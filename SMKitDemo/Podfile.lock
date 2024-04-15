@@ -1,0 +1,29 @@
+PODS:
+  - LASwift (0.3.2)
+  - SMBase (0.4.3):
+    - LASwift
+    - SwiftyJSON
+  - SMKit (0.1.0):
+    - SMBase (= 0.4.3)
+  - SwiftyJSON (5.0.2)
+
+DEPENDENCIES:
+  - SMKit (= 0.1.0)
+
+SPEC REPOS:
+  https://bitbucket.org/sency-ios/sency_ios_sdk.git:
+    - SMBase
+    - SMKit
+  https://github.com/CocoaPods/Specs.git:
+    - LASwift
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  LASwift: 216b431849a03b8a06f5b8cd6d949f60583c998a
+  SMBase: eb5b5675e8d1bbe71a78a91f34294d9249db04d2
+  SMKit: c625681fc0f9a1a820ba51206e9aa18a963d8890
+  SwiftyJSON: 967521cb94e7e1169f99045be1378b87c50d8f8c
+
+PODFILE CHECKSUM: 1df4c9c445dcdc5f587c9d16103b418f29aa101d
+
+COCOAPODS: 1.14.3
