@@ -22,8 +22,8 @@ class ViewController: UIViewController {
         }
     }
     
-    //Then call startDetction to start the exercise detection.
-    func startDetction(){
+    //Then call startDetection to start the exercise detection.
+    func startDetection(){
         do{
             try flowManager?.startDetection(exercise: "EXERCISE_NAME")
         }catch{
