@@ -1,10 +1,11 @@
-#[smkit-ios-demo](https://github.com/sency-ai/smkit-sdk)
+# [smkit-ios-demo](https://github.com/sency-ai/smkit-sdk)
 
-1. [ Installation. ](#inst)
-2. [ Setup. ](#setup)
-3. [ Configure. ](#conf)
-4. [ Start. ](#start)
-5. [ Body Calibration.](#body)
+## Table of contents
+1. [ Installation ](#inst)
+2. [ Setup ](#setup)
+3. [ Configure ](#conf)
+4. [ Start ](#start)
+5. [ Models ](#models)
 
 <a name="inst"></a>
 ## 1. Installation
@@ -145,10 +146,13 @@ func stopSession(){
     }
 }
 ```
-<a name="body"></a>
-## 4. Body Calibration
 
-Implement **SMBodyCalibrationDelegate**
+## 4. Models <a name="models"></a>
+
+### Body calibration
+*Body calibration* is used to get information about the users' location during the session.
+
+#### Implement **SMBodyCalibrationDelegate**
 
 ```swift
 extension ViewController:SMBodyCalibrationDelegate{
