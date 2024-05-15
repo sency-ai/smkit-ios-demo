@@ -6,6 +6,7 @@
 3. [ Configure ](#conf)
 4. [ Start ](#start)
 5. [ Models ](#models)
+6. [ Data ](#data)
 
 <a name="inst"></a>
 ## 1. Installation
@@ -81,13 +82,6 @@ extension ViewController:SMKitSessionDelegate{
     
     //This function will be called when SMKit detects movement data.
     func handleDetectionData(movementData: MovementFeedbackData?) {
-        // movementData?.didFinishMovement => will be true when the user finish a dynamic movment.
-        // movementData?.isShallowRep => @ofer please add.
-        //movementData?.isInPosition => will be true if the user is in the currect position
-        //movementData?.isPerfectForm => will be true if the user did not have any mistakes
-        //movementData?.feedback => a array of feedback of the user movment.
-        //movementData?.currentRomValue => the current Range Of Motion of the user
-        //movementData?.specialParams => some dynamic exercises will have some special params for example the exercise "Jumps" has "JumpPeakHeight" and "currHeight".
     }
     
     //This function will be called with the user joints location.
@@ -188,5 +182,81 @@ func setBodyPositionCalibrationInactive(){
     flowManager?.setBodyPositionCalibrationInactive()
 }
 ```
+## Available Data Types <a name="data"></a>
+#### `MovementFeedbackData`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| didFinishMovement   | `Bool?`                                                      | Will be true when the user finish a dynamic movment.                                                         |
+| isShallowRep        | `Bool?`                                                      | Will be true when the user finish a shallow dynamic movment.                                                 |
+| isInPosition        | `Bool?`                                                      | Will be true if the user is in the currect position                                                          |
+| isPerfectForm       | `Bool?`                                                      | Will be true if the user did not have any mistakes                                                           |
+| techniqueScore      | `Float?`                                                     | The score representing the user's technique during the exercise.                                             |
+| detectionConfidence | `Float?`                                                     | The confidence score                                                                                         |
+| feedback            | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
+| currentRomValue     | `Float?`                                                     | The current Range Of Motion of the user.                                                                     |
+| specialParams       | `[String:Float?]`                                            | Some dynamic exercises will have some special params for example the exercise "Jumps" has "JumpPeakHeight" and "currHeight". |
+
+#### `SMExerciseInfo`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId           | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| startTime           | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+
+#### `SMExerciseInfo` type of `SMExerciseInfo`
+| Type                   | Format                                                       | Description                                                                                                  |
+|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| timeInActiveZone       | `Double`                                                     | The time the user was in position.                                                                           |
+| positionTechniqueScore | `Double`                                                     | The user score.                                                                                              |
+| inPosition             | `[StaticData]`                                               | Array of static data.                                                                                        |
+
+
+#### `StaticData`
+| Type                     | Format                                                       | Description                                                                                                  |
+|--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
+| detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
+| detectionConfidenceScore | `Float`                                                      | The Confidence in the detection.                                                                             |
+| inGreenZone              | `Bool`                                                       | Will be true if the user is in the success zone.                                                             |
+| romScore                 | `Float`                                                      | The ROM score.                                                                                               |
+| techniqueScore           | `Float`                                                      | The user technic score.                                                                                      |
+| inPosition               | `Bool`                                                       | Will be true if the user in position.                                                                        |
+| isGood                   | `Bool`                                                       | Is good detection                                                                                            |
+| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
+
+#### `SMExerciseDynamicInfo` type of `SMExerciseInfo`
+| Type                   | Format                                                       | Description                                                                                                  |
+|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| performedReps          | `[RepData]`                                                  | Array of RepData.                                                                                            |
+| numberOfPerformedReps  | `Int?`                                                       | The number of times the user repeated the exercise.                                                          |
+| repsTechniqueScore     | `[Double]`                                                   | The exercise score.                                                                                          |
+
+#### `RepData`
+| Type                     | Format                                                       | Description                                                                                                  |
+|--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
+| detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
+| detectionConfidenceScore | `Float`                                                      | The Confidence in the detection.                                                                             |
+| isShallowRep             | `Bool`                                                       | Will be true if the Rep is shallow                                                                           |
+| romScore                 | `Float`                                                      | The ROM score.                                                                                               |
+| techniqueScore           | `Float`                                                      | The user technic score.                                                                                      |
+| isGood                   | `Bool`                                                       | Is good detection                                                                                            |
+| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
+
+#### `DetectionSessionResultData`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| exercises           | `[SMExerciseInfo]`                                           | Array of all the exerxises.                                                                                  |
+| startTime           | `String`                                                     | The start time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime             | `String`                                                     | The end time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
