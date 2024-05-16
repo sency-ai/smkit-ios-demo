@@ -87,6 +87,7 @@ extension ViewController:SMKitSessionDelegate{
     }
     
     //This function will be called with the user joints location.
+    //Please notice the joint location are for the video resoltion.
     func handlePositionData(poseData: [Joint : CGPoint]?) {
         
     }
@@ -206,7 +207,7 @@ func setBodyPositionCalibrationInactive(){
 | endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
 | totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
 
-#### `SMExerciseInfo` type of `SMExerciseInfo`
+#### `SMExerciseStaticInfo` type of `SMExerciseInfo`
 | Type                   | Format                                                       | Description                                                                                                  |
 |------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
@@ -260,5 +261,37 @@ func setBodyPositionCalibrationInactive(){
 | exercises           | `[SMExerciseInfo]`                                           | Array of all the exerxises.                                                                                  |
 | startTime           | `String`                                                     | The start time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
 | endTime             | `String`                                                     | The end time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+
+
+#### `Joint`
+| Name                |
+|---------------------|
+| Nose                |
+| Neck                |
+| RShoulder           |
+| RElbow              |
+| RWrist              |
+| LShoulder           |
+| LElbow              |
+| LWrist              |
+| RHip                |
+| RKnee               |
+| RAnkle              |
+| LHip                |
+| LKnee               |
+| LAnkle              |
+| REye                |
+| LEye                |
+| REar                |
+| LEar                |
+| Hip                 |
+| Chest               |
+| Head                |
+| LBigToe             |
+| RBigToe             |
+| LSmallToe           |
+| RSmallToe           |
+| LHeel               |
+| RHeel               |
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
