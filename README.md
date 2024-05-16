@@ -37,7 +37,9 @@ end
 
 ### SPM
 
-Comming soon
+In your **Package Dependencies** add this url `https://bitbucket.org/sency-ios/smkit_package` and then press **Add package**
+
+[!add package](screenshots/AddSMKit.png)
 
 <a name="setup"></a>
 ## 2. Setup
