@@ -14,7 +14,7 @@
 ### Cocoapods
 ```ruby
 # [1] add the source to the top of your Podfile.
-source 'https://bitbucket.org/sency-ios/sency_ios_sdk.git'
+source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
 # [2] add the pod to your target
