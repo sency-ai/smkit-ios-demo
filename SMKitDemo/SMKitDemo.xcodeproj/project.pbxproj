@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E52C36892A009222EA /* AuthManager.swift */; };
+		BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */; };
+		BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E82C36892A009222EA /* ExerciseTimerView.swift */; };
+		BEB762F22C36892A009222EA /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E92C36892A009222EA /* ExerciseView.swift */; };
+		BEB762F32C36892A009222EA /* StrokeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EA2C36892A009222EA /* StrokeModifier.swift */; };
+		BEB762F42C36892A009222EA /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EB2C36892A009222EA /* SummaryScreen.swift */; };
+		BEB762F52C36892A009222EA /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EC2C36892A009222EA /* WelcomeScreen.swift */; };
+		BEB762F62C36892A009222EA /* WelcomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */; };
+		BEB762F82C368973009222EA /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762F72C368973009222EA /* ExerciseViewController.swift */; };
 		BEC0983D2BCD1D5100E47B8F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */; };
 		BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0983E2BCD1D5100E47B8F /* SceneDelegate.swift */; };
 		BEC098412BCD1D5100E47B8F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC098402BCD1D5100E47B8F /* ViewController.swift */; };
@@ -20,6 +29,15 @@
 		082DB0AB1A9000EEF41CAD77 /* Pods-SMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 		747BB6BAA5AC4622862E50A4 /* Pods_SMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAC3620D436A6CBFE32EE80F /* Pods-SMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		BEB762E52C36892A009222EA /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseIndicatorView.swift; sourceTree = "<group>"; };
+		BEB762E82C36892A009222EA /* ExerciseTimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
+		BEB762E92C36892A009222EA /* ExerciseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		BEB762EA2C36892A009222EA /* StrokeModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokeModifier.swift; sourceTree = "<group>"; };
+		BEB762EB2C36892A009222EA /* SummaryScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
+		BEB762EC2C36892A009222EA /* WelcomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
+		BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreenViewController.swift; sourceTree = "<group>"; };
+		BEB762F72C368973009222EA /* ExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
 		BEC098392BCD1D5100E47B8F /* SMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BEC0983E2BCD1D5100E47B8F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +77,29 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BEB762E62C36892A009222EA /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				BEB762E52C36892A009222EA /* AuthManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		BEB762EE2C36892A009222EA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BEB762F72C368973009222EA /* ExerciseViewController.swift */,
+				BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */,
+				BEB762E82C36892A009222EA /* ExerciseTimerView.swift */,
+				BEB762E92C36892A009222EA /* ExerciseView.swift */,
+				BEB762EA2C36892A009222EA /* StrokeModifier.swift */,
+				BEB762EB2C36892A009222EA /* SummaryScreen.swift */,
+				BEB762EC2C36892A009222EA /* WelcomeScreen.swift */,
+				BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		BEC098302BCD1D5100E47B8F = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +121,8 @@
 		BEC0983B2BCD1D5100E47B8F /* SMKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BEB762E62C36892A009222EA /* Managers */,
+				BEB762EE2C36892A009222EA /* UI */,
 				BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */,
 				BEC0983E2BCD1D5100E47B8F /* SceneDelegate.swift */,
 				BEC098402BCD1D5100E47B8F /* ViewController.swift */,
@@ -206,8 +249,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */,
 				BEC098412BCD1D5100E47B8F /* ViewController.swift in Sources */,
+				BEB762F52C36892A009222EA /* WelcomeScreen.swift in Sources */,
+				BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */,
+				BEB762F62C36892A009222EA /* WelcomeScreenViewController.swift in Sources */,
 				BEC0983D2BCD1D5100E47B8F /* AppDelegate.swift in Sources */,
+				BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */,
+				BEB762F42C36892A009222EA /* SummaryScreen.swift in Sources */,
+				BEB762F22C36892A009222EA /* ExerciseView.swift in Sources */,
+				BEB762F32C36892A009222EA /* StrokeModifier.swift in Sources */,
+				BEB762F82C368973009222EA /* ExerciseViewController.swift in Sources */,
 				BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,8 +414,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SMKitDemo/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "For SMKit";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -395,8 +449,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SMKitDemo/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "For SMKit";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

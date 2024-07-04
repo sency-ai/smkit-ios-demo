@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SMKitFlowManager.configure(authKey: "YOUR_KEY") {
             // The configuration was successful
             // Your Code
+            AuthManager.shared.didFinishAuth = true
         } onFailure: { error in
             // The configuration failed with error
             // Your Code
