@@ -5,8 +5,10 @@
 2. [ Setup ](#setup)
 3. [ Configure ](#conf)
 4. [ Start ](#start)
-5. [ Models ](#models)
-6. [ Data ](#data)
+5. [ Body calibration ](#body)
+6. [ Setters ](#setters)
+7. [ Getters ](#getters)
+8. [ Data ](#data)
 
 <a name="inst"></a>
 ## 1. Installation
@@ -37,7 +39,7 @@ end
 
 ### SPM
 
-In your **Package Dependencies** add this url `https://bitbucket.org/sency-ios/smkit_package` and then press **Add package**
+In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smkit_package` and then press **Add package**
 
 [!add package](screenshots/AddSMKit.png)
 
@@ -144,7 +146,7 @@ func stopSession(){
 }
 ```
 
-## 4. Models <a name="models"></a>
+## 5. Body calibration <a name="models"></a>
 
 ### Body calibration
 *Body calibration* is used to get information about the users' location during the session.
@@ -185,7 +187,106 @@ func setBodyPositionCalibrationInactive(){
     flowManager?.setBodyPositionCalibrationInactive()
 }
 ```
-## Available Data Types <a name="data"></a>
+## 6. Setters <a name="setters"></a>
+
+setDeviceMotionActive(phoneCalibrationInfo:SMPhoneCalibrationInfo, tiltDidChange: @escaping (SMPhoneCalibrationInfo) -> Void)
+**Description**: Activate DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback tiltDidChange that wiךl be called when the phone changed
+
+```swift
+    flowManager.setDeviceMotionActive(
+    phoneCalibrationInfo: SMPhoneCalibrationInfo(YZAngleRange: 60..<90, XYAngleRange: 3..< -3),
+    tiltDidChange: { info in
+        if info.isXYTiltAngleInRange && info.isYZTiltAngleInRange{
+            print("In Range")
+        }
+    })
+```
+
+setDeviceMotionInactive()
+**Description**: Sets DeviceMotion inactive.
+
+```swift
+    flowManager.setDeviceMotionInactive()
+```
+
+setDeviceMotionFrequency(isHigh: Bool)
+**Description**: Changes the device motion frequency, if true will update DeviceMotion every 0.1 seconds and if false updates every 0.5 seconds
+
+```swift
+    flowManager.setDeviceMotionFrequency(isHigh: true)
+```
+
+setBodyPositionCalibrationActive(delegate: SMBodyCalibrationDelegate, screenSize:CGSize, boundingBox:BodyCalRectGuide? = nil)
+**Description**: for more detailed information please check out [ Body calibration ](#body)
+
+```string
+    flowManager.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
+```
+
+setBodyPositionCalibrationInactive()
+**Description**: Sets BodyPositionCalibration inactive.
+
+```swift
+    flowManager.setBodyPositionCalibrationInactive()
+```
+
+setPhonePositionMode(mode: PhonePosition)
+**Description**: sets the [PhonePositionMode](#PhonePositionMode)
+
+```swift
+    flowManager.setPhonePositionMode(mode: .Floor)
+```
+
+setJumpRefPoint(jumpRefPoint: String)
+**Description**: Sets the jump reference point
+
+```swift
+    flowManager.setJumpRefPoint(jumpRefPoint: "Hip")
+```
+
+setJumpHeightThreshold(threshold: Float)
+**Description**: Sets the jump height threshold
+
+```swift
+    flowManager.setJumpHeightThreshold(threshold: 80.0)
+```
+
+setUserHeight(height: Float)
+**Description**: sets the user height in centimeter
+
+```swift
+    flowManager.setUserHeight(height: 172)
+```
+
+## 7. Getters <a name="getters"></a>
+
+getExerciseType() -> ExerciseTypeBr?
+**Description**: Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr) if possible
+
+```swift
+    let exerciseType = flowManager.getExerciseType()
+```
+
+getExerciseType(ByType type:String) throws -> ExerciseTypeBr
+**Description**: Returns [ExerciseTypeBr](#ExerciseTypeBr) according to the type
+
+```swift
+    do{
+        let exerciseType = try flowManager.getExerciseType(ByType: "HighKnees")
+    }catch{
+        print(error)
+    }
+```
+
+getExerciseRange() -> ClosedRange<Float>?
+**Description**: Returns the exercise rang of movment if possible
+
+```swift
+    let range = flowManager.getExerciseRange()
+```
+
+
+## 8. Available Data Types <a name="data"></a>
 #### `MovementFeedbackData`
 | Type                | Format                                                       | Description                                                                                                  |
 |---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
@@ -293,5 +394,31 @@ func setBodyPositionCalibrationInactive(){
 | RSmallToe           |
 | LHeel               |
 | RHeel               |
+
+### `SMPhoneCalibrationInfo` <a name="SMPhoneCalibrationInfo"></a>
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| YZTiltAngle         | `Float`                                                      | The current Y angle.                                                                                         |
+| YZTiltAngle         | `Float`                                                      | The current X angle.                                                                                         |
+| YZAngleRange        | `Range<Float>`                                               | The currect Y range.                                                                                         |
+| XYAngleRange        | `Range<Float>`                                               | The currect X range.                                                                                         |
+| isYZTiltAngleInRange| `Bool`                                                       | Will be true if Y angle is in range.                                                                         |
+| isXYTiltAngleInRange| `Bool`                                                       | Will be true if X angle is in range.                                                                         |
+
+### `PhonePositionMode` <a name ="PhonePositionMode)"></a>
+| Type                |
+|---------------------|
+| Floor               |
+| Elevated            |
+
+### `ExerciseTypeBr` <a name ="ExerciseTypeBr)"></a>
+| Type                |
+|---------------------|
+| Dynamic             |
+| Static              |
+| BodyAssessment      |
+| Mobility            |
+| Highlights          |
+| Other               |
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
