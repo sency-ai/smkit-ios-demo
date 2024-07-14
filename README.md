@@ -106,7 +106,7 @@ Now we can start the exercise.
 ```swift
 var flowManager:SMKitFlowManager?
 
-//First you will need to start to start the session.
+//First you will need to start the session.
 func statSession(){
     do{
         self.flowManager = try SMKitFlowManager(delegate: self)
