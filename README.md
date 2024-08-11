@@ -108,9 +108,15 @@ var flowManager:SMKitFlowManager?
 
 //First you will need to start the session.
 func statSession(){
+    let sessionSettings = SMKitSessionSettings(
+        phonePosition: .Floor,
+        jumpRefPoint: "Hip",
+        jumpHeightThreshold: 120,
+        userHeight: 180
+    )
     do{
         self.flowManager = try SMKitFlowManager(delegate: self)
-        try flowManager?.startSession()
+        try flowManager?.startSession(sessionSettings: sessionSettings) // sessionSettings is optinal if you dont want to change the values please omit sessionSettings
     }catch{
         print(error)
     }
@@ -230,34 +236,6 @@ setBodyPositionCalibrationInactive()
     flowManager.setBodyPositionCalibrationInactive()
 ```
 
-setPhonePositionMode(mode: PhonePosition)
-**Description**: sets the [PhonePositionMode](#PhonePositionMode)
-
-```swift
-    flowManager.setPhonePositionMode(mode: .Floor)
-```
-
-setJumpRefPoint(jumpRefPoint: String)
-**Description**: Sets the jump reference point
-
-```swift
-    flowManager.setJumpRefPoint(jumpRefPoint: "Hip")
-```
-
-setJumpHeightThreshold(threshold: Float)
-**Description**: Sets the jump height threshold
-
-```swift
-    flowManager.setJumpHeightThreshold(threshold: 80.0)
-```
-
-setUserHeight(height: Float)
-**Description**: sets the user height in centimeter
-
-```swift
-    flowManager.setUserHeight(height: 172)
-```
-
 ## 7. Getters <a name="getters"></a>
 
 getExerciseType() -> ExerciseTypeBr?
@@ -285,8 +263,23 @@ getExerciseRange() -> ClosedRange<Float>?
     let range = flowManager.getExerciseRange()
 ```
 
+getModelsID() -> [String:String]
+**Description**: Returns a dictionary with the model's name as the key and its ID as the value.
+
+```swift
+    let models = flowManager.getModelsID()
+```
 
 ## 8. Available Data Types <a name="data"></a>
+
+#### `SMKitSessionSettings`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| phonePosition       | `PhonePositionMode?`                                         | The session PhonePositionMode.                                                                              |
+| jumpRefPoint        | `String?`                                                    | The session jumpRefPoint                                                                                    |
+| isInPosition        | `jumpHeightThreshold?`                                       | The session jumpHeightThreshold                                                                             |
+| userHeight        | `jumpHeightThreshold?`                                         | The session userHeight                                                                                      |
+
 #### `MovementFeedbackData`
 | Type                | Format                                                       | Description                                                                                                  |
 |---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|

@@ -45,9 +45,14 @@ class ExerciseViewController: UIViewController {
     
     func configure(exercise:[String], phonePosition:PhonePosition){
         do{
+            let sessionSettings = SMKitSessionSettings(
+                phonePosition: phonePosition,
+                jumpRefPoint: "Hip",
+                jumpHeightThreshold: 120,
+                userHeight: 180
+            )
             flowManager = try SMKitFlowManager(delegate: self)
-            try flowManager?.startSession()
-            try flowManager?.setPhonePositionMode(mode: phonePosition)
+            try flowManager?.startSession(sessionSettings: sessionSettings)
             self.exercise = exercise
             
             self.view.addSubview(exerciceView)
