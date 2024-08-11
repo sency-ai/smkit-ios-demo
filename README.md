@@ -263,6 +263,12 @@ getExerciseRange() -> ClosedRange<Float>?
     let range = flowManager.getExerciseRange()
 ```
 
+getModelsID() -> [String:String]
+**Description**: Returns a dictionary with the model's name as the key and its ID as the value.
+
+```swift
+    let models = flowManager.getModelsID()
+```
 
 ## 8. Available Data Types <a name="data"></a>
 
