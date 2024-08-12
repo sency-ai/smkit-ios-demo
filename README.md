@@ -152,7 +152,7 @@ func stopSession(){
 }
 ```
 
-## 5. Body calibration <a name="models"></a>
+## 5. Body calibration <a name="body"></a>
 
 ### Body calibration
 *Body calibration* is used to get information about the users' location during the session.
