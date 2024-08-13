@@ -7,14 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */; };
+		BE4042642C6B745200E2B675 /* SM3DSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */; };
+		BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */; };
+		BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042672C6B768000E2B675 /* WelcomeViewController.swift */; };
+		BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */; };
+		BE97B3272C6BFEE1002AF536 /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE97B3262C6BFEE1002AF536 /* SMKitPackage */; };
 		BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E52C36892A009222EA /* AuthManager.swift */; };
 		BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */; };
 		BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E82C36892A009222EA /* ExerciseTimerView.swift */; };
 		BEB762F22C36892A009222EA /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E92C36892A009222EA /* ExerciseView.swift */; };
 		BEB762F32C36892A009222EA /* StrokeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EA2C36892A009222EA /* StrokeModifier.swift */; };
 		BEB762F42C36892A009222EA /* SummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EB2C36892A009222EA /* SummaryScreen.swift */; };
-		BEB762F52C36892A009222EA /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EC2C36892A009222EA /* WelcomeScreen.swift */; };
-		BEB762F62C36892A009222EA /* WelcomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */; };
+		BEB762F52C36892A009222EA /* Pre2DExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762EC2C36892A009222EA /* Pre2DExerciseView.swift */; };
+		BEB762F62C36892A009222EA /* Pre2DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762ED2C36892A009222EA /* Pre2DExerciseViewController.swift */; };
 		BEB762F82C368973009222EA /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762F72C368973009222EA /* ExerciseViewController.swift */; };
 		BEC0983D2BCD1D5100E47B8F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */; };
 		BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0983E2BCD1D5100E47B8F /* SceneDelegate.swift */; };
@@ -22,18 +28,22 @@
 		BEC098442BCD1D5100E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098432BCD1D5100E47B8F /* Base */; };
 		BEC098462BCD1D5200E47B8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEC098452BCD1D5200E47B8F /* Assets.xcassets */; };
 		BEC098492BCD1D5200E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098482BCD1D5200E47B8F /* Base */; };
-		BEF209032C370B9A005E8C71 /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BEF209022C370B9A005E8C71 /* SMKitPackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DInfoViewModel.swift; sourceTree = "<group>"; };
+		BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DSkeleton.swift; sourceTree = "<group>"; };
+		BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DExerciseViewController.swift; sourceTree = "<group>"; };
+		BE4042672C6B768000E2B675 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		BEB762E52C36892A009222EA /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseIndicatorView.swift; sourceTree = "<group>"; };
 		BEB762E82C36892A009222EA /* ExerciseTimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
 		BEB762E92C36892A009222EA /* ExerciseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		BEB762EA2C36892A009222EA /* StrokeModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokeModifier.swift; sourceTree = "<group>"; };
 		BEB762EB2C36892A009222EA /* SummaryScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryScreen.swift; sourceTree = "<group>"; };
-		BEB762EC2C36892A009222EA /* WelcomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
-		BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreenViewController.swift; sourceTree = "<group>"; };
+		BEB762EC2C36892A009222EA /* Pre2DExerciseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pre2DExerciseView.swift; sourceTree = "<group>"; };
+		BEB762ED2C36892A009222EA /* Pre2DExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pre2DExerciseViewController.swift; sourceTree = "<group>"; };
 		BEB762F72C368973009222EA /* ExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
 		BEC098392BCD1D5100E47B8F /* SMKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SMKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEF209032C370B9A005E8C71 /* SMKitPackage in Frameworks */,
+				BE97B3272C6BFEE1002AF536 /* SMKitPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +74,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BE40425C2C6B73C100E2B675 /* 3D */ = {
+			isa = PBXGroup;
+			children = (
+				BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */,
+				BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */,
+				BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */,
+			);
+			path = 3D;
+			sourceTree = "<group>";
+		};
 		BEB762E62C36892A009222EA /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -75,14 +95,17 @@
 		BEB762EE2C36892A009222EA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				BE40425C2C6B73C100E2B675 /* 3D */,
 				BEB762F72C368973009222EA /* ExerciseViewController.swift */,
 				BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */,
 				BEB762E82C36892A009222EA /* ExerciseTimerView.swift */,
 				BEB762E92C36892A009222EA /* ExerciseView.swift */,
 				BEB762EA2C36892A009222EA /* StrokeModifier.swift */,
 				BEB762EB2C36892A009222EA /* SummaryScreen.swift */,
-				BEB762EC2C36892A009222EA /* WelcomeScreen.swift */,
-				BEB762ED2C36892A009222EA /* WelcomeScreenViewController.swift */,
+				BEB762EC2C36892A009222EA /* Pre2DExerciseView.swift */,
+				BEB762ED2C36892A009222EA /* Pre2DExerciseViewController.swift */,
+				BE4042672C6B768000E2B675 /* WelcomeViewController.swift */,
+				BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -137,7 +160,7 @@
 			);
 			name = SMKitDemo;
 			packageProductDependencies = (
-				BEF209022C370B9A005E8C71 /* SMKitPackage */,
+				BE97B3262C6BFEE1002AF536 /* SMKitPackage */,
 			);
 			productName = SMKitDemo;
 			productReference = BEC098392BCD1D5100E47B8F /* SMKitDemo.app */;
@@ -168,7 +191,7 @@
 			);
 			mainGroup = BEC098302BCD1D5100E47B8F;
 			packageReferences = (
-				BEF209012C370B9A005E8C71 /* XCRemoteSwiftPackageReference "smkit_package" */,
+				BE97B3252C6BFEE1002AF536 /* XCRemoteSwiftPackageReference "smkit_package" */,
 			);
 			productRefGroup = BEC0983A2BCD1D5100E47B8F /* Products */;
 			projectDirPath = "";
@@ -197,18 +220,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */,
+				BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */,
 				BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */,
 				BEC098412BCD1D5100E47B8F /* ViewController.swift in Sources */,
-				BEB762F52C36892A009222EA /* WelcomeScreen.swift in Sources */,
+				BEB762F52C36892A009222EA /* Pre2DExerciseView.swift in Sources */,
+				BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */,
 				BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */,
-				BEB762F62C36892A009222EA /* WelcomeScreenViewController.swift in Sources */,
+				BEB762F62C36892A009222EA /* Pre2DExerciseViewController.swift in Sources */,
 				BEC0983D2BCD1D5100E47B8F /* AppDelegate.swift in Sources */,
 				BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */,
 				BEB762F42C36892A009222EA /* SummaryScreen.swift in Sources */,
 				BEB762F22C36892A009222EA /* ExerciseView.swift in Sources */,
+				BE4042642C6B745200E2B675 /* SM3DSkeleton.swift in Sources */,
 				BEB762F32C36892A009222EA /* StrokeModifier.swift in Sources */,
 				BEB762F82C368973009222EA /* ExerciseViewController.swift in Sources */,
 				BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */,
+				BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,7 +387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -370,11 +398,12 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -393,7 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -404,11 +433,12 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -445,20 +475,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		BEF209012C370B9A005E8C71 /* XCRemoteSwiftPackageReference "smkit_package" */ = {
+		BE97B3252C6BFEE1002AF536 /* XCRemoteSwiftPackageReference "smkit_package" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
 			requirement = {
-				kind = exactVersion;
-				version = "0.1.9-logs";
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BEF209022C370B9A005E8C71 /* SMKitPackage */ = {
+		BE97B3262C6BFEE1002AF536 /* SMKitPackage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BEF209012C370B9A005E8C71 /* XCRemoteSwiftPackageReference "smkit_package" */;
+			package = BE97B3252C6BFEE1002AF536 /* XCRemoteSwiftPackageReference "smkit_package" */;
 			productName = SMKitPackage;
 		};
 /* End XCSwiftPackageProductDependency section */

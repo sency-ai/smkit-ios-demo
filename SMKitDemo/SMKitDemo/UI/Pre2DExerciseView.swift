@@ -8,21 +8,30 @@
 import SwiftUI
 import SMKit
 
-struct WelcomeScreen: View {
+struct Pre2DExerciseView: View {
     
     @State var phonePosition:PhonePosition = .Floor
     @State var selectedExercises:[String] = []
     
     let startWasPressed:(PhonePosition, [String])->Void
-    
+    let dismissWasPressed:()->Void
+
     @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         VStack(alignment: .leading,spacing: 20){
-            Text("SMKit Demo")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack{
+                Text("SMKit 2D Demo")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Button(action: dismissWasPressed){
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .padding()
+                }
+            }
             Spacer()
 
             VStack(alignment:.leading){
@@ -121,7 +130,7 @@ struct WelcomeScreen: View {
 }
 
 #Preview {
-    WelcomeScreen(startWasPressed: {_,_ in})
+    Pre2DExerciseView(startWasPressed: {_,_ in}, dismissWasPressed: {})
 }
 
 enum DemoExercises:String, CaseIterable{

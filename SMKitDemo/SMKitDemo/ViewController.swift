@@ -90,7 +90,9 @@ extension ViewController:SMKitSessionDelegate{
     }
     
     //This function will be called with the user joints location.
-    func handlePositionData(poseData: [Joint : CGPoint]?) {
+    //Please notice the 2D joint location are for the video resoltion.
+    //Please notice that the 3D joint location are the distance from the camera
+    func handlePositionData(poseData2D: [Joint:CGPoint]?, poseData3D: [Joint:SCNVector3]?, jointAnglesData: [LimbsPairs:Float]?){
         
     }
     
@@ -101,14 +103,17 @@ extension ViewController:SMKitSessionDelegate{
 }
 
 extension ViewController:SMBodyCalibrationDelegate{
-    // indicates the user is positioned 'inside' the 'rect' defined in "setBodyPositionCalibrationActive"
-    func didEnterFrame() {
-        
-    }
-    
-    // indicates the user is positioned 'outside' the 'rect' defined in "setBodyPositionCalibrationActive"
-    func didLeaveFrame() {
-        
+    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
+        switch status{
+        case .DidEnterFrame:
+            print("DidEnterFrame")
+        case .DidLeaveFrame:
+            print("DidLeaveFrame")
+        case .TooClose(let tooClose):
+            print("TooClose \(tooClose)")
+        @unknown default:
+            break
+        }
     }
     
     // BodyCalRectGuide will give you the 'box' size and location

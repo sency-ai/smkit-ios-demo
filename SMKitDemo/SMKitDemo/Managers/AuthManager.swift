@@ -8,13 +8,20 @@
 import Foundation
 
 protocol AuthManagerDelegate:NSObject{
+    func didFinishAuth()
     func didFailAuth()
 }
 
 class AuthManager:ObservableObject{
     static let shared = AuthManager()
     
-    @Published var didFinishAuth = false
+    @Published var didFinishAuth = false{
+        didSet{
+            if didFaildAuth{
+                delegate?.didFinishAuth()
+            }
+        }
+    }
     @Published var didFaildAuth = false{
         didSet{
             delegate?.didFailAuth()
