@@ -111,7 +111,7 @@ func statSession(){
     let sessionSettings = SMKitSessionSettings(
         phonePosition: .Floor,
         jumpRefPoint: "Hip",
-        jumpHeightThreshold: 120,
+        jumpHeightThreshold: 20,
         userHeight: 180
     )
     do{
