@@ -1,8 +1,8 @@
-##Start 3D exercise detection 
+## Start 3D exercise detection 
 
 Starting a 3D session is very similar to starting a 2D session, with only a few minor adjustments.
 
-###Configure
+### Configure
 First you will have to configure SMKit the similery to [the previus section](https://github.com/sency-ai/smkit-ios-demo?tab=readme-ov-file#conf) but with the add `shouldSupport3D` this Bool wil make sure that 3D data is supported
 ```Swift
 SMKitFlowManager.configure(authKey: "YOUR_KEY", shouldSupport3D: true) {
@@ -15,7 +15,7 @@ SMKitFlowManager.configure(authKey: "YOUR_KEY", shouldSupport3D: true) {
 ```
 To reduce wait time we recommend to call `configure` on app launch.
 
-###Implement **SMKitSessionDelegate**.
+### Implement **SMKitSessionDelegate**.
 Now please implement the SMKitSessionDelegate.
 ```swift
 extension ViewController:SMKitSessionDelegate{
@@ -46,7 +46,7 @@ extension ViewController:SMKitSessionDelegate{
     }
 }
 ```
-###Starting the 3D session
+### Starting the 3D session
 Now we can start the 3D session, to do so please call startSession with a `SMKitSessionSettings` and make sure that `include3D` is set to true.
 ```swift
 //First you will need to start the session with include3D.
