@@ -21,7 +21,7 @@ class Pre2DExerciseViewController:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(welcomeScreen)
-        
+        self.view.backgroundColor = .backgroundAccent
         NSLayoutConstraint.activate([
             welcomeScreen.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             welcomeScreen.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
