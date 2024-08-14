@@ -117,6 +117,7 @@ class ExerciseViewController: UIViewController {
 }
 
 extension ExerciseViewController:SMKitSessionDelegate{
+    
     func captureSessionDidSet(session: AVCaptureSession) {
         DispatchQueue.main.async {
             self.setupPreviewLayer(session: session)
@@ -152,8 +153,8 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData: [Joint : CGPoint]?) {
-        
+    func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+
     }
     
     func handleSessionErrors(error: any Error) {

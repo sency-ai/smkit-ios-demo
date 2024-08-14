@@ -12,7 +12,7 @@ import SMKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        SMKitFlowManager.configure(authKey: "YOUR_KEY") {
+        SMKitFlowManager.configure(authKey: "YOUR_KEY", shouldSupport3D: true) {
             // The configuration was successful
             // Your Code
             AuthManager.shared.didFinishAuth = true

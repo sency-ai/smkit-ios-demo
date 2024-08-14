@@ -1,0 +1,42 @@
+{
+  "originHash" : "754cc41fe1f0fc882b8e3b683799591947fc82a2b34d2db6337e0e1708767efd",
+  "pins" : [
+    {
+      "identity" : "opencv-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yeatse/opencv-spm.git",
+      "state" : {
+        "revision" : "dd26dba92773b39488768888c107e5ef6b0e7c1b",
+        "version" : "4.10.0"
+      }
+    },
+    {
+      "identity" : "smbase_package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://bitbucket.org/sencyai/smbase_package",
+      "state" : {
+        "revision" : "673e141cafe1be7e84c2d0eab04d6da435763562",
+        "version" : "0.5.7"
+      }
+    },
+    {
+      "identity" : "smkit_package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://bitbucket.org/sencyai/smkit_package",
+      "state" : {
+        "revision" : "39c75684c2fd5ed2a4bb84e79ed4ceea8b0b11e9",
+        "version" : "0.2.4"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
+        "version" : "5.0.2"
+      }
+    }
+  ],
+  "version" : 3
+}

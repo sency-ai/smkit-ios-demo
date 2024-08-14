@@ -69,88 +69,9 @@ To reduce wait time we recommend to call `configure` on app launch.
 
 <a name="start"></a>
 ## 4. Start
-### Start exercise detection 
+- [Start 2D exercise detection](https://github.com/sency-ai/smkit-ios-demo/blob/main/Start2DSession.md)
 
-Implement **SMKitSessionDelegate**.
-```swift
-extension ViewController:SMKitSessionDelegate{
-    //This function will be called when the session started and the camera is ready.
-    func captureSessionDidSet(session: AVCaptureSession) {
-        
-    }
-    
-    //This function will be called when the session stoped.
-    func captureSessionDidStop() {
-        
-    }
-    
-    //This function will be called when SMKit detects movement data.
-    func handleDetectionData(movementData: MovementFeedbackData?) {
-    }
-    
-    //This function will be called with the user joints location.
-    //Please notice the joint location are for the video resoltion.
-    func handlePositionData(poseData: [Joint : CGPoint]?) {
-        
-    }
-    
-    //This function will be called with if ant error occcured.
-    func handleSessionErrors(error: any Error) {
-        
-    }
-}
-```
-
-Now we can start the exercise.
-
-```swift
-var flowManager:SMKitFlowManager?
-
-//First you will need to start the session.
-func statSession(){
-    let sessionSettings = SMKitSessionSettings(
-        phonePosition: .Floor,
-        jumpRefPoint: "Hip",
-        jumpHeightThreshold: 20,
-        userHeight: 180
-    )
-    do{
-        self.flowManager = try SMKitFlowManager(delegate: self)
-        try flowManager?.startSession(sessionSettings: sessionSettings) // sessionSettings is optinal if you dont want to change the values please omit sessionSettings
-    }catch{
-        print(error)
-    }
-}
-
-//Then call startDetection to start the exercise detection.
-func startDetection(){
-    do{
-        try flowManager?.startDetection(exercise: "EXERCISE_NAME")
-    }catch{
-        print(error)
-    }
-}
-
-//When you are ready to stop the exercise call stopDetection.
-func stopDetection(){
-    do{
-        //returns a SMExerciseInfo.
-        let exerciseData = try flowManager?.stopDetection()
-    }catch{
-        print(error)
-    }
-}
-
-//When you are ready to stop the session call stopSession.
-func stopSession(){
-    do{
-        //returns a DetectionSessionResultData.
-        let workoutData = try flowManager?.stopSession()
-    }catch{
-        print(error)
-    }
-}
-```
+- [Start 3D exercise detection](https://github.com/sency-ai/smkit-ios-demo/blob/main/Start3DSession.md)
 
 ## 5. Body calibration <a name="body"></a>
 
@@ -161,14 +82,9 @@ func stopSession(){
 
 ```swift
 extension ViewController:SMBodyCalibrationDelegate{
-    // indicates the user is positioned 'inside' the 'rect' defined in "setBodyPositionCalibrationActive"
-    func didEnterFrame() {
-        
-    }
+    // indicates the user current position status
+    func bodyCalStatusDidChange(status:SMBodyCalibrationStatus){
     
-    // indicates the user is positioned 'outside' the 'rect' defined in "setBodyPositionCalibrationActive"
-    func didLeaveFrame() {
-        
     }
     
     // BodyCalRectGuide will give you the 'box' size and location
@@ -398,13 +314,13 @@ getModelsID() -> [String:String]
 | isYZTiltAngleInRange| `Bool`                                                       | Will be true if Y angle is in range.                                                                         |
 | isXYTiltAngleInRange| `Bool`                                                       | Will be true if X angle is in range.                                                                         |
 
-### `PhonePositionMode` <a name ="PhonePositionMode)"></a>
+### `PhonePositionMode` <a name ="PhonePositionMode"></a>
 | Type                |
 |---------------------|
 | Floor               |
 | Elevated            |
 
-### `ExerciseTypeBr` <a name ="ExerciseTypeBr)"></a>
+### `ExerciseTypeBr` <a name ="ExerciseTypeBr"></a>
 | Type                |
 |---------------------|
 | Dynamic             |
@@ -413,5 +329,12 @@ getModelsID() -> [String:String]
 | Mobility            |
 | Highlights          |
 | Other               |
+
+### `SMBodyCalibrationStatus`
+| Type                | Description                           |
+|---------------------|---------------------------------------|
+| DidEnterFrame       | if the user enterd the frame          |
+| DidLeaveFrame       | if the user left the frame            |
+| TooClose(Bool)      | will be true if the user is too close |
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.

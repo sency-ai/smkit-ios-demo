@@ -8,10 +8,10 @@
 import SwiftUI
 import SMKit
 
-class WelcomeScreenViewController:UIViewController{
+class Pre2DExerciseViewController:UIViewController{
     
     lazy var welcomeScreen:UIView = {
-        guard let view = UIHostingController(rootView: WelcomeScreen(startWasPressed: startWasPressed)).view else {return UIView()}
+        guard let view = UIHostingController(rootView: Pre2DExerciseView(startWasPressed: startWasPressed, dismissWasPressed: dismissWasPressed)).view else {return UIView()}
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -35,5 +35,9 @@ class WelcomeScreenViewController:UIViewController{
         vc.configure(exercise: exercise, phonePosition: phonePostion)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
+    }
+    
+    func dismissWasPressed(){
+        self.dismiss(animated: true)
     }
 }
