@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smbase_package",
       "state" : {
-        "revision" : "673e141cafe1be7e84c2d0eab04d6da435763562",
+        "revision" : "bf164ea32d162e757beb67c42de228a35b67bc1a",
         "version" : "0.5.7"
       }
     },
