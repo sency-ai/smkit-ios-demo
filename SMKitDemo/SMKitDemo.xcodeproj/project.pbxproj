@@ -479,8 +479,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.4;
+				kind = exactVersion;
+				version = 0.2.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

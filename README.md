@@ -83,8 +83,21 @@ To reduce wait time we recommend to call `configure` on app launch.
 ```swift
 extension ViewController:SMBodyCalibrationDelegate{
     // indicates the user current position status
-    func bodyCalStatusDidChange(status:SMBodyCalibrationStatus){
-    
+    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
+        switch status {
+        case .DidEnterFrame:
+            // This status is triggered when the user enters the bounding box.
+            // You can add specific logic here to handle when the user is detected in frame.
+            break
+        case .DidLeaveFrame:
+            // This status is triggered when the user leaves the bounding box.
+            // Implement any necessary actions when the user is no longer detected.
+            break
+        case .TooClose(let tooClose):
+            // This status is triggered only when 3D data is available.
+            // The `tooClose` parameter indicates whether the user is too close to the screen.
+            break
+        }
     }
     
     // BodyCalRectGuide will give you the 'box' size and location
