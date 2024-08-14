@@ -35,7 +35,9 @@ extension ViewController:SMKitSessionDelegate{
     
     //This function will be called with the user joints location.
     //Please notice the 2D joint location are for the video resoltion.
-    //Please notice that the 3D joint location are the distance from the camera
+    //Please notice that the 3D joint location are the distance from the camera.
+    //Note: `poseData3D` will be `nil` if the user is too close to the camera.
+
     func handlePositionData(poseData2D: [Joint:CGPoint]?, poseData3D: [Joint:SCNVector3]?, jointAnglesData: [LimbsPairs:Float]?){
         
     }
