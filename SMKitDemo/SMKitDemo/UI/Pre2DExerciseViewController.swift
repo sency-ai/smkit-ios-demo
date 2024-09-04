@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SMKit
+import SMKitDev
 
 class Pre2DExerciseViewController:UIViewController{
     

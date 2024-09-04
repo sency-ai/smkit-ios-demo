@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 import SceneKit
-import SMBase
+import SMBaseDev
 
 public class SM3DSkeleton:UIView{
     

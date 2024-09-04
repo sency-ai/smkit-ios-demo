@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SMKit
+import SMKitDev
 
 class ViewController: UIViewController {
     

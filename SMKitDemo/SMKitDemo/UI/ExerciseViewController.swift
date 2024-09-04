@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SMKit
+import SMKitDev
 import AVFoundation
 
 class ExerciseViewController: UIViewController {
@@ -48,8 +48,8 @@ class ExerciseViewController: UIViewController {
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
                 jumpRefPoint: "Hip",
-                jumpHeightThreshold: 120,
-                userHeight: 180
+                jumpHeightThreshold: 10,
+                userHeight: 170
             )
             flowManager = try SMKitFlowManager(delegate: self)
             try flowManager?.startSession(sessionSettings: sessionSettings)
