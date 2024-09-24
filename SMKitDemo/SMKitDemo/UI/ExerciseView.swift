@@ -12,7 +12,7 @@ class ExerciseViewModel:ObservableObject{
     @Published var isPaused = false
     @Published fileprivate var feedbacks:[String] = []
     @Published var isShallow:Bool? = false
-    @Published var timePassed = 0
+    @Published var timePassed:Float = 0
     
     func addFeedback(feedbacks:[String]){
         if self.feedbacks != feedbacks{

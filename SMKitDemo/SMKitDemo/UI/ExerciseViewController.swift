@@ -52,9 +52,26 @@ class ExerciseViewController: UIViewController {
                 userHeight: 170
             )
             flowManager = try SMKitFlowManager(delegate: self)
-            try flowManager?.startSession(sessionSettings: sessionSettings)
-            self.exercise = exercise
             
+            flowManager?.setDeviceMotionActive(
+                phoneCalibrationInfo: SMPhoneCalibrationInfo(
+                    YZAngleRange: 70..<90,
+                    XYAngleRange: -5..<5
+                ),
+                tiltDidChange: {
+                    print("\($0.isXYTiltAngleInRange), \($0.isYZTiltAngleInRange)")
+                })
+            
+            self.flowManager?.setDeviceMotionFrequency(isHigh: true)
+            self.flowManager?.setBodyPositionCalibrationInactive()
+
+            try flowManager?.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
+            
+            try flowManager?.startSession(sessionSettings: sessionSettings)
+
+            self.exercise = exercise
+            self.startExercise()
+
             self.view.addSubview(exerciceView)
             
             NSLayoutConstraint.activate([
@@ -84,8 +101,6 @@ class ExerciseViewController: UIViewController {
         previewLayer.videoGravity = .resizeAspect
         self.view.layer.insertSublayer(previewLayer, at: 0)
         self.previewLayer = previewLayer
-        
-        self.startExercise()
     }
     
     func startExercise(){
@@ -140,11 +155,7 @@ extension ExerciseViewController:SMKitSessionDelegate{
             }
             
             if  movementData?.didFinishMovement == true, isDymnamic{
-                if (movementData?.isPerfectForm ?? false){
-                    repModel.didFinishRep = true
-                }else{
-                    repModel.finishedReps += 1
-                }
+                repModel.repFeedback(isGoodRep: movementData?.isPerfectForm ?? false)
             }
             
             if !isDymnamic{
@@ -198,6 +209,16 @@ extension ExerciseViewController:ExerciseViewDelegate{
         }catch{
             self.showError(message: error.localizedDescription)
         }
+        
+    }
+}
+
+extension ExerciseViewController:SMBodyCalibrationDelegate{
+    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
+        
+    }
+    
+    func didRecivedBoundingBox(box: BodyCalRectGuide) {
         
     }
 }

@@ -12,7 +12,7 @@
 		BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */; };
 		BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042672C6B768000E2B675 /* WelcomeViewController.swift */; };
 		BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */; };
-		BE8099052C8741740089F141 /* SMKitDevPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE8099042C8741740089F141 /* SMKitDevPackage */; };
+		BE45DAD22CA13E2C00C129B2 /* SMKitDevPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE45DAD12CA13E2C00C129B2 /* SMKitDevPackage */; };
 		BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E52C36892A009222EA /* AuthManager.swift */; };
 		BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */; };
 		BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E82C36892A009222EA /* ExerciseTimerView.swift */; };
@@ -60,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8099052C8741740089F141 /* SMKitDevPackage in Frameworks */,
+				BE45DAD22CA13E2C00C129B2 /* SMKitDevPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +160,7 @@
 			);
 			name = SMKitDemo;
 			packageProductDependencies = (
-				BE8099042C8741740089F141 /* SMKitDevPackage */,
+				BE45DAD12CA13E2C00C129B2 /* SMKitDevPackage */,
 			);
 			productName = SMKitDemo;
 			productReference = BEC098392BCD1D5100E47B8F /* SMKitDemo.app */;
@@ -191,7 +191,7 @@
 			);
 			mainGroup = BEC098302BCD1D5100E47B8F;
 			packageReferences = (
-				BE8099032C8741740089F141 /* XCRemoteSwiftPackageReference "smkit_dev_package" */,
+				BE45DAD02CA13E2C00C129B2 /* XCRemoteSwiftPackageReference "smkit_dev_package" */,
 			);
 			productRefGroup = BEC0983A2BCD1D5100E47B8F /* Products */;
 			projectDirPath = "";
@@ -387,7 +387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -403,7 +403,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -422,7 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -438,7 +438,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -475,20 +475,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		BE8099032C8741740089F141 /* XCRemoteSwiftPackageReference "smkit_dev_package" */ = {
+		BE45DAD02CA13E2C00C129B2 /* XCRemoteSwiftPackageReference "smkit_dev_package" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://bitbucket.org/sencyai/smkit_dev_package";
 			requirement = {
 				kind = exactVersion;
-				version = "0.2.5-2";
+				version = "0.2.6-3";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BE8099042C8741740089F141 /* SMKitDevPackage */ = {
+		BE45DAD12CA13E2C00C129B2 /* SMKitDevPackage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BE8099032C8741740089F141 /* XCRemoteSwiftPackageReference "smkit_dev_package" */;
+			package = BE45DAD02CA13E2C00C129B2 /* XCRemoteSwiftPackageReference "smkit_dev_package" */;
 			productName = SMKitDevPackage;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -8,10 +8,25 @@
 import SwiftUI
 
 class ExerciseIndicatorModel:ObservableObject{
-    @Published var didFinishRep: Bool = false
+    @Published fileprivate var didFinishRep: Bool = false
     @Published var finishedReps:Int = 0
     @Published var isDynamic = true
     @Published var inPosition = false
+    
+    private var lastGoodRep = Date(){
+        didSet{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+                guard let self = self else {return}
+                if canShrinkCircle, didFinishRep{
+                    didFinishRep = false
+                }
+            }
+        }
+    }
+    
+    var canShrinkCircle:Bool{
+       return Date().timeIntervalSince1970 - lastGoodRep.timeIntervalSince1970 >= 0.8
+    }
     
     func startExercise(isDynamic:Bool){
         finishedReps = 0
@@ -21,6 +36,14 @@ class ExerciseIndicatorModel:ObservableObject{
     func setInPosition(inPosition: Bool){
         if self.inPosition != inPosition{
             self.inPosition = inPosition
+        }
+    }
+    
+    func repFeedback(isGoodRep:Bool){
+        finishedReps += 1
+        if isGoodRep{
+            didFinishRep = true
+            lastGoodRep = Date()
         }
     }
 }
@@ -62,15 +85,6 @@ struct ExerciseIndicatorView: View {
         circleColor = didFinishRep ? .green : .black
         withAnimation(.easeInOut(duration: 0.5)) {
             scale = didFinishRep ? 1.2 : 0.8
-            if didFinishRep{
-                model.finishedReps += 1
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            if model.didFinishRep{
-                model.didFinishRep.toggle()
-            }
         }
     }
     
