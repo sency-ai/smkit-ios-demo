@@ -1,5 +1,6 @@
 # [1] add the source to the top of your Podfile.
 source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
+source 'https://bitbucket.org/sencyai/ios_sdks_dev.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'SMKitUIDemo.xcworkspace'
@@ -7,7 +8,7 @@ workspace 'SMKitUIDemo.xcworkspace'
 #[2] add the pod to your target
 target 'SMKitDemo' do
   use_frameworks!
-  pod 'SMKit' , '0.1.8'
+  pod 'SMKitDev' , '0.2.6'
 end
 
 #[3] add post_install hooks
