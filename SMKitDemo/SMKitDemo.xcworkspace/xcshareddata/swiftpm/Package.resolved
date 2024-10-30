@@ -1,5 +1,5 @@
 {
-  "originHash" : "c83d98f850162fb3a8c9f2dc19fa2c40e2debb5d51a2492febe5fe1d4786339d",
+  "originHash" : "754cc41fe1f0fc882b8e3b683799591947fc82a2b34d2db6337e0e1708767efd",
   "pins" : [
     {
       "identity" : "opencv-spm",
@@ -11,21 +11,21 @@
       }
     },
     {
-      "identity" : "smbase_dev_package",
+      "identity" : "smbase_package",
       "kind" : "remoteSourceControl",
-      "location" : "https://bitbucket.org/sencyai/smbase_dev_package",
+      "location" : "https://bitbucket.org/sencyai/smbase_package",
       "state" : {
-        "revision" : "a9a4acc83fab612a0b2cbfd06560954420a0b2fe",
-        "version" : "0.5.9-3"
+        "revision" : "e0a3769420edab59b8187e70e0ec9507ab06c847",
+        "version" : "0.6.0"
       }
     },
     {
-      "identity" : "smkit_dev_package",
+      "identity" : "smkit_package",
       "kind" : "remoteSourceControl",
-      "location" : "https://bitbucket.org/sencyai/smkit_dev_package",
+      "location" : "https://bitbucket.org/sencyai/smkit_package",
       "state" : {
-        "revision" : "40715374389b2689e6d0a854a5e17cdedbee2050",
-        "version" : "0.2.6-3"
+        "revision" : "aca0e45fb5396276ba7b4b3b4cfe25c6c6d513f0",
+        "version" : "0.2.7"
       }
     },
     {

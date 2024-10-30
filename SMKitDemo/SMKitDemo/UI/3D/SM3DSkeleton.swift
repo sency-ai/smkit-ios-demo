@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 import SceneKit
-import SMBaseDev
+import SMBase
 
 public class SM3DSkeleton:UIView{
     
@@ -49,7 +49,7 @@ public class SM3DSkeleton:UIView{
         return sceneView
     }()
     
-    init(poseType: PoseType) {
+    init(poseType: _Pose) {
         joints = poseType.bodyParts.map({$0.key})
         super.init(frame: .zero)
 

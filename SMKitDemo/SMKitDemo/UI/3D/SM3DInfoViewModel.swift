@@ -9,7 +9,7 @@ import SwiftUI
 
 import SwiftUI
 import SceneKit
-import SMBaseDev
+import SMBase
 
 public class SM3DInfoViewModel:ObservableObject{
     @Published public var posData:[Joint : SCNVector3] = [:]
@@ -88,7 +88,7 @@ public struct SM3DInfoView: View {
 
 struct SM3DSkeletonRepresentable:UIViewRepresentable{
     
-    @State var skeleton:SM3DSkeleton = SM3DSkeleton(poseType: .Temp14)
+    @State var skeleton:SM3DSkeleton = SM3DSkeleton(poseType: .Sency25)
     @Binding var posData:[Joint : SCNVector3]
     
     func makeUIView(context: Context) -> some SM3DSkeleton {

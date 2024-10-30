@@ -13,6 +13,7 @@
 		BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */; };
 		BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042672C6B768000E2B675 /* WelcomeViewController.swift */; };
 		BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */; };
+		BE4B12E82CB7D982008F2131 /* KitDataHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4B12E72CB7D980008F2131 /* KitDataHolder.swift */; };
 		BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E52C36892A009222EA /* AuthManager.swift */; };
 		BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */; };
 		BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E82C36892A009222EA /* ExerciseTimerView.swift */; };
@@ -28,6 +29,7 @@
 		BEC098442BCD1D5100E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098432BCD1D5100E47B8F /* Base */; };
 		BEC098462BCD1D5200E47B8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEC098452BCD1D5200E47B8F /* Assets.xcassets */; };
 		BEC098492BCD1D5200E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098482BCD1D5200E47B8F /* Base */; };
+		BED9F6402CBC1F61002A20B6 /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BED9F63F2CBC1F61002A20B6 /* SMKitPackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,7 @@
 		BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DExerciseViewController.swift; sourceTree = "<group>"; };
 		BE4042672C6B768000E2B675 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		BE4B12E72CB7D980008F2131 /* KitDataHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KitDataHolder.swift; sourceTree = "<group>"; };
 		BEB762E52C36892A009222EA /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseIndicatorView.swift; sourceTree = "<group>"; };
 		BEB762E82C36892A009222EA /* ExerciseTimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseTimerView.swift; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED9F6402CBC1F61002A20B6 /* SMKitPackage in Frameworks */,
 				B4E120EBD372A7F70B8D0907 /* Pods_SMKitDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,6 +99,14 @@
 				BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */,
 			);
 			path = 3D;
+			sourceTree = "<group>";
+		};
+		BE4B12E62CB7D96E008F2131 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				BE4B12E72CB7D980008F2131 /* KitDataHolder.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		BEB762E62C36892A009222EA /* Managers */ = {
@@ -144,6 +156,7 @@
 		BEC0983B2BCD1D5100E47B8F /* SMKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BE4B12E62CB7D96E008F2131 /* Data */,
 				BEB762E62C36892A009222EA /* Managers */,
 				BEB762EE2C36892A009222EA /* UI */,
 				BEC0983C2BCD1D5100E47B8F /* AppDelegate.swift */,
@@ -168,7 +181,6 @@
 				BEC098352BCD1D5100E47B8F /* Sources */,
 				BEC098362BCD1D5100E47B8F /* Frameworks */,
 				BEC098372BCD1D5100E47B8F /* Resources */,
-				F5773D16BFD2575F8B6CC5D3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,6 +215,9 @@
 				Base,
 			);
 			mainGroup = BEC098302BCD1D5100E47B8F;
+			packageReferences = (
+				BED9F63E2CBC1F60002A20B6 /* XCRemoteSwiftPackageReference "smkit_package" */,
+			);
 			productRefGroup = BEC0983A2BCD1D5100E47B8F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -226,23 +241,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F5773D16BFD2575F8B6CC5D3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		FECEAE0489E01D290B5170AD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,6 +286,7 @@
 				BEB762F32C36892A009222EA /* StrokeModifier.swift in Sources */,
 				BEB762F82C368973009222EA /* ExerciseViewController.swift in Sources */,
 				BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */,
+				BE4B12E82CB7D982008F2131 /* KitDataHolder.swift in Sources */,
 				BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,7 +455,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.4;
+				MARKETING_VERSION = 0.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -492,7 +491,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.4;
+				MARKETING_VERSION = 0.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sency.SMKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -527,6 +526,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BED9F63E2CBC1F60002A20B6 /* XCRemoteSwiftPackageReference "smkit_package" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BED9F63F2CBC1F61002A20B6 /* SMKitPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BED9F63E2CBC1F60002A20B6 /* XCRemoteSwiftPackageReference "smkit_package" */;
+			productName = SMKitPackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BEC098312BCD1D5100E47B8F /* Project object */;
 }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SMKitDev
+import SMKit
 import AVFoundation
 
 class ExerciseViewController: UIViewController {
@@ -17,6 +17,7 @@ class ExerciseViewController: UIViewController {
     var exercise:[String] = []
     var exerciseIndex = 0
     var previewLayer:AVCaptureVideoPreviewLayer?
+    let dataHolder = KitDataHolder()
 
     var currentExercise:String{
         exercise[exerciseIndex]
@@ -37,6 +38,18 @@ class ExerciseViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
+    }()
+    
+    lazy var skeletonView:SkeletonView = {
+        let skeletonView = SkeletonView(
+            poseType: .COCO,
+            limbsStyle: dataHolder.limbsStyles,
+            jointsStyle: dataHolder.jointsStyle,
+            limbsMidData: dataHolder.limbMidData,
+            frame: self.view.frame
+        )
+        skeletonView.frame = self.view.frame
+        return skeletonView
     }()
     
     override func viewDidLoad() {
@@ -71,7 +84,8 @@ class ExerciseViewController: UIViewController {
 
             self.exercise = exercise
             self.startExercise()
-
+            
+            self.view.addSubview(self.skeletonView)
             self.view.addSubview(exerciceView)
             
             NSLayoutConstraint.activate([
@@ -155,6 +169,8 @@ extension ExerciseViewController:SMKitSessionDelegate{
             }
             
             if  movementData?.didFinishMovement == true, isDymnamic{
+                print(movementData!)
+                
                 repModel.repFeedback(isGoodRep: movementData?.isPerfectForm ?? false)
             }
             
@@ -165,7 +181,10 @@ extension ExerciseViewController:SMKitSessionDelegate{
     }
     
     func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
-
+        guard let previewLayer else {return}
+        let captureSize = previewLayer.frame.size
+        let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
+        skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
     }
     
     func handleSessionErrors(error: any Error) {
@@ -179,7 +198,15 @@ extension ExerciseViewController:SMKitSessionDelegate{
 extension ExerciseViewController:ExerciseViewDelegate{
     func nextWasPressed() {
         do{
-            let _ = try flowManager?.stopDetection()
+            let result = try flowManager?.stopDetection()
+            
+            let jsonEncoder = JSONEncoder()
+            jsonEncoder.outputFormatting = .prettyPrinted
+            let jsonData = try jsonEncoder.encode(result)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            
+            print(json)
+
             if exerciseIndex >= exercise.count - 1{
                 self.quitWasPressed()
             }else{
@@ -204,7 +231,7 @@ extension ExerciseViewController:ExerciseViewDelegate{
             let jsonData = try jsonEncoder.encode(result)
             let json = String(data: jsonData, encoding: String.Encoding.utf8)
 
-            
+            print(json)
             showSummary(summary: json ?? "")
         }catch{
             self.showError(message: error.localizedDescription)

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-import SMKitDev
-import SMBaseDev
+import SMKit
+import SMBase
 import SceneKit
 
 class SM3DExerciseViewController: UIViewController {
