@@ -31,24 +31,25 @@ public struct SM3DInfoView: View {
     
     public var body: some View {
         VStack(alignment: .leading){
-            HStack(alignment: .top){
+//            HStack(alignment: .top){
                 if !model.posData.isEmpty{
                     SM3DSkeletonRepresentable(posData: $model.posData)
-                        .frame(width: 150, height: 300)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .frame(width: 150, height: 300)
                 }
-                Spacer()
+//                Spacer()
                 
-                Button(action: dismissWasPressed){
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.white)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.black.opacity(0.5))
-                        )
-                }
-                .padding(.horizontal)
-            }
+//                Button(action: dismissWasPressed){
+//                    Image(systemName: "xmark")
+//                        .foregroundStyle(.white)
+//                        .padding()
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 10)
+//                                .fill(.black.opacity(0.5))
+//                        )
+//                }
+//                .padding(.horizontal)
+//            }
             if model.posData.isEmpty{
                 Spacer()
                 Text("MOVE IN RANGE")
@@ -62,23 +63,36 @@ public struct SM3DInfoView: View {
                     )
                     .frame(maxWidth: .infinity,alignment: .center)
             }
-            Spacer()
+//            Spacer()
             
-            HStack{
-                Spacer()
-                VStack{
-                    SM3DInfoViewLabel(title: "Hip", value: hip)
-                    ForEach(0..<sortedAngles.count, id: \.self){ i in
-                        let angle = sortedAngles[i]
-                        let value = model.threeDAnglesData[angle]
-                        
-                        SM3DInfoViewLabel(title: angle.rawValue, value: "\(String(format: "%.1f", value ?? 0))")
-                    }
-                }
-                .foregroundColor(.white)
-            }
+//            HStack{
+//                Spacer()
+//                VStack{
+//                    SM3DInfoViewLabel(title: "Hip", value: hip)
+//                    ForEach(0..<sortedAngles.count, id: \.self){ i in
+//                        let angle = sortedAngles[i]
+//                        let value = model.threeDAnglesData[angle]
+//                        
+//                        SM3DInfoViewLabel(title: angle.rawValue, value: "\(String(format: "%.1f", value ?? 0))")
+//                    }
+//                }
+//                .foregroundColor(.white)
+//            }
         }
         .background(Color.clear)
+        .overlay(
+            Button(action: dismissWasPressed){
+                Image(systemName: "xmark")
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.black.opacity(0.5))
+                    )
+            }
+            .padding(.horizontal)
+            ,alignment: .topLeading
+        )
     }
 }
 

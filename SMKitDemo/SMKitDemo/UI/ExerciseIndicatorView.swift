@@ -70,10 +70,10 @@ struct ExerciseIndicatorView: View {
                 }
             )
             .scaleEffect(scale)
-            .onChange(of: model.didFinishRep) { _, newValue in
+            .onChange(of: model.didFinishRep) { newValue in
                 playScaleAnim()
             }
-            .onChange(of: model.inPosition) { oldValue, newValue in
+            .onChange(of: model.inPosition) { newValue in
                 if newValue{
                     playBreathingAnim()
                 }
