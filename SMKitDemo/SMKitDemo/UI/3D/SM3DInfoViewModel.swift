@@ -9,7 +9,7 @@ import SwiftUI
 
 import SwiftUI
 import SceneKit
-import SMBase
+import SMBaseDev
 
 public class SM3DInfoViewModel:ObservableObject{
     @Published public var posData:[Joint : SCNVector3] = [:]

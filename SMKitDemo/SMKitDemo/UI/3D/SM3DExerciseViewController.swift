@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-import SMKit
-import SMBase
+import SMKitDev
+import SMBaseDev
 import SceneKit
 
 class SM3DExerciseViewController: UIViewController {
@@ -32,10 +32,10 @@ class SM3DExerciseViewController: UIViewController {
         super.viewDidLoad()
         do{
             self.flowManager = try SMKitFlowManager(delegate: self)
-            let URL = Bundle.main.url(forResource: "testDance", withExtension: "mp4")!
-            let player = try flowManager?.startVideoSession(url: URL)
-            setupPlayerLayer(videoPlayer: player)
-//            self.startSession()
+//            let URL = Bundle.main.url(forResource: "testDance", withExtension: "MOV")!
+//            let player = try flowManager?.startVideoSession(url: URL)
+//            setupPlayerLayer(videoPlayer: player)
+            self.startSession()
             
             self.view.addSubview(sm3DInfoView)
             
@@ -119,9 +119,10 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
         
     }
     
-    func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
+
             sm3DInfoViewModel.posData = poseData3D ?? [:]
             sm3DInfoViewModel.threeDAnglesData = jointAnglesData ?? [:]
         }

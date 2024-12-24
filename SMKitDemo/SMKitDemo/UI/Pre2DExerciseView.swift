@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SMKit
+import SMKitDev
 
 struct Pre2DExerciseView: View {
     

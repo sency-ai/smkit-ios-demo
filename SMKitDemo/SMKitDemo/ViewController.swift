@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SMKit
+import SMKitDev
 
 class ViewController: UIViewController {
     
@@ -92,8 +92,8 @@ extension ViewController:SMKitSessionDelegate{
     //This function will be called with the user joints location.
     //Please notice the 2D joint location are for the video resoltion.
     //Please notice that the 3D joint location are the distance from the camera
-    func handlePositionData(poseData2D: [Joint:CGPoint]?, poseData3D: [Joint:SCNVector3]?, jointAnglesData: [LimbsPairs:Float]?){
-        
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+
     }
     
     //This function will be called with if ant error occcured.

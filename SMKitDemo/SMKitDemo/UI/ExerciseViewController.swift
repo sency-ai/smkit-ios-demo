@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SMKit
+import SMKitDev
 import AVFoundation
 
 class ExerciseViewController: UIViewController {
@@ -180,11 +180,15 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
         guard let previewLayer else {return}
         let captureSize = previewLayer.frame.size
         let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
-        skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
+        
+        DispatchQueue.main.async {[weak self] in
+            guard let self else {return}
+            skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
+        }
     }
     
     func handleSessionErrors(error: any Error) {

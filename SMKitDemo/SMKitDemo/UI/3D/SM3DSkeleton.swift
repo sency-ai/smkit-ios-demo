@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 import SceneKit
-import SMBase
+import SMBaseDev
 
 public class SM3DSkeleton:UIView{
     
@@ -27,8 +27,10 @@ public class SM3DSkeleton:UIView{
     
     var didAddFloor = false
     var floorNode:SCNNode?
+   
+//    let recorder = SceneKitRecorder()
     
-    let jointsToSkip:[Joint] = [.MiddleSpine, .LEar, .REar, .LEye, .REye, .Neck, .Nose, .LowerSpine , .UpperSpine]
+    let jointsToSkip:[Joint] = []// [.MiddleSpine, .LEar, .REar, .LEye, .REye, .Neck, .Nose, .LowerSpine , .UpperSpine]
     
     var limbs:[Limb] = [
         Limb(startJoint: .LShoulder, endJoint: .RShoulder),
@@ -96,10 +98,23 @@ public class SM3DSkeleton:UIView{
         self.createNods()
         self.addFloor()
 
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let videoPath = documentsDirectory.appendingPathComponent("output\(Date()).mp4")
+//        do{
+//            try recorder.startRecording(sceneView: sceneView, outputURL: videoPath, videoSize: CGSize(width: 1080 , height: 1920 ))
+//        }catch{
+//            print(error)
+//        }
         DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
             guard let self else { return }
             addCameraAnim()
         }
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+//            self.recorder.stopRecording { url in
+//                print("DONE!")
+//            }
+//        }
     }
     
     func setupScene() {
@@ -129,11 +144,11 @@ public class SM3DSkeleton:UIView{
             sphereNodes[joint] = sphereNode
             sceneView.scene?.rootNode.addChildNode(sphereNode)
             
-            if joint == .MiddleSpine{
-                let lookAtConstraint = SCNLookAtConstraint(target: sphereNode)
-                lookAtConstraint.isGimbalLockEnabled = true // Optional: restrict to rotation on one axis
-                cameraNode.constraints = [lookAtConstraint]
-            }
+//            if joint == .MiddleSpine{
+//                let lookAtConstraint = SCNLookAtConstraint(target: sphereNode)
+//                lookAtConstraint.isGimbalLockEnabled = true // Optional: restrict to rotation on one axis
+//                cameraNode.constraints = [lookAtConstraint]
+//            }
             
 
         }
@@ -270,6 +285,7 @@ public class SM3DSkeleton:UIView{
         limbsNodes.forEach({$0.value.removeFromParentNode()})
         createLimbs()
         floorNode?.position = SCNVector3(0, (posData[.Hip]?.y ?? 0) - 0.8 , 0)
+//        self.recorder.captureFrame(sceneView: self.sceneView)
 //        if !didAddFloor{
 //            addFloor()
 //            didAddFloor = true

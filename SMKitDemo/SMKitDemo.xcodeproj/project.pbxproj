@@ -8,14 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		B4E120EBD372A7F70B8D0907 /* Pods_SMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CD79567EABC074A74EF722 /* Pods_SMKitDemo.framework */; };
-		BE036FF82CD230BF0045EC2D /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE036FF72CD230BF0045EC2D /* SMKitPackage */; };
-		BE036FFA2CD36C230045EC2D /* testDance.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BE036FF92CD36C230045EC2D /* testDance.mp4 */; };
+		BE23AE262D083F7500BFAD8B /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */; };
+		BE23AE282D0840C200BFAD8B /* ViewRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */; };
+		BE23AE2A2D08419B00BFAD8B /* SceneKitRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */; };
 		BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */; };
 		BE4042642C6B745200E2B675 /* SM3DSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */; };
 		BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */; };
 		BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042672C6B768000E2B675 /* WelcomeViewController.swift */; };
 		BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042692C6B7AEC00E2B675 /* WelcomeView.swift */; };
 		BE4B12E82CB7D982008F2131 /* KitDataHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4B12E72CB7D980008F2131 /* KitDataHolder.swift */; };
+		BE77715C2D19B956006346C8 /* SMKitDevPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE77715B2D19B956006346C8 /* SMKitDevPackage */; };
 		BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E52C36892A009222EA /* AuthManager.swift */; };
 		BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */; };
 		BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB762E82C36892A009222EA /* ExerciseTimerView.swift */; };
@@ -31,13 +33,14 @@
 		BEC098442BCD1D5100E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098432BCD1D5100E47B8F /* Base */; };
 		BEC098462BCD1D5200E47B8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEC098452BCD1D5200E47B8F /* Assets.xcassets */; };
 		BEC098492BCD1D5200E47B8F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BEC098482BCD1D5200E47B8F /* Base */; };
-		BED9F6402CBC1F61002A20B6 /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BED9F63F2CBC1F61002A20B6 /* SMKitPackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3FC7E691FF8F095498D35F52 /* Pods-SMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		8EDE7FE9D21E3F2AE2BB3CF0 /* Pods-SMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
-		BE036FF92CD36C230045EC2D /* testDance.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testDance.mp4; sourceTree = "<group>"; };
+		BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecorder.swift; sourceTree = "<group>"; };
+		BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitRecorder.swift; sourceTree = "<group>"; };
 		BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DInfoViewModel.swift; sourceTree = "<group>"; };
 		BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DSkeleton.swift; sourceTree = "<group>"; };
 		BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DExerciseViewController.swift; sourceTree = "<group>"; };
@@ -69,9 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BED9F6402CBC1F61002A20B6 /* SMKitPackage in Frameworks */,
 				B4E120EBD372A7F70B8D0907 /* Pods_SMKitDemo.framework in Frameworks */,
-				BE036FF82CD230BF0045EC2D /* SMKitPackage in Frameworks */,
+				BE77715C2D19B956006346C8 /* SMKitDevPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +162,9 @@
 		BEC0983B2BCD1D5100E47B8F /* SMKitDemo */ = {
 			isa = PBXGroup;
 			children = (
-				BE036FF92CD36C230045EC2D /* testDance.mp4 */,
+				BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */,
+				BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */,
+				BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */,
 				BE4B12E62CB7D96E008F2131 /* Data */,
 				BEB762E62C36892A009222EA /* Managers */,
 				BEB762EE2C36892A009222EA /* UI */,
@@ -221,7 +225,7 @@
 			);
 			mainGroup = BEC098302BCD1D5100E47B8F;
 			packageReferences = (
-				BE036FF62CD230BF0045EC2D /* XCRemoteSwiftPackageReference "smkit_package" */,
+				BE77715A2D19B956006346C8 /* XCRemoteSwiftPackageReference "smkit_dev_package" */,
 			);
 			productRefGroup = BEC0983A2BCD1D5100E47B8F /* Products */;
 			projectDirPath = "";
@@ -240,7 +244,6 @@
 				BEC098462BCD1D5200E47B8F /* Assets.xcassets in Resources */,
 				BEC098492BCD1D5200E47B8F /* Base in Resources */,
 				BEC098442BCD1D5100E47B8F /* Base in Resources */,
-				BE036FFA2CD36C230045EC2D /* testDance.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,9 +283,12 @@
 				BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */,
 				BEB762F02C36892A009222EA /* ExerciseIndicatorView.swift in Sources */,
 				BEC098412BCD1D5100E47B8F /* ViewController.swift in Sources */,
+				BE23AE262D083F7500BFAD8B /* VideoRecorder.swift in Sources */,
 				BEB762F52C36892A009222EA /* Pre2DExerciseView.swift in Sources */,
+				BE23AE282D0840C200BFAD8B /* ViewRecorder.swift in Sources */,
 				BE40426A2C6B7AEC00E2B675 /* WelcomeView.swift in Sources */,
 				BEB762EF2C36892A009222EA /* AuthManager.swift in Sources */,
+				BE23AE2A2D08419B00BFAD8B /* SceneKitRecorder.swift in Sources */,
 				BEB762F62C36892A009222EA /* Pre2DExerciseViewController.swift in Sources */,
 				BEC0983D2BCD1D5100E47B8F /* AppDelegate.swift in Sources */,
 				BEB762F12C36892A009222EA /* ExerciseTimerView.swift in Sources */,
@@ -445,7 +451,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -481,7 +487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -534,34 +540,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		BE036FF62CD230BF0045EC2D /* XCRemoteSwiftPackageReference "smkit_package" */ = {
+		BE77715A2D19B956006346C8 /* XCRemoteSwiftPackageReference "smkit_dev_package" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
+			repositoryURL = "https://bitbucket.org/sencyai/smkit_dev_package";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.7;
-			};
-		};
-		BED9F63E2CBC1F60002A20B6 /* XCRemoteSwiftPackageReference "smkit_package" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.7;
+				minimumVersion = 0.3.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BE036FF72CD230BF0045EC2D /* SMKitPackage */ = {
+		BE77715B2D19B956006346C8 /* SMKitDevPackage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BE036FF62CD230BF0045EC2D /* XCRemoteSwiftPackageReference "smkit_package" */;
-			productName = SMKitPackage;
-		};
-		BED9F63F2CBC1F61002A20B6 /* SMKitPackage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BED9F63E2CBC1F60002A20B6 /* XCRemoteSwiftPackageReference "smkit_package" */;
-			productName = SMKitPackage;
+			package = BE77715A2D19B956006346C8 /* XCRemoteSwiftPackageReference "smkit_dev_package" */;
+			productName = SMKitDevPackage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
