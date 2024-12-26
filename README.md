@@ -14,6 +14,8 @@
 ## 1. Installation
 
 ### Cocoapods
+*Latest version: SMKit '0.3.1'*
+
 ```ruby
 # [1] add the source to the top of your Podfile.
 source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
@@ -40,6 +42,7 @@ end
 ### SPM
 
 In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smkit_package` and then press **Add package**
+*Latest version: smkit_package '0.3.1'*
 
 [!add package](screenshots/AddSMKit.png)
 

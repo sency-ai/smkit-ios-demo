@@ -17,6 +17,7 @@ class ExerciseViewController: UIViewController {
     var exercise:[String] = []
     var exerciseIndex = 0
     var previewLayer:AVCaptureVideoPreviewLayer?
+    let dataHolder = KitDataHolder()
 
     var currentExercise:String{
         exercise[exerciseIndex]
@@ -39,6 +40,18 @@ class ExerciseViewController: UIViewController {
         return view
     }()
     
+    lazy var skeletonView:SkeletonView = {
+        let skeletonView = SkeletonView(
+            poseType: .COCO,
+            limbsStyle: dataHolder.limbsStyles,
+            jointsStyle: dataHolder.jointsStyle,
+            limbsMidData: dataHolder.limbMidData,
+            frame: self.view.frame
+        )
+        skeletonView.frame = self.view.frame
+        return skeletonView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -48,13 +61,31 @@ class ExerciseViewController: UIViewController {
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
                 jumpRefPoint: "Hip",
-                jumpHeightThreshold: 120,
-                userHeight: 180
+                jumpHeightThreshold: 10,
+                userHeight: 170
             )
             flowManager = try SMKitFlowManager(delegate: self)
-            try flowManager?.startSession(sessionSettings: sessionSettings)
-            self.exercise = exercise
             
+            flowManager?.setDeviceMotionActive(
+                phoneCalibrationInfo: SMPhoneCalibrationInfo(
+                    YZAngleRange: 70..<90,
+                    XYAngleRange: -5..<5
+                ),
+                tiltDidChange: { _ in
+//                    print("\($0.isXYTiltAngleInRange), \($0.isYZTiltAngleInRange)")
+                })
+            
+            self.flowManager?.setDeviceMotionFrequency(isHigh: true)
+            self.flowManager?.setBodyPositionCalibrationInactive()
+
+            try flowManager?.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
+            
+            try flowManager?.startSession(sessionSettings: sessionSettings)
+
+            self.exercise = exercise
+            self.startExercise()
+            
+            self.view.addSubview(self.skeletonView)
             self.view.addSubview(exerciceView)
             
             NSLayoutConstraint.activate([
@@ -84,8 +115,6 @@ class ExerciseViewController: UIViewController {
         previewLayer.videoGravity = .resizeAspect
         self.view.layer.insertSublayer(previewLayer, at: 0)
         self.previewLayer = previewLayer
-        
-        self.startExercise()
     }
     
     func startExercise(){
@@ -140,11 +169,9 @@ extension ExerciseViewController:SMKitSessionDelegate{
             }
             
             if  movementData?.didFinishMovement == true, isDymnamic{
-                if (movementData?.isPerfectForm ?? false){
-                    repModel.didFinishRep = true
-                }else{
-                    repModel.finishedReps += 1
-                }
+                print(movementData!)
+                
+                repModel.repFeedback(isGoodRep: movementData?.isPerfectForm ?? false)
             }
             
             if !isDymnamic{
@@ -153,8 +180,15 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
-
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+        guard let previewLayer else {return}
+        let captureSize = previewLayer.frame.size
+        let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
+        
+        DispatchQueue.main.async {[weak self] in
+            guard let self else {return}
+            skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
+        }
     }
     
     func handleSessionErrors(error: any Error) {
@@ -168,7 +202,15 @@ extension ExerciseViewController:SMKitSessionDelegate{
 extension ExerciseViewController:ExerciseViewDelegate{
     func nextWasPressed() {
         do{
-            let _ = try flowManager?.stopDetection()
+            let result = try flowManager?.stopDetection()
+            
+            let jsonEncoder = JSONEncoder()
+            jsonEncoder.outputFormatting = .prettyPrinted
+            let jsonData = try jsonEncoder.encode(result)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            
+            print(json)
+
             if exerciseIndex >= exercise.count - 1{
                 self.quitWasPressed()
             }else{
@@ -193,11 +235,21 @@ extension ExerciseViewController:ExerciseViewDelegate{
             let jsonData = try jsonEncoder.encode(result)
             let json = String(data: jsonData, encoding: String.Encoding.utf8)
 
-            
+            print(json)
             showSummary(summary: json ?? "")
         }catch{
             self.showError(message: error.localizedDescription)
         }
+        
+    }
+}
+
+extension ExerciseViewController:SMBodyCalibrationDelegate{
+    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
+        
+    }
+    
+    func didRecivedBoundingBox(box: BodyCalRectGuide) {
         
     }
 }
