@@ -45,7 +45,7 @@ In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smk
 
 *Latest version: `smkit_package '0.3.1'`*
 
-[!add package](screenshots/AddSMKit.png)
+[add package](screenshots/spm_add_package.png)
 
 <a name="setup"></a>
 ## 2. Setup
