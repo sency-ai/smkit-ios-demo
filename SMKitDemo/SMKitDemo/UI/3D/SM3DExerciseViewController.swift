@@ -19,6 +19,8 @@ class SM3DExerciseViewController: UIViewController {
     var previewLayer:AVCaptureVideoPreviewLayer?
     let sm3DInfoViewModel = SM3DInfoViewModel()
     
+    var playerLayer: AVPlayerLayer?
+    
     lazy var sm3DInfoView:UIView = {
         guard let view = UIHostingController(rootView: SM3DInfoView(model: sm3DInfoViewModel, dismissWasPressed: dismissWasPressed)).view else {return UIView()}
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -30,6 +32,9 @@ class SM3DExerciseViewController: UIViewController {
         super.viewDidLoad()
         do{
             self.flowManager = try SMKitFlowManager(delegate: self)
+//            let URL = Bundle.main.url(forResource: "testDance", withExtension: "MOV")!
+//            let player = try flowManager?.startVideoSession(url: URL)
+//            setupPlayerLayer(videoPlayer: player)
             self.startSession()
             
             self.view.addSubview(sm3DInfoView)
@@ -59,6 +64,18 @@ class SM3DExerciseViewController: UIViewController {
         }
     }
 
+    
+    private func setupPlayerLayer(videoPlayer: AVPlayer?) {
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        playerLayer = AVPlayerLayer(player: videoPlayer)
+        playerLayer?.frame = view.layer.bounds
+        playerLayer?.videoGravity = .resizeAspect  // Maintain the aspect ratio
+        if let layer = playerLayer {
+            self.view.layer.insertSublayer(layer, at: 0)
+        }
+    }
+    
     func setupPreviewLayer(){
         self.previewLayer?.removeFromSuperlayer()
         self.previewLayer = nil
@@ -102,9 +119,10 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
         
     }
     
-    func handlePositionData(poseData2D: [Joint : CGPoint]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
+
             sm3DInfoViewModel.posData = poseData3D ?? [:]
             sm3DInfoViewModel.threeDAnglesData = jointAnglesData ?? [:]
         }

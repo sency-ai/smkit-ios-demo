@@ -12,13 +12,16 @@ import SMKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        SMKitFlowManager.configure(authKey: "YOUR_KEY", shouldSupport3D: true) {
+         SMKitFlowManager.configure(authKey: "", shouldSupport3D: true) {
             // The configuration was successful
             // Your Code
-            AuthManager.shared.didFinishAuth = true
+            DispatchQueue.main.async {
+                AuthManager.shared.didFinishAuth = true
+            }
         } onFailure: { error in
             // The configuration failed with error
             // Your Code
+            print(error)
         }
         return true
     }
