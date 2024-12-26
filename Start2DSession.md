@@ -19,7 +19,7 @@ extension ViewController:SMKitSessionDelegate{
     
     //This function will be called with the user joints location.
     //Please notice the 2D joint location are for the video resoltion.
-    func handlePositionData(poseData2D: [Joint:CGPoint]?, poseData3D: [Joint:SCNVector3]?, jointAnglesData: [LimbsPairs:Float]?)
+    func handlePositionData(poseData2D: [Joint:JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
         
     }
     
