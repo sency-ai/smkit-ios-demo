@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SMKit
+import SMBase
 import AVFoundation
 
 class ExerciseViewController: UIViewController {
@@ -180,7 +181,7 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?) {
         guard let previewLayer else {return}
         let captureSize = previewLayer.frame.size
         let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize

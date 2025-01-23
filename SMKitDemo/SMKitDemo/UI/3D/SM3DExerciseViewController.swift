@@ -119,7 +119,7 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
         
     }
     
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
 
