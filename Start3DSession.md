@@ -46,6 +46,11 @@ extension ViewController:SMKitSessionDelegate{
     func handleSessionErrors(error: any Error) {
         
     }
+    
+    //This function will be called when a with each camera frame.
+    func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
+        
+    }
 }
 ```
 ### Starting the 3D session

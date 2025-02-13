@@ -99,6 +99,7 @@ class SM3DExerciseViewController: UIViewController {
 }
 
 extension SM3DExerciseViewController:SMKitSessionDelegate{
+    
     func captureSessionDidSet(session: AVCaptureSession) {
         self.session = session
         DispatchQueue.main.async {
@@ -126,5 +127,9 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
             sm3DInfoViewModel.posData = poseData3D ?? [:]
             sm3DInfoViewModel.threeDAnglesData = jointAnglesData ?? [:]
         }
+    }
+    
+    func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
+        
     }
 }

@@ -14,7 +14,7 @@
 ## 1. Installation
 
 ### Cocoapods
-*Latest version: `SMKit '0.3.3'`*
+*Latest version: `SMKit '0.3.5'`*
 
 ```ruby
 # [1] add the source to the top of your Podfile.
@@ -43,7 +43,7 @@ end
 
 In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smkit_package` and then press **Add package**
 
-*Latest version: `smkit_package '0.3.3'`*
+*Latest version: `smkit_package '0.3.5'`*
 
 [add package](screenshots/spm_add_package.png)
 
@@ -291,35 +291,40 @@ getModelsID() -> [String:String]
 
 
 #### `Joint`
-| Name                |
-|---------------------|
-| Nose                |
-| Neck                |
-| RShoulder           |
-| RElbow              |
-| RWrist              |
-| LShoulder           |
-| LElbow              |
-| LWrist              |
-| RHip                |
-| RKnee               |
-| RAnkle              |
-| LHip                |
-| LKnee               |
-| LAnkle              |
-| REye                |
-| LEye                |
-| REar                |
-| LEar                |
-| Hip                 |
-| Chest               |
-| Head                |
-| LBigToe             |
-| RBigToe             |
-| LSmallToe           |
-| RSmallToe           |
-| LHeel               |
-| RHeel               |
+
+| 2D Joints           | 3D Joins     |
+|---------------------|--------------|
+| Head                | Head         |
+| REye                | REye         |
+| LEye                | LEye         |
+| LEar                | LEar         |
+| REar                | REar         |
+| Nose                | Nose         |
+| Neck                | Neck         |
+| RShoulder           | RShoulder    |
+| RElbow              | RElbow       |
+| RWrist              | RWrist       |
+| LShoulder           | LShoulder    |
+| LElbow              | LElbow       |
+| LWrist              | LWrist       |
+| UpperSpine          | UpperSpine   |
+| MiddleSpine1        | MiddleSpine1 |
+| Hip                 | Hip          |
+| RHip                | RHip         |
+| RKnee               | RKnee        |
+| RAnkle              | RAnkle       |
+| RHeel               | RBigToe      |
+| RBigToe             | LHip         |
+| RSmallToe           | LKnee        |
+| LHip                | LAnkle       |
+| LKnee               | LBigToe      |
+| LAnkle              |              |
+| LHeel               |              |
+| LBigToe             |              |
+| LSmallTo            |              |
+
+
+
 
 ### `SMPhoneCalibrationInfo` <a name="SMPhoneCalibrationInfo"></a>
 | Type                | Format                                                       | Description                                                                                                  |
