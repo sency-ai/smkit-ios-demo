@@ -198,6 +198,9 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
 
+    func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
+        
+    }
 }
 
 extension ExerciseViewController:ExerciseViewDelegate{

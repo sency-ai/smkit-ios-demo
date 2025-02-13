@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 
 
 extension ViewController:SMKitSessionDelegate{
-    
+
     //This function will be called when the session started and the camera is ready.
     func captureSessionDidSet(session: AVCaptureSession) {
         
@@ -99,6 +99,11 @@ extension ViewController:SMKitSessionDelegate{
     
     //This function will be called with if ant error occcured.
     func handleSessionErrors(error: any Error) {
+        
+    }
+    
+    //This function will be called when a with each camera frame.
+    func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
         
     }
 }

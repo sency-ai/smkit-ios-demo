@@ -102,7 +102,7 @@ public struct SM3DInfoView: View {
 
 struct SM3DSkeletonRepresentable:UIViewRepresentable{
     
-    @State var skeleton:SM3DSkeleton = SM3DSkeleton(poseType: .Sency25)
+    @State var skeleton:SM3DSkeleton = SM3DSkeleton(poseType: .SENCY3D)
     @Binding var posData:[Joint : SCNVector3]
     
     func makeUIView(context: Context) -> some SM3DSkeleton {
