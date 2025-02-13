@@ -291,35 +291,40 @@ getModelsID() -> [String:String]
 
 
 #### `Joint`
-| Name                |
-|---------------------|
-| Nose                |
-| Neck                |
-| RShoulder           |
-| RElbow              |
-| RWrist              |
-| LShoulder           |
-| LElbow              |
-| LWrist              |
-| RHip                |
-| RKnee               |
-| RAnkle              |
-| LHip                |
-| LKnee               |
-| LAnkle              |
-| REye                |
-| LEye                |
-| REar                |
-| LEar                |
-| Hip                 |
-| Chest               |
-| Head                |
-| LBigToe             |
-| RBigToe             |
-| LSmallToe           |
-| RSmallToe           |
-| LHeel               |
-| RHeel               |
+
+| 2D Joints           | 3D Joins     |
+|---------------------|--------------|
+| Head                | Head         |
+| REye                | REye         |
+| LEye                | LEye         |
+| LEar                | LEar         |
+| REar                | REar         |
+| Nose                | Nose         |
+| Neck                | Neck         |
+| RShoulder           | RShoulder    |
+| RElbow              | RElbow       |
+| RWrist              | RWrist       |
+| LShoulder           | LShoulder    |
+| LElbow              | LElbow       |
+| LWrist              | LWrist       |
+| UpperSpine          | UpperSpine   |
+| MiddleSpine1        | MiddleSpine1 |
+| Hip                 | Hip          |
+| RHip                | RHip         |
+| RKnee               | RKnee        |
+| RAnkle              | RAnkle       |
+| RHeel               | RBigToe      |
+| RBigToe             | LHip         |
+| RSmallToe           | LKnee        |
+| LHip                | LAnkle       |
+| LKnee               | LBigToe      |
+| LAnkle              |              |
+| LHeel               |              |
+| LBigToe             |              |
+| LSmallTo            |              |
+
+
+
 
 ### `SMPhoneCalibrationInfo` <a name="SMPhoneCalibrationInfo"></a>
 | Type                | Format                                                       | Description                                                                                                  |
