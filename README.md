@@ -6,15 +6,16 @@
 3. [ Configure ](#conf)
 4. [ Start ](#start)
 5. [ Body calibration ](#body)
-6. [ Setters ](#setters)
-7. [ Getters ](#getters)
-8. [ Data ](#data)
+6. [ Change Camera](#cam)
+7. [ Setters ](#setters)
+8. [ Getters ](#getters)
+9. [ Data ](#data)
 
 <a name="inst"></a>
 ## 1. Installation
 
 ### Cocoapods
-*Latest version: `SMKit '0.3.5'`*
+*Latest version: `SMKit '0.3.9'`*
 
 ```ruby
 # [1] add the source to the top of your Podfile.
@@ -126,7 +127,24 @@ func setBodyPositionCalibrationInactive(){
     flowManager?.setBodyPositionCalibrationInactive()
 }
 ```
-## 6. Setters <a name="setters"></a>
+## 6. Change camera<a name="cam"></a>
+In SMKit you have the ability to choose which camera you prefer to use front or back you can achieve this with two different way
+
+### Before session start
+To choose which camera to use before the session starts, you need to call start session with SMKitSessionSettings and add a SMCameraType like so:
+
+```swift
+try flowManager.startSession(sessionSettings: SMKitSessionSettings(camType: SMCameraType.front))
+```
+
+### while session is running
+To switch the camera type during the session you need to call `changeCameraType` like so:
+
+```swift
+self.flowManager.changeCameraType(type: SMCameraType.back)
+```
+
+## 7. Setters <a name="setters"></a>
 
 setDeviceMotionActive(phoneCalibrationInfo:SMPhoneCalibrationInfo, tiltDidChange: @escaping (SMPhoneCalibrationInfo) -> Void)
 **Description**: Activate DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback tiltDidChange that wiךl be called when the phone changed
@@ -169,7 +187,7 @@ setBodyPositionCalibrationInactive()
     flowManager.setBodyPositionCalibrationInactive()
 ```
 
-## 7. Getters <a name="getters"></a>
+## 8. Getters <a name="getters"></a>
 
 getExerciseType() -> ExerciseTypeBr?
 **Description**: Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr) if possible
@@ -203,7 +221,7 @@ getModelsID() -> [String:String]
     let models = flowManager.getModelsID()
 ```
 
-## 8. Available Data Types <a name="data"></a>
+## 9. Available Data Types <a name="data"></a>
 
 #### `SMKitSessionSettings`
 | Type                | Format                                                       | Description                                                                                                  |
@@ -358,5 +376,11 @@ getModelsID() -> [String:String]
 | DidEnterFrame       | if the user enterd the frame          |
 | DidLeaveFrame       | if the user left the frame            |
 | TooClose(Bool)      | will be true if the user is too close |
+
+### `SMCameraType`
+| Type                | Description                           |
+|---------------------|---------------------------------------|
+| front               | the front camera                      |
+| back                | the back camera                       |
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
