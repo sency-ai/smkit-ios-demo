@@ -134,56 +134,52 @@ struct Pre2DExerciseView: View {
 }
 
 enum DemoExercises:String, CaseIterable{
+    // Dynamic Exercises
     case AlternateWindmillToeTouch
     case Burpees
     case Crunches
+    case LungeFrontRight
+    case LungeFrontLeft
     case Froggers
     case GlutesBridge
     case HighKnees
     case Jumps
     case JumpingJacks
     case LateralRaises
-    case LungeFront
-    case LungeJump
     case LungeSide
     case LungeSideRight
     case LungeSideLeft
-    case LungeSideSplit
-    case LungeRegular
-    case PlankHighKneeToElbow
     case PlankHighShoulderTaps
-    case PlankMountainClimber
+    case PushupKnees
+    case PushupKneesNarrow
+    case PushupKneesWide
+    case PushupNarrow
+    case PushupWide
     case PushupRegular
     case ReverseSitToTableTop
-    case SitupPenguin
-    case SitupRussianTwist
-    case SquatAndKick
-    case SquatJump
     case SquatRegular
     case SquatAndRotationJab
-    case SquatSide
+    case SquatAndStep
     case SquatSumo
+    case SquatNarrow
+    case SquatRegularOverhead
+    case ShouldersPress
     case StandingAlternateToeTouch
     case StandingBicycleCrunches
     case StandingObliqueCrunches
-    case StandingStepReverseAirFly
     case ShouldersPress
-    case SideStepJacks
-    case Lunge
     case SkiJumps
     case SkaterHops
-    case SumoSquatSpreadHandsVariation
-    case SingleHandOverheadHealDigs
-    case BackSupermanStatic
-    case BackSupermanStraightArmsStatic
-    case BearStatic
-    case HandStand
-    case LungeRegularStatic
+    case QuadThoraticRotation
+
+    // Static / Isometric Exercises
     case PlankHighStatic
-    case PlankLowStatic
-    case PlankSideLowStatic
-    case SitupRussianTwistStatic
+    case LungeRegularStaticLeft
+    case LungeRegularStaticRight
+    case LungeSideStaticLeft
+    case LungeSideStaticRight
     case SquatRegularOverheadStatic
+    case PlankSideLowStatic
     case SquatRegularStatic
     case SquatSumoStatic
     case TuckHold
@@ -191,16 +187,24 @@ enum DemoExercises:String, CaseIterable{
     case StandingKneeRaiseLeft
     case StandingSideBendRight
     case StandingSideBendLeft
-    case JeffersonCurl
-    case JeffersonCurlRight
-    case LungeSideStaticRight
-    case LungeSideStaticLeft
-    case AnklesMobility
+
+    case AnkleMobilityLeft
+    case AnkleMobilityRight
     case HamstringMobility
+    case HipExternalRotationLeft
+    case HipExternalRotationRight
+    case HipFlexionLeft
+    case HipFlexionRight
+    case HipInternalRotationLeft
+    case HipInternalRotationRight
     case InnerThighMobility
-    case HipExternalRotationGlutesMobility
-    case HipInternalRotationMobility
-    case HipFlexionMobility
+    case JeffersonCurl
     case OverheadMobility
-    case PecsMobility
+    case StandingKneeRaiseLeft
+    case StandingKneeRaiseRight
+    case StandingSideBendLeft
+    case StandingSideBendRight
+
+    case Rest
+    case Cooldown
 }
