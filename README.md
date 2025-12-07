@@ -44,7 +44,7 @@ end
 
 In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smkit_package` and then press **Add package**
 
-*Latest version: `smkit_package '1.4.3'`*
+*Latest version: `smkit_package '0.3.9'`*
 
 [add package](screenshots/spm_add_package.png)
 
