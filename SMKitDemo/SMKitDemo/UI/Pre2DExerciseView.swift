@@ -183,11 +183,6 @@ enum DemoExercises:String, CaseIterable{
     case SquatRegularStatic
     case SquatSumoStatic
     case TuckHold
-    case StandingKneeRaiseRight
-    case StandingKneeRaiseLeft
-    case StandingSideBendRight
-    case StandingSideBendLeft
-
     case AnkleMobilityLeft
     case AnkleMobilityRight
     case HamstringMobility
@@ -200,10 +195,11 @@ enum DemoExercises:String, CaseIterable{
     case InnerThighMobility
     case JeffersonCurl
     case OverheadMobility
-    case StandingKneeRaiseLeft
     case StandingKneeRaiseRight
-    case StandingSideBendLeft
+    case StandingKneeRaiseLeft
     case StandingSideBendRight
+    case StandingSideBendLeft
+
 
     case Rest
     case Cooldown
