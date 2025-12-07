@@ -15,7 +15,7 @@
 ## 1. Installation
 
 ### Cocoapods
-*Latest version: `SMKit '0.3.9'`*
+*Latest version: `SMKit '1.4.3'`*
 
 ```ruby
 # [1] add the source to the top of your Podfile.
