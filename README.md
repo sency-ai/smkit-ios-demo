@@ -14,10 +14,15 @@
 <a name="inst"></a>
 ## 1. Installation
 
-### Cocoapods
-*Latest version: `SMKit '0.3.9'`*
+> **Note:** CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one can be active at a time — using both will cause a "Multiple commands produce" build error.
+
+### CocoaPods (currently active)
+
+*Latest version: `SMKit '1.4.6'`*
 
 ```ruby
+platform :ios, '16.0'
+
 # [1] add the source to the top of your Podfile.
 source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
 source 'https://github.com/CocoaPods/Specs.git'
@@ -25,7 +30,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 # [2] add the pod to your target
 target 'YourApp' do
   use_frameworks!
-  pod 'SMKit'
+  pod 'SMKit', '1.4.6'
 end
 
 # [3] add post_install hooks
@@ -34,19 +39,31 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.5'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
     end
   end
 end
 ```
 
+Then run:
+```bash
+cd SMKitDemo && pod install
+```
+
+Open **`SMKitDemo/SMKitUIDemo.xcworkspace`** (not the `.xcodeproj`).
+
 ### SPM
 
-In your **Package Dependencies** add this url `https://bitbucket.org/sencyai/smkit_package` and then press **Add package**
+*Latest version: `smkit_package '1.4.6'`*
 
-*Latest version: `smkit_package '0.3.9'`*
+**Before switching to SPM:**
+1. Comment out the `pod 'SMKit'` line in `SMKitDemo/Podfile` and run `pod install`
+2. In Xcode, go to the project → **Package Dependencies** → add `https://bitbucket.org/sencyai/smkit_package`
+3. Add `SMKitPackage` to your target's **Frameworks, Libraries, and Embedded Content**
 
-[add package](screenshots/spm_add_package.png)
+**To switch back to CocoaPods:**
+1. In Xcode, remove the `smkit_package` package dependency from the project
+2. Uncomment `pod 'SMKit', '1.4.6'` in the Podfile and run `pod install`
 
 <a name="setup"></a>
 ## 2. Setup

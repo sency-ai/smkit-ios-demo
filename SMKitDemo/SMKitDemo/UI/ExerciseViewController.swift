@@ -57,7 +57,7 @@ class ExerciseViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func configure(exercise:[String], phonePosition:PhonePosition){
+    func configure(exercise: [String], phonePosition: PhonePosition, showSkeleton: Bool = false) {
         do{
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
@@ -86,7 +86,9 @@ class ExerciseViewController: UIViewController {
             self.exercise = exercise
             self.startExercise()
             
-            self.view.addSubview(self.skeletonView)
+            if showSkeleton {
+                self.view.addSubview(self.skeletonView)
+            }
             self.view.addSubview(exerciceView)
             
             NSLayoutConstraint.activate([
