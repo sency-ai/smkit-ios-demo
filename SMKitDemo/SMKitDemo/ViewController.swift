@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     func stopDetection(){
         do{
             //returns a SMExerciseInfo.
-            let exerciseData = try flowManager?.stopDetection()
+            _ = try flowManager?.stopDetection()
         }catch{
             print(error)
         }
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     func stopSession(){
         do{
             //returns a DetectionSessionResultData.
-            let workoutData = try flowManager?.stopSession()
+            _ = try flowManager?.stopSession()
         }catch{
             print(error)
         }
@@ -93,7 +93,7 @@ extension ViewController:SMKitSessionDelegate{
     //This function will be called with the user joints location.
     //Please notice the 2D joint location are for the video resoltion.
     //Please notice that the 3D joint location are the distance from the camera
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?) {
 
     }
     

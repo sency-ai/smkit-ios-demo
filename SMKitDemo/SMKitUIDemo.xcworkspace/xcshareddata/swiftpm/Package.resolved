@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yeatse/opencv-spm.git",
       "state" : {
-        "revision" : "9b5943c3095350dedfb2bebd276f05643b7045d1",
-        "version" : "4.11.0"
+        "revision" : "151a5374946aa867ff3892e0d69fd85e1ecdaf2e",
+        "version" : "4.13.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smbase_package",
       "state" : {
-        "revision" : "005487ec61624898eefd25ab13c1d18c490cdd80",
-        "version" : "0.6.8"
+        "revision" : "9bd26b8ac6cdfe7a7b58f456b3a6827b6754deee",
+        "version" : "0.7.3"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smkit_package",
       "state" : {
-        "revision" : "e530993d359e79e29dea94cc99f5b43722ee9086",
-        "version" : "0.3.5"
+        "revision" : "365244e6e9a28ce25e92a80d3c20cac31b77f16c",
+        "version" : "0.3.9"
       }
     },
     {
