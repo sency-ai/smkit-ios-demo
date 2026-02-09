@@ -286,12 +286,15 @@ let models = flowManager.getModelsID()
 ## 10. Available Data Types <a name="data"></a>
 
 #### `SMKitSessionSettings`
-| Type                | Format                                                       | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| phonePosition       | `PhonePositionMode?`                                         | The session PhonePositionMode.                                                                              |
-| jumpRefPoint        | `String?`                                                    | The session jumpRefPoint                                                                                    |
-| isInPosition        | `jumpHeightThreshold?`                                       | The session jumpHeightThreshold                                                                             |
-| userHeight        | `jumpHeightThreshold?`                                         | The session userHeight                                                                                      |
+| Type                       | Format                              | Description                                                                                    |
+|----------------------------|-------------------------------------|------------------------------------------------------------------------------------------------|
+| phonePosition              | `PhonePosition`                     | The phone position mode for the session (Floor or Elevated).                                   |
+| jumpRefPoint               | `String?`                           | Reference point for jump detection.                                                            |
+| jumpHeightThreshold        | `Float?`                            | Threshold value for jump height detection.                                                     |
+| userHeight                 | `Float?`                            | The user's height in centimeters.                                                              |
+| include3D                  | `Bool?`                             | Whether to include 3D pose estimation in the session.                                          |
+| camType                    | `SMCameraType`                      | Camera type to use (front or back).                                                            |
+| configFileName             | `String?`                           | Optional custom configuration file name.                                                       |
 
 #### `MovementFeedbackData`
 | Type                | Format                                                       | Description                                                                                                  |
@@ -310,20 +313,25 @@ let models = flowManager.getModelsID()
 | Type                | Format                                                       | Description                                                                                                  |
 |---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | sessionId           | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName        | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
 | startTime           | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
 | endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
 | totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| techniqueScore      | `Float`                                                      | The technique score for the exercise.                                                                        |
 
 #### `SMExerciseStaticInfo` type of `SMExerciseInfo`
 | Type                   | Format                                                       | Description                                                                                                  |
 |------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
 | startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
 | endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
 | totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
 | timeInActiveZone       | `Double`                                                     | The time the user was in position.                                                                           |
-| positionTechniqueScore | `Double`                                                     | The user score.                                                                                              |
-| inPosition             | `[StaticData]`                                               | Array of static data.                                                                                        |
+| timeInPositionPerfect  | `Double`                                                     | The time the user was in perfect position.                                                                   |
+| positionTechniqueScore | `Float`                                                      | The technique score for the static exercise.                                                                 |
+| peakRangeOfMotionScore | `Float`                                                      | The peak range of motion score achieved during the exercise.                                                 |
+| inPosition             | `[StaticData]?`                                              | Array of static data (optional).                                                                             |
 
 
 #### `StaticData`
@@ -331,24 +339,26 @@ let models = flowManager.getModelsID()
 |--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
 | detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
-| detectionConfidenceScore | `Float`                                                      | The Confidence in the detection.                                                                             |
+| detectionConfidenceScore | `Float`                                                      | The confidence in the detection.                                                                             |
 | inGreenZone              | `Bool`                                                       | Will be true if the user is in the success zone.                                                             |
-| romScore                 | `Float`                                                      | The ROM score.                                                                                               |
-| techniqueScore           | `Float`                                                      | The user technic score.                                                                                      |
-| inPosition               | `Bool`                                                       | Will be true if the user in position.                                                                        |
-| isGood                   | `Bool`                                                       | Is good detection                                                                                            |
-| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
-
+| rangeOfMotionScore       | `Float`                                                      | The range of motion score.                                                                                   |
+| techniqueScore           | `Float`                                                      | The user technique score.                                                                                    |
+| inPosition               | `Bool`                                                       | Will be true if the user is in position.                                                                     |
+| isGood                   | `Bool`                                                       | Indicates if the detection is good.                                                                          |
+| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback for the user movement.                                                                     |
 #### `SMExerciseDynamicInfo` type of `SMExerciseInfo`
 | Type                   | Format                                                       | Description                                                                                                  |
 |------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
 | startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
 | endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
 | totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
-| performedReps          | `[RepData]`                                                  | Array of RepData.                                                                                            |
+| performedReps          | `[RepData]`                                                  | Array of RepData containing information about each repetition.                                               |
 | numberOfPerformedReps  | `Int?`                                                       | The number of times the user repeated the exercise.                                                          |
-| repsTechniqueScore     | `[Double]`                                                   | The exercise score.                                                                                          |
+| perfectReps            | `Int`                                                        | The number of perfect reps performed.                                                                        |
+| repsTechniqueScore     | `Float`                                                      | The overall technique score for the dynamic exercise.                                                        |
+
 
 #### `RepData`
 | Type                     | Format                                                       | Description                                                                                                  |
@@ -365,9 +375,12 @@ let models = flowManager.getModelsID()
 #### `DetectionSessionResultData`
 | Type                | Format                                                       | Description                                                                                                  |
 |---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| exercises           | `[SMExerciseInfo]`                                           | Array of all the exerxises.                                                                                  |
-| startTime           | `String`                                                     | The start time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
-| endTime             | `String`                                                     | The end time of the session session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| sessionID           | `String`                                                     | The session identifier.                                                                                      |
+| exercises           | `[SMExerciseInfo]`                                           | Array of all the exercises performed in the session.                                                         |
+| startTime           | `String`                                                     | The start time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                          |
+| endTime             | `String`                                                     | The end time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                            |
+| totalTime           | `Double`                                                     | The total time for the session in seconds.                                                                   |
+| totalScore          | `Int`                                                        | The overall score for the session.                                                                           |
 
 
 #### `Joint`
@@ -437,7 +450,7 @@ let models = flowManager.getModelsID()
 |---------------------|---------------------------------------|
 | DidEnterFrame       | if the user enterd the frame          |
 | DidLeaveFrame       | if the user left the frame            |
-| TooClose(Bool)      | will be true if the user is too close |
+| TooClose(Bool)      | if the user is too close (using 3D)   |
 
 ### `SMCameraType`
 | Type                | Description                           |
@@ -526,3 +539,4 @@ For common issues and migration guides, see the [Troubleshooting Guide](TROUBLES
 ---
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
+
