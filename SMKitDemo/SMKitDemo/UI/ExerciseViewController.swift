@@ -183,11 +183,11 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?, xyzRelativeAngles: [String : SCNVector3]?) {
         guard let previewLayer else {return}
         let captureSize = previewLayer.frame.size
         let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
-        
+
         DispatchQueue.main.async {[weak self] in
             guard let self else {return}
             skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)

@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		308FC229FF512D148E863E84 /* Pods_SMKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4C52D374589C5A6343FFEC /* Pods_SMKitDemo.framework */; };
+		AA1111112BCD1D5100E47B8F /* SMKitPackage in Frameworks */ = {isa = PBXBuildFile; productRef = AA1111102BCD1D5100E47B8F /* SMKitPackage */; };
+		AA2222212BCD1D5100E47B8F /* SMBasePackage in Frameworks */ = {isa = PBXBuildFile; productRef = AA2222202BCD1D5100E47B8F /* SMBasePackage */; };
 		BE23AE262D083F7500BFAD8B /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */; };
 		BE23AE282D0840C200BFAD8B /* ViewRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */; };
 		BE23AE2A2D08419B00BFAD8B /* SceneKitRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */; };
@@ -35,7 +36,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6826F907B35A1116BCCEC695 /* Pods-SMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
 		BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecorder.swift; sourceTree = "<group>"; };
 		BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitRecorder.swift; sourceTree = "<group>"; };
@@ -62,8 +62,6 @@
 		BEC098452BCD1D5200E47B8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BEC098482BCD1D5200E47B8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BEC0984A2BCD1D5200E47B8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DF4C52D374589C5A6343FFEC /* Pods_SMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E61765490FEA2A56490C8DE1 /* Pods-SMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +69,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				308FC229FF512D148E863E84 /* Pods_SMKitDemo.framework in Frameworks */,
+				AA1111112BCD1D5100E47B8F /* SMKitPackage in Frameworks */,
+				AA2222212BCD1D5100E47B8F /* SMBasePackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,10 +80,7 @@
 		138495C9D6159E124C266E3F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6826F907B35A1116BCCEC695 /* Pods-SMKitDemo.debug.xcconfig */,
-				E61765490FEA2A56490C8DE1 /* Pods-SMKitDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -136,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				BEC0983B2BCD1D5100E47B8F /* SMKitDemo */,
-				BEC35D212D42841000694841 /* Frameworks */,
 				BEC0983A2BCD1D5100E47B8F /* Products */,
 				138495C9D6159E124C266E3F /* Pods */,
 			);
@@ -170,14 +165,6 @@
 			path = SMKitDemo;
 			sourceTree = "<group>";
 		};
-		BEC35D212D42841000694841 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DF4C52D374589C5A6343FFEC /* Pods_SMKitDemo.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -185,17 +172,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BEC0984D2BCD1D5200E47B8F /* Build configuration list for PBXNativeTarget "SMKitDemo" */;
 			buildPhases = (
-				E54B5178850293693CA25C8C /* [CP] Check Pods Manifest.lock */,
 				BEC098352BCD1D5100E47B8F /* Sources */,
 				BEC098362BCD1D5100E47B8F /* Frameworks */,
 				BEC098372BCD1D5100E47B8F /* Resources */,
-				39A841E7566D362A07109DDA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SMKitDemo;
+			packageProductDependencies = (
+				AA1111102BCD1D5100E47B8F /* SMKitPackage */,
+				AA2222202BCD1D5100E47B8F /* SMBasePackage */,
+			);
 			productName = SMKitDemo;
 			productReference = BEC098392BCD1D5100E47B8F /* SMKitDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -224,6 +213,9 @@
 				Base,
 			);
 			mainGroup = BEC098302BCD1D5100E47B8F;
+			packageReferences = (
+				D2A3D5972F39C1D50073000B /* XCRemoteSwiftPackageReference "smkit_package" */,
+			);
 			productRefGroup = BEC0983A2BCD1D5100E47B8F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -245,48 +237,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		39A841E7566D362A07109DDA /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E54B5178850293693CA25C8C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SMKitDemo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BEC098352BCD1D5100E47B8F /* Sources */ = {
@@ -460,14 +410,15 @@
 		};
 		BEC0984E2BCD1D5200E47B8F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6826F907B35A1116BCCEC695 /* Pods-SMKitDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SMKitDemo/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -496,14 +447,15 @@
 		};
 		BEC0984F2BCD1D5200E47B8F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E61765490FEA2A56490C8DE1 /* Pods-SMKitDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RJZ8GBLWY7;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SMKitDemo/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -553,6 +505,28 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		D2A3D5972F39C1D50073000B /* XCRemoteSwiftPackageReference "smkit_package" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://bitbucket.org/sencyai/smkit_package";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA1111102BCD1D5100E47B8F /* SMKitPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2A3D5972F39C1D50073000B /* XCRemoteSwiftPackageReference "smkit_package" */;
+			productName = SMKitPackage;
+		};
+		AA2222202BCD1D5100E47B8F /* SMBasePackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SMBasePackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BEC098312BCD1D5100E47B8F /* Project object */;
 }

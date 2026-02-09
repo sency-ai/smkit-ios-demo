@@ -10,7 +10,7 @@ workspace 'SMKitUIDemo.xcworkspace'
 #[2] add the pod to your target
 target 'SMKitDemo' do
   use_frameworks!
-  pod 'SMKit', '1.4.6'
+  # pod 'SMKit', '1.4.6'  # Commented out - now using SPM
 end
 
 #[3] add post_install hooks

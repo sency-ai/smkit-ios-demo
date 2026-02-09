@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smbase_package",
       "state" : {
-        "revision" : "9bd26b8ac6cdfe7a7b58f456b3a6827b6754deee",
-        "version" : "0.7.3"
+        "revision" : "6293618cb72f7ddb817a5de4eb652d9de8603116",
+        "version" : "1.4.9"
       }
     },
     {
@@ -24,17 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smkit_package",
       "state" : {
-        "revision" : "365244e6e9a28ce25e92a80d3c20cac31b77f16c",
-        "version" : "0.3.9"
-      }
-    },
-    {
-      "identity" : "swiftyjson",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
-      "state" : {
-        "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
-        "version" : "5.0.2"
+        "revision" : "b6902d94cf9706ebafc3b3349a6c0872f263f329",
+        "version" : "1.4.6"
       }
     }
   ],
