@@ -12,60 +12,16 @@
 9. [ Getters ](#getters)
 10. [ Data ](#data)
 11. [ MCP Server Integration ](#mcp)
+12. [ Troubleshooting ](#troubleshoot)
 
 <a name="inst"></a>
 ## 1. Installation
 
-> **Note:** CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one can be active at a time — using both will cause a "Multiple commands produce" build error.
+This branch uses **Swift Package Manager (SPM)** for dependency management.
 
-### CocoaPods
-
-*Latest version: `SMKit '1.4.6'`*
-
-#### Step-by-step Integration:
-
-1. **Add the repository sources to your `Podfile`:**
-   ```ruby
-   platform :ios, '16.0'
-
-   source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
-   source 'https://github.com/CocoaPods/Specs.git'
-   ```
-
-2. **Add the pod to your target:**
-   ```ruby
-   target 'YourApp' do
-     use_frameworks!
-     pod 'SMKit', '1.4.6'
-   end
-   ```
-
-3. **Add post_install hooks** (required for proper build configuration):
-   ```ruby
-   post_install do |installer|
-     installer.pods_project.targets.each do |target|
-       target.build_configurations.each do |config|
-         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-       end
-     end
-   end
-   ```
-
-4. **Install the pods:**
-   ```bash
-   pod install
-   ```
-
-5. **Open the workspace:**
-   - ⚠️ **Important:** Always open the `.xcworkspace` file, not the `.xcodeproj` file
-   - Example: `YourApp.xcworkspace`
-
-#### Updating to a New Version:
-```bash
-pod update SMKit
-```
+> Looking for **CocoaPods** integration? See the [`release/1.4.6`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.4.6) branch.
+>
+> Need to switch between CocoaPods and SPM? See the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
 ### SPM (Swift Package Manager)
 
@@ -97,38 +53,6 @@ pod update SMKit
    ```swift
    import SMKit
    import SMBase
-   ```
-
-#### Switching from CocoaPods to SPM:
-
-1. **Remove CocoaPods:**
-   ```bash
-   pod deintegrate
-   ```
-
-2. **Clean derived data:**
-   ```bash
-   rm -rf ~/Library/Developer/Xcode/DerivedData/*
-   ```
-
-3. **Follow the Fresh SPM Integration steps above**
-
-4. **Build your project** to verify the integration
-
-#### Switching from SPM back to CocoaPods:
-
-1. **In Xcode, remove the package:**
-   - Select your project → **Package Dependencies** tab
-   - Remove `smkit_package`
-
-2. **Uncomment the pod** in your `Podfile`:
-   ```ruby
-   pod 'SMKit', '1.4.6'
-   ```
-
-3. **Install pods:**
-   ```bash
-   pod install
    ```
 
 #### Updating SPM Packages:
@@ -275,79 +199,89 @@ self.flowManager.changeCameraType(type: SMCameraType.back)
 
 ## 8. Setters <a name="setters"></a>
 
-setDeviceMotionActive(phoneCalibrationInfo:SMPhoneCalibrationInfo, tiltDidChange: @escaping (SMPhoneCalibrationInfo) -> Void)
-**Description**: Activate DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback tiltDidChange that wiךl be called when the phone changed
+### `setDeviceMotionActive`
+
+Activates DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback that will be called when the phone orientation changes.
 
 ```swift
-    flowManager.setDeviceMotionActive(
+flowManager.setDeviceMotionActive(
     phoneCalibrationInfo: SMPhoneCalibrationInfo(YZAngleRange: 60..<90, XYAngleRange: 3..< -3),
     tiltDidChange: { info in
-        if info.isXYTiltAngleInRange && info.isYZTiltAngleInRange{
+        if info.isXYTiltAngleInRange && info.isYZTiltAngleInRange {
             print("In Range")
         }
-    })
-```
-
-setDeviceMotionInactive()
-**Description**: Sets DeviceMotion inactive.
-
-```swift
-    flowManager.setDeviceMotionInactive()
-```
-
-setDeviceMotionFrequency(isHigh: Bool)
-**Description**: Changes the device motion frequency, if true will update DeviceMotion every 0.1 seconds and if false updates every 0.5 seconds
-
-```swift
-    flowManager.setDeviceMotionFrequency(isHigh: true)
-```
-
-setBodyPositionCalibrationActive(delegate: SMBodyCalibrationDelegate, screenSize:CGSize, boundingBox:BodyCalRectGuide? = nil)
-**Description**: for more detailed information please check out [ Body calibration ](#body)
-
-```string
-    flowManager.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
-```
-
-setBodyPositionCalibrationInactive()
-**Description**: Sets BodyPositionCalibration inactive.
-
-```swift
-    flowManager.setBodyPositionCalibrationInactive()
-```
-
-## 9. Getters <a name="getters">
-
-getExerciseType() -> ExerciseTypeBr?
-**Description**: Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr) if possible
-
-```swift
-    let exerciseType = flowManager.getExerciseType()
-```
-
-getExerciseType(ByType type:String) throws -> ExerciseTypeBr
-**Description**: Returns [ExerciseTypeBr](#ExerciseTypeBr) according to the type
-
-```swift
-    do{
-        let exerciseType = try flowManager.getExerciseType(ByType: "HighKnees")
-    }catch{
-        print(error)
     }
+)
 ```
 
-getExerciseRange() -> ClosedRange<Float>?
-**Description**: Returns the exercise rang of movment if possible
+### `setDeviceMotionInactive`
+
+Deactivates DeviceMotion.
 
 ```swift
-    let range = flowManager.getExerciseRange()
+flowManager.setDeviceMotionInactive()
 ```
 
-getModelsID() -> [String:String]
-**Description**: Returns a dictionary with the model's name as the key and its ID as the value.
+### `setDeviceMotionFrequency`
+
+Changes the device motion update frequency. When `isHigh` is `true`, updates every 0.1 seconds. When `false`, updates every 0.5 seconds.
 
 ```swift
-    let models = flowManager.getModelsID()
+flowManager.setDeviceMotionFrequency(isHigh: true)
+```
+
+### `setBodyPositionCalibrationActive`
+
+Activates body position calibration. For more details, see [Body Calibration](#body).
+
+```swift
+flowManager.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
+```
+
+### `setBodyPositionCalibrationInactive`
+
+Deactivates body position calibration.
+
+```swift
+flowManager.setBodyPositionCalibrationInactive()
+```
+
+## 9. Getters <a name="getters"></a>
+
+### `getExerciseType() -> ExerciseTypeBr?`
+
+Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr), if available.
+
+```swift
+let exerciseType = flowManager.getExerciseType()
+```
+
+### `getExerciseType(ByType:) throws -> ExerciseTypeBr`
+
+Returns an [ExerciseTypeBr](#ExerciseTypeBr) for the given exercise type name.
+
+```swift
+do {
+    let exerciseType = try flowManager.getExerciseType(ByType: "HighKnees")
+} catch {
+    print(error)
+}
+```
+
+### `getExerciseRange() -> ClosedRange<Float>?`
+
+Returns the exercise range of movement, if available.
+
+```swift
+let range = flowManager.getExerciseRange()
+```
+
+### `getModelsID() -> [String:String]`
+
+Returns a dictionary with model names as keys and their IDs as values.
+
+```swift
+let models = flowManager.getModelsID()
 ```
 
 ## 10. Available Data Types <a name="data"></a>
@@ -533,42 +467,44 @@ Add the server definition to `~/.cursor/mcp.json` and reload Cursor:
   }
 }
 ```
-### Integration with Claude Code:
-                                                                                                                                                                      
+### Integration with Claude Code
+
 To use the Sency MCP server with Claude Code, follow these steps:
-                                                                                                                                                                   
-### 1. Configure MCP Settings          
+
+**1. Configure MCP Settings**
 
 Create or edit the file `~/.claude/mcp_settings.json` and add the following configuration:
 
 ```json
 {
- "mcpServers": {
-   "sency": {
-     "type": "http",
-     "url": "https://sency-mcp-production.up.railway.app/mcp",
-     "headers": {
-       "X-API-Key": "YOUR-API-KEY"
-     }
-   }
- }
+  "mcpServers": {
+    "sency": {
+      "type": "http",
+      "url": "https://sency-mcp-production.up.railway.app/mcp",
+      "headers": {
+        "X-API-Key": "YOUR-API-KEY"
+      }
+    }
+  }
 }
 ```
 
-2. Restart Claude Code
+**2. Restart Claude Code**
 
 After adding the configuration, restart Claude Code to load the MCP server:
 
+```bash
 # Exit your current Claude Code session
 # Then start a new session
 claude
+```
 
 After setup, you can ask Claude Code questions like:
-  - "Show me the iOS setup guide"
-  - "List all available exercises"
-  - "Create a beginner workout focused on upper body"
-  - "Generate Swift code for a cardio workout"
-  - "Search for exercises targeting core muscles"
+- "Show me the iOS setup guide"
+- "List all available exercises"
+- "Create a beginner workout focused on upper body"
+- "Generate Swift code for a cardio workout"
+- "Search for exercises targeting core muscles"
 
 ### Getting Your API Key
 
@@ -581,6 +517,12 @@ The Model Context Protocol (MCP) allows AI assistants to access external context
 - Provide contextual code suggestions
 - Help troubleshoot integration issues
 - Suggest best practices for exercise detection implementation
+
+## 12. Troubleshooting <a name="troubleshoot"></a>
+
+For common issues and migration guides, see the [Troubleshooting Guide](TROUBLESHOOTING.md), including:
+- Switching from CocoaPods to SPM
+- Switching from SPM back to CocoaPods
 
 ---
 
