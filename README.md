@@ -6,64 +6,135 @@
 3. [ Configure ](#conf)
 4. [ Start ](#start)
 5. [ Body calibration ](#body)
-6. [ Change Camera](#cam)
-7. [ Setters ](#setters)
-8. [ Getters ](#getters)
-9. [ Data ](#data)
+6. [ Modifying Feedback Parameters ](#feedback)
+7. [ Change Camera](#cam)
+8. [ Setters ](#setters)
+9. [ Getters ](#getters)
+10. [ Data ](#data)
+11. [ MCP Server Integration ](#mcp)
 
 <a name="inst"></a>
 ## 1. Installation
 
 > **Note:** CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one can be active at a time — using both will cause a "Multiple commands produce" build error.
 
-### CocoaPods (currently active)
+### CocoaPods
 
 *Latest version: `SMKit '1.4.6'`*
 
-```ruby
-platform :ios, '16.0'
+#### Step-by-step Integration:
 
-# [1] add the source to the top of your Podfile.
-source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
-source 'https://github.com/CocoaPods/Specs.git'
+1. **Add the repository sources to your `Podfile`:**
+   ```ruby
+   platform :ios, '16.0'
 
-# [2] add the pod to your target
-target 'YourApp' do
-  use_frameworks!
-  pod 'SMKit', '1.4.6'
-end
+   source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
+   source 'https://github.com/CocoaPods/Specs.git'
+   ```
 
-# [3] add post_install hooks
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-    end
-  end
-end
-```
+2. **Add the pod to your target:**
+   ```ruby
+   target 'YourApp' do
+     use_frameworks!
+     pod 'SMKit', '1.4.6'
+   end
+   ```
 
-Then run:
+3. **Add post_install hooks** (required for proper build configuration):
+   ```ruby
+   post_install do |installer|
+     installer.pods_project.targets.each do |target|
+       target.build_configurations.each do |config|
+         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+       end
+     end
+   end
+   ```
+
+4. **Install the pods:**
+   ```bash
+   pod install
+   ```
+
+5. **Open the workspace:**
+   - ⚠️ **Important:** Always open the `.xcworkspace` file, not the `.xcodeproj` file
+   - Example: `YourApp.xcworkspace`
+
+#### Updating to a New Version:
 ```bash
-cd SMKitDemo && pod install
+pod update SMKit
 ```
 
-Open **`SMKitDemo/SMKitUIDemo.xcworkspace`** (not the `.xcodeproj`).
+### SPM (Swift Package Manager)
 
-### SPM
+*Latest version: `1.4.6` (SMKit), `1.4.9` (SMBase)*
 
-*Latest version: `smkit_package '1.4.6'`*
+#### Fresh SPM Integration:
 
-**Before switching to SPM:**
-1. Comment out the `pod 'SMKit'` line in `SMKitDemo/Podfile` and run `pod install`
-2. In Xcode, go to the project → **Package Dependencies** → add `https://bitbucket.org/sencyai/smkit_package`
-3. Add `SMKitPackage` to your target's **Frameworks, Libraries, and Embedded Content**
+1. **Open your project in Xcode**
 
-**To switch back to CocoaPods:**
-1. In Xcode, remove the `smkit_package` package dependency from the project
-2. Uncomment `pod 'SMKit', '1.4.6'` in the Podfile and run `pod install`
+2. **Add the package dependency:**
+   - Go to **File → Add Package Dependencies...**
+   - Enter the repository URL: `https://bitbucket.org/sencyai/smkit_package`
+   - **Dependency Rule:** Select "Branch" → `main` (recommended)
+     - Alternatively, use "Exact Version" → `1.4.6`
+   - Click **Add Package**
+
+3. **Select the package product:**
+   - When prompted, select **`SMKitPackage`** (not "SMKit")
+   - Add to your app target
+   - Click **Add Package**
+
+4. **Configure build settings:**
+   - Select your project → Your target → **Build Settings**
+   - Search for "Excluded Architectures"
+   - Add `arm64` to **Excluded Architectures** for "Any iOS Simulator SDK"
+   - This setting: `EXCLUDED_ARCHS[sdk=iphonesimulator*] = arm64`
+
+5. **Import in your code:**
+   ```swift
+   import SMKit
+   import SMBase
+   ```
+
+#### Switching from CocoaPods to SPM:
+
+1. **Remove CocoaPods:**
+   ```bash
+   pod deintegrate
+   ```
+
+2. **Clean derived data:**
+   ```bash
+   rm -rf ~/Library/Developer/Xcode/DerivedData/*
+   ```
+
+3. **Follow the Fresh SPM Integration steps above**
+
+4. **Build your project** to verify the integration
+
+#### Switching from SPM back to CocoaPods:
+
+1. **In Xcode, remove the package:**
+   - Select your project → **Package Dependencies** tab
+   - Remove `smkit_package`
+
+2. **Uncomment the pod** in your `Podfile`:
+   ```ruby
+   pod 'SMKit', '1.4.6'
+   ```
+
+3. **Install pods:**
+   ```bash
+   pod install
+   ```
+
+#### Updating SPM Packages:
+
+- **Xcode:** File → Packages → Update to Latest Package Versions
+- **Or resolve to specific version:** File → Packages → Resolve Package Versions
 
 <a name="setup"></a>
 ## 2. Setup
@@ -144,7 +215,48 @@ func setBodyPositionCalibrationInactive(){
     flowManager?.setBodyPositionCalibrationInactive()
 }
 ```
-## 6. Change camera<a name="cam"></a>
+
+## 6. Modifying Feedback Parameters <a name="feedback"></a>
+
+You have the ability to modify specific feedback parameters for exercises. This allows you to customize the thresholds and ranges for feedback detection according to your application's needs.
+
+### How to Modify Parameters
+
+Use the `modifications` dictionary to customize feedback parameters for specific exercises:
+
+```swift
+let modifications: [String: Any] = [
+    "Crunches": [
+        // Feedback/parameter name: [parameter values]
+        "DepthCrunchesShallowDepth": ["low": 0.1, "high": 0.9],
+        // Add more parameters as needed
+    ],
+    "Squats": [
+        "DepthSquatsShallowDepth": ["low": 0.2, "high": 0.85],
+    ]
+]
+
+// Apply modifications when starting a session
+try flowManager.startSession(
+    sessionSettings: SMKitSessionSettings(),
+    modifications: modifications
+)
+```
+
+### Parameter Structure
+
+Each modification follows this structure:
+- **Exercise Name** (e.g., "Crunches", "Squats"): The key identifying the exercise
+- **Parameter Name** (e.g., "DepthCrunchesShallowDepth"): The specific feedback parameter to modify
+- **Values**: A dictionary containing threshold values (typically `"low"` and `"high"`)
+
+### Getting Available Parameters
+
+**Note:** We will release our feedbacks catalog soon with a complete list of available parameters for each exercise.
+
+For assistance in applying modifications or to request the current catalog, please [contact us](mailto:support@sency.ai).
+
+## 7. Change camera<a name="cam"></a>
 In SMKit you have the ability to choose which camera you prefer to use front or back you can achieve this with two different way
 
 ### Before session start
@@ -161,7 +273,7 @@ To switch the camera type during the session you need to call `changeCameraType`
 self.flowManager.changeCameraType(type: SMCameraType.back)
 ```
 
-## 7. Setters <a name="setters"></a>
+## 8. Setters <a name="setters"></a>
 
 setDeviceMotionActive(phoneCalibrationInfo:SMPhoneCalibrationInfo, tiltDidChange: @escaping (SMPhoneCalibrationInfo) -> Void)
 **Description**: Activate DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback tiltDidChange that wiךl be called when the phone changed
@@ -204,7 +316,7 @@ setBodyPositionCalibrationInactive()
     flowManager.setBodyPositionCalibrationInactive()
 ```
 
-## 8. Getters <a name="getters"></a>
+## 9. Getters <a name="getters">
 
 getExerciseType() -> ExerciseTypeBr?
 **Description**: Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr) if possible
@@ -238,7 +350,7 @@ getModelsID() -> [String:String]
     let models = flowManager.getModelsID()
 ```
 
-## 9. Available Data Types <a name="data"></a>
+## 10. Available Data Types <a name="data"></a>
 
 #### `SMKitSessionSettings`
 | Type                | Format                                                       | Description                                                                                                  |
@@ -399,5 +511,51 @@ getModelsID() -> [String:String]
 |---------------------|---------------------------------------|
 | front               | the front camera                      |
 | back                | the back camera                       |
+
+## 11. MCP Server Integration <a name="mcp"></a>
+
+Sency provides an MCP (Model Context Protocol) server for integration with AI development tools like Cursor and Claude CLI. This enables AI-assisted development with direct access to SMKit documentation and examples.
+
+### Integration with Cursor
+
+Add the server definition to `~/.cursor/mcp.json` and reload Cursor:
+
+```json
+{
+  "mcpServers": {
+    "smkitui": {
+      "type": "streamable-http",
+      "url": "https://sency-mcp-production.up.railway.app/mcp",
+      "headers": {
+        "X-API-Key": "Your-API-Key"
+      }
+    }
+  }
+}
+```
+
+### Integration with Claude CLI
+
+Run the following command:
+
+```bash
+npx @modelcontextprotocol/cli client http \
+  --url https://sency-mcp-production.up.railway.app/mcp \
+  --header "X-API-Key: Your-API-Key"
+```
+
+### Getting Your API Key
+
+Contact us at [support@sency.ai](mailto:support@sency.ai) to receive your MCP server API key.
+
+### What is MCP?
+
+The Model Context Protocol (MCP) allows AI assistants to access external context and tools. With Sency's MCP server, your AI development assistant can:
+- Access SMKit documentation and API references
+- Provide contextual code suggestions
+- Help troubleshoot integration issues
+- Suggest best practices for exercise detection implementation
+
+---
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.
