@@ -533,16 +533,42 @@ Add the server definition to `~/.cursor/mcp.json` and reload Cursor:
   }
 }
 ```
+### Integration with Claude Code:
+                                                                                                                                                                      
+To use the Sency MCP server with Claude Code, follow these steps:
+                                                                                                                                                                   
+### 1. Configure MCP Settings          
 
-### Integration with Claude CLI
+Create or edit the file `~/.claude/mcp_settings.json` and add the following configuration:
 
-Run the following command:
-
-```bash
-npx @modelcontextprotocol/cli client http \
-  --url https://sency-mcp-production.up.railway.app/mcp \
-  --header "X-API-Key: Your-API-Key"
+```json
+{
+ "mcpServers": {
+   "sency": {
+     "type": "http",
+     "url": "https://sency-mcp-production.up.railway.app/mcp",
+     "headers": {
+       "X-API-Key": "YOUR-API-KEY"
+     }
+   }
+ }
+}
 ```
+
+2. Restart Claude Code
+
+After adding the configuration, restart Claude Code to load the MCP server:
+
+# Exit your current Claude Code session
+# Then start a new session
+claude
+
+After setup, you can ask Claude Code questions like:
+  - "Show me the iOS setup guide"
+  - "List all available exercises"
+  - "Create a beginner workout focused on upper body"
+  - "Generate Swift code for a cardio workout"
+  - "Search for exercises targeting core muscles"
 
 ### Getting Your API Key
 
