@@ -12,11 +12,16 @@
 9. [ Getters ](#getters)
 10. [ Data ](#data)
 11. [ MCP Server Integration ](#mcp)
+12. [ Troubleshooting ](#troubleshoot)
 
 <a name="inst"></a>
 ## 1. Installation
 
-> **Note:** CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one can be active at a time — using both will cause a "Multiple commands produce" build error.
+This branch uses **CocoaPods** for dependency management.
+
+> Looking for **Swift Package Manager (SPM)** integration? See the [`release/1.4.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.4.6_spm) branch.
+>
+> Need to switch between CocoaPods and SPM? See the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
 ### CocoaPods
 
@@ -66,75 +71,6 @@
 ```bash
 pod update SMKit
 ```
-
-### SPM (Swift Package Manager)
-
-*Latest version: `1.4.6` (SMKit), `1.4.9` (SMBase)*
-
-#### Fresh SPM Integration:
-
-1. **Open your project in Xcode**
-
-2. **Add the package dependency:**
-   - Go to **File → Add Package Dependencies...**
-   - Enter the repository URL: `https://bitbucket.org/sencyai/smkit_package`
-   - **Dependency Rule:** Select "Branch" → `main` (recommended)
-     - Alternatively, use "Exact Version" → `1.4.6`
-   - Click **Add Package**
-
-3. **Select the package product:**
-   - When prompted, select **`SMKitPackage`** (not "SMKit")
-   - Add to your app target
-   - Click **Add Package**
-
-4. **Configure build settings:**
-   - Select your project → Your target → **Build Settings**
-   - Search for "Excluded Architectures"
-   - Add `arm64` to **Excluded Architectures** for "Any iOS Simulator SDK"
-   - This setting: `EXCLUDED_ARCHS[sdk=iphonesimulator*] = arm64`
-
-5. **Import in your code:**
-   ```swift
-   import SMKit
-   import SMBase
-   ```
-
-#### Switching from CocoaPods to SPM:
-
-1. **Remove CocoaPods:**
-   ```bash
-   pod deintegrate
-   ```
-
-2. **Clean derived data:**
-   ```bash
-   rm -rf ~/Library/Developer/Xcode/DerivedData/*
-   ```
-
-3. **Follow the Fresh SPM Integration steps above**
-
-4. **Build your project** to verify the integration
-
-#### Switching from SPM back to CocoaPods:
-
-1. **In Xcode, remove the package:**
-   - Select your project → **Package Dependencies** tab
-   - Remove `smkit_package`
-
-2. **Uncomment the pod** in your `Podfile`:
-   ```ruby
-   pod 'SMKit', '1.4.6'
-   ```
-
-3. **Install pods:**
-   ```bash
-   pod install
-   ```
-
-#### Updating SPM Packages:
-
-- **Xcode:** File → Packages → Update to Latest Package Versions
-- **Or resolve to specific version:** File → Packages → Resolve Package Versions
 
 <a name="setup"></a>
 ## 2. Setup
@@ -581,6 +517,12 @@ The Model Context Protocol (MCP) allows AI assistants to access external context
 - Provide contextual code suggestions
 - Help troubleshoot integration issues
 - Suggest best practices for exercise detection implementation
+
+## 12. Troubleshooting <a name="troubleshoot"></a>
+
+For common issues and migration guides, see the [Troubleshooting Guide](TROUBLESHOOTING.md), including:
+- Switching from CocoaPods to SPM
+- Switching from SPM back to CocoaPods
 
 ---
 
