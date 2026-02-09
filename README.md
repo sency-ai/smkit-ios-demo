@@ -19,7 +19,7 @@
 
 This branch uses **Swift Package Manager (SPM)** for dependency management.
 
-> Looking for **CocoaPods** integration? See the [`release/1.4.6`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.4.6) branch.
+> Looking for **CocoaPods** integration? See the [`main`](https://github.com/sency-ai/smkit-ios-demo) branch.
 >
 > Need to switch between CocoaPods and SPM? See the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
