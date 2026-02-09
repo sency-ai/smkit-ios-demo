@@ -533,7 +533,7 @@ Add the server definition to `~/.cursor/mcp.json` and reload Cursor:
   }
 }
 ```
-Integration with Claude Code:
+### Integration with Claude Code:
                                                                                                                                                                       
 To use the Sency MCP server with Claude Code, follow these steps:
                                                                                                                                                                    
