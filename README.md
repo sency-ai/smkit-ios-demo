@@ -172,9 +172,11 @@ let modifications: [String: Any] = [
     ]
 ]
 
-// Apply modifications when starting a session
-try flowManager.startSession(
-    sessionSettings: SMKitSessionSettings(),
+// Apply modifications when starting a workout (SMKitUI)
+try SMKitUIModel.startWorkout(
+    viewController: self,
+    workout: workout,
+    delegate: self,
     modifications: modifications
 )
 ```
