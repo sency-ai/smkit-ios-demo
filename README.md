@@ -297,25 +297,16 @@ let models = flowManager.getModelsID()
 
 ## 10. Available Data Types <a name="data"></a>
 
-  #### `SMKitSessionSettings`                                                                                                                                         
-  | Type                       | Format                              | Description                                                                                    
-  |                                                                                                                                                                   
-  |----------------------------|-------------------------------------|------------------------------------------------------------------------------------------------
-  |
-  | phonePosition              | `PhonePosition`                     | The phone position mode for the session (Floor or Elevated).
-  |
-  | jumpRefPoint               | `String?`                           | Reference point for jump detection.
-  |
-  | jumpHeightThreshold        | `Float?`                            | Threshold value for jump height detection.
-  |
-  | userHeight                 | `Float?`                            | The user's height in centimeters.
-  |
-  | include3D                  | `Bool?`                             | Whether to include 3D pose estimation in the session.
-  |
-  | camType                    | `SMCameraType`                      | Camera type to use (front or back).
-  |
-  | configFileName             | `String?`                           | Optional custom configuration file name.
-  |
+#### `SMKitSessionSettings`
+| Type                       | Format                              | Description                                                                                    |
+|----------------------------|-------------------------------------|------------------------------------------------------------------------------------------------|
+| phonePosition              | `PhonePosition`                     | The phone position mode for the session (Floor or Elevated).                                   |
+| jumpRefPoint               | `String?`                           | Reference point for jump detection.                                                            |
+| jumpHeightThreshold        | `Float?`                            | Threshold value for jump height detection.                                                     |
+| userHeight                 | `Float?`                            | The user's height in centimeters.                                                              |
+| include3D                  | `Bool?`                             | Whether to include 3D pose estimation in the session.                                          |
+| camType                    | `SMCameraType`                      | Camera type to use (front or back).                                                            |
+| configFileName             | `String?`                           | Optional custom configuration file name.                                                       |
 
 #### `MovementFeedbackData`
 | Type                | Format                                                       | Description                                                                                                  |
@@ -330,95 +321,55 @@ let models = flowManager.getModelsID()
 | currentRomValue     | `Float?`                                                     | The current Range Of Motion of the user.                                                                     |
 | specialParams       | `[String:Float?]`                                            | Some dynamic exercises will have some special params for example the exercise "Jumps" has "JumpPeakHeight" and "currHeight". |
 
-  #### `SMExerciseInfo`
-  | Type                | Format                                                       | Description
-                                  |
-  |---------------------|--------------------------------------------------------------|------------------------------------------------------------------------------
-  --------------------------------|
-  | sessionId           | `String`                                                     | The identifier for the session in which the exercise was performed.
-                                  |
-  | exerciseName        | `String`                                                     | The name/ID of the exercise being performed.
-                                  |
-  | startTime           | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                  |
-  | endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                  |
-  | totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.
-                                  |
-  | techniqueScore      | `Float`                                                      | The technique score for the exercise.
-  
+#### `SMExerciseInfo`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId           | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName        | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
+| startTime           | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| techniqueScore      | `Float`                                                      | The technique score for the exercise.                                                                        |
 
 #### `SMExerciseStaticInfo` type of `SMExerciseInfo`
-  | Type                   | Format                                                       | Description
-                                     |
-  |------------------------|--------------------------------------------------------------|---------------------------------------------------------------------------
-  -----------------------------------|
-  | sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.
-                                     |
-  | exerciseName           | `String`                                                     | The name/ID of the exercise being performed.
-                                     |
-  | startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ"
-  format.                                 |
-  | endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                     |
-  | totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.
-                                     |
-  | timeInActiveZone       | `Double`                                                     | The time the user was in position.
-                                     |
-  | timeInPositionPerfect  | `Double`                                                     | The time the user was in perfect position.
-                                     |
-  | positionTechniqueScore | `Float`                                                      | The technique score for the static exercise.
-                                     |
-  | peakRangeOfMotionScore | `Float`                                                      | The peak range of motion score achieved during the exercise.
-                                     |
-  | inPosition             | `[StaticData]?`                                              | Array of static data (optional).
+| Type                   | Format                                                       | Description                                                                                                  |
+|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
+| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| timeInActiveZone       | `Double`                                                     | The time the user was in position.                                                                           |
+| timeInPositionPerfect  | `Double`                                                     | The time the user was in perfect position.                                                                   |
+| positionTechniqueScore | `Float`                                                      | The technique score for the static exercise.                                                                 |
+| peakRangeOfMotionScore | `Float`                                                      | The peak range of motion score achieved during the exercise.                                                 |
+| inPosition             | `[StaticData]?`                                              | Array of static data (optional).                                                                             |
 
 
- #### `StaticData`
-  | Type                     | Format                                                       | Description
-                                       |
-  |--------------------------|--------------------------------------------------------------|-------------------------------------------------------------------------
-  -------------------------------------|
-  | detectionStartTime       | `String`                                                     | The start time of the detection.
-                                       |
-  | detectionEndTime         | `String`                                                     | The end time of detection.
-                                       |
-  | detectionConfidenceScore | `Float`                                                      | The confidence in the detection.
-                                       |
-  | inGreenZone              | `Bool`                                                       | Will be true if the user is in the success zone.
-                                       |
-  | rangeOfMotionScore       | `Float`                                                      | The range of motion score.
-                                       |
-  | techniqueScore           | `Float`                                                      | The user technique score.
-                                       |
-  | inPosition               | `Bool`                                                       | Will be true if the user is in position.
-                                       |
-  | isGood                   | `Bool`                                                       | Indicates if the detection is good.
-                                       |
-  | feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback for the user movement.
- 
+#### `StaticData`
+| Type                     | Format                                                       | Description                                                                                                  |
+|--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
+| detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
+| detectionConfidenceScore | `Float`                                                      | The confidence in the detection.                                                                             |
+| inGreenZone              | `Bool`                                                       | Will be true if the user is in the success zone.                                                             |
+| rangeOfMotionScore       | `Float`                                                      | The range of motion score.                                                                                   |
+| techniqueScore           | `Float`                                                      | The user technique score.                                                                                    |
+| inPosition               | `Bool`                                                       | Will be true if the user is in position.                                                                     |
+| isGood                   | `Bool`                                                       | Indicates if the detection is good.                                                                          |
+| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback for the user movement.                                                                     |
 #### `SMExerciseDynamicInfo` type of `SMExerciseInfo`
-  | Type                   | Format                                                       | Description
-                                     |
-  |------------------------|--------------------------------------------------------------|---------------------------------------------------------------------------
-  -----------------------------------|
-  | sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.
-                                     |
-  | exerciseName           | `String`                                                     | The name/ID of the exercise being performed.
-                                     |
-  | startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ"
-  format.                                 |
-  | endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                     |
-  | totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.
-                                     |
-  | performedReps          | `[RepData]`                                                  | Array of RepData containing information about each repetition.
-                                     |
-  | numberOfPerformedReps  | `Int?`                                                       | The number of times the user repeated the exercise.
-                                     |
-  | perfectReps            | `Int`                                                        | The number of perfect reps performed.
-                                     |
-  | repsTechniqueScore     | `Float`                                                      | The overall technique score for the dynamic exercise.
+| Type                   | Format                                                       | Description                                                                                                  |
+|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
+| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
+| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
+| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
+| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
+| performedReps          | `[RepData]`                                                  | Array of RepData containing information about each repetition.                                               |
+| numberOfPerformedReps  | `Int?`                                                       | The number of times the user repeated the exercise.                                                          |
+| perfectReps            | `Int`                                                        | The number of perfect reps performed.                                                                        |
+| repsTechniqueScore     | `Float`                                                      | The overall technique score for the dynamic exercise.                                                        |
 
 
 #### `RepData`
@@ -433,22 +384,15 @@ let models = flowManager.getModelsID()
 | isGood                   | `Bool`                                                       | Is good detection                                                                                            |
 | feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
 
-  #### `DetectionSessionResultData`
-  | Type                | Format                                                       | Description
-                                  |
-  |---------------------|--------------------------------------------------------------|------------------------------------------------------------------------------
-  --------------------------------|
-  | sessionID           | `String`                                                     | The session identifier.
-                                  |
-  | exercises           | `[SMExerciseInfo]`                                           | Array of all the exercises performed in the session.
-                                  |
-  | startTime           | `String`                                                     | The start time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                  |
-  | endTime             | `String`                                                     | The end time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.
-                                  |
-  | totalTime           | `Double`                                                     | The total time for the session in seconds.
-                                  |
-  | totalScore          | `Int`                                                        | The overall score for the session.
+#### `DetectionSessionResultData`
+| Type                | Format                                                       | Description                                                                                                  |
+|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| sessionID           | `String`                                                     | The session identifier.                                                                                      |
+| exercises           | `[SMExerciseInfo]`                                           | Array of all the exercises performed in the session.                                                         |
+| startTime           | `String`                                                     | The start time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                          |
+| endTime             | `String`                                                     | The end time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                            |
+| totalTime           | `Double`                                                     | The total time for the session in seconds.                                                                   |
+| totalScore          | `Int`                                                        | The overall score for the session.                                                                           |
 
 
 #### `Joint`
