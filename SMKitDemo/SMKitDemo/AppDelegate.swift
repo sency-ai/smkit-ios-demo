@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } onFailure: { error in
             // The configuration failed with error
             // Your Code
-            print(error)
+            print(error as Any)
         }
         return true
     }

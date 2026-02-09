@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import AVFoundation
+@preconcurrency import AVFoundation
 import Photos
 import ReplayKit
 import CoreMedia
@@ -27,7 +27,7 @@ struct RecorderAudio{
     let inAppTime:Double
 }
 
-class Recorder {
+class Recorder: @unchecked Sendable {
     // Video
     var assetVideoWriter: AVAssetWriter!
     var assetVideoWriterInput: AVAssetWriterInput?
@@ -53,6 +53,9 @@ class Recorder {
     var progressTimer:Timer?
     var didSetupRecorderSession: Bool = false
     let initialAudioDelay = 0.43
+    private var audioExportSession: AVAssetExportSession?
+    private var videoExportSession: AVAssetExportSession?
+    private var activeExportSession: AVAssetExportSession?
 
     
     var didVideoUploadComplete: Bool = false {
@@ -181,22 +184,7 @@ class Recorder {
         }
     }
     
-    func handleSourceRecordingComplition(_ audioComplition: Bool, _ videoComplition: Bool, _ complition: @escaping () -> Void) {
-            self.saveToLibrary(videoURL: self.videoPath) { complition() }
-    }
-
     func finishRecordingToLocal(complition: @escaping () -> Void) {
-        var didFinishWritingAudio: Bool = false {
-            didSet {
-                handleSourceRecordingComplition(didFinishWritingAudio,didFinishWritingVideo) {complition()}
-            }
-        }
-        var didFinishWritingVideo: Bool = false {
-            didSet {
-                handleSourceRecordingComplition(didFinishWritingAudio,didFinishWritingVideo) {complition()}
-            }
-        }
-        
         guard self.assetVideoWriter != nil else { return complition() }
 
         // Video
@@ -206,11 +194,9 @@ class Recorder {
         }
         self.assetVideoWriterInput?.markAsFinished()
         assetVideoWriter.finishWriting(completionHandler: {
-            let urlVid = self.assetVideoWriter.outputURL
-//            SencyFitDelegateManager.shared.videoURL = urlVid
             self.assetVideoWriter = nil
             self.assetVideoWriterInput = nil
-            didFinishWritingVideo = true
+            self.saveToLibrary(videoURL: self.videoPath) { complition() }
         })
         didSetupRecorderSession = false
     }
@@ -267,121 +253,109 @@ class Recorder {
         return String((0..<length).map { _ in letters.randomElement()! })
     }
     
-    func mergeAudioFiles(recorderAudio: [RecorderAudio], compltion:@escaping (URL?)->Void) {
-        let composition = AVMutableComposition()
-        for rAudio in recorderAudio {
-            
-            guard let compositionAudioTrack :AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID()) else {continue}
-            
-            let asset = AVURLAsset(url: rAudio.audioURL)
-            let track = asset.tracks(withMediaType: .audio)[0]
-            let timeRange = CMTimeRange(start: CMTimeMake(value: 0, timescale: 600), duration: track.timeRange.duration)
-            let newTime = CMTime(seconds: rAudio.inAppTime, preferredTimescale: 600)
-                        
-            try! compositionAudioTrack.insertTimeRange(timeRange, of: track, at: newTime)
-        }
+    func mergeAudioFiles(recorderAudio: [RecorderAudio], compltion: @escaping (URL?) -> Void) {
+        Task {
+            let composition = AVMutableComposition()
+            for rAudio in recorderAudio {
+                guard let compositionAudioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID()) else { continue }
+                let asset = AVURLAsset(url: rAudio.audioURL)
+                guard let track = try? await asset.loadTracks(withMediaType: .audio).first,
+                      let trackTimeRange = try? await track.load(.timeRange) else { continue }
+                let timeRange = CMTimeRange(start: CMTimeMake(value: 0, timescale: 600), duration: trackTimeRange.duration)
+                let newTime = CMTime(seconds: rAudio.inAppTime, preferredTimescale: 600)
+                try? compositionAudioTrack.insertTimeRange(timeRange, of: track, at: newTime)
+            }
 
-        if let audioPath = audioPath{
-            cleanup(fileURL: audioPath)
-        }
-        
-        guard let assetExport = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A) else {return compltion(nil)}
-        assetExport.outputFileType = .m4a
-        assetExport.outputURL = audioPath
-        checkProgress(exportSession: assetExport)
+            if let audioPath = audioPath {
+                cleanup(fileURL: audioPath)
+            }
 
-        DispatchQueue.main.async {
-            assetExport.exportAsynchronously(completionHandler:{
-                let error = assetExport.error?.localizedDescription ?? ""
-                switch assetExport.status{
-                case .failed:
-                    print("failed \(error)")
-                case .cancelled:
-                    print("cancelled \(error)")
-                case .unknown:
-                    print("unknown\(error)")
-                case .waiting:
-                    print("waiting\(error)")
-                case .exporting:
-                    print("exporting\(error)")
-                default:
-                    print("Audio Concatenation Complete")
+            guard let session = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A) else {
+                compltion(nil)
+                return
+            }
+            self.audioExportSession = session
+            self.audioExportSession?.outputFileType = .m4a
+            self.audioExportSession?.outputURL = self.audioPath
+            checkProgress(exportSession: session)
+
+            self.audioExportSession?.exportAsynchronously(completionHandler: {
+                let error = self.audioExportSession?.error?.localizedDescription ?? ""
+                switch self.audioExportSession?.status {
+                case .failed: print("failed \(error)")
+                case .cancelled: print("cancelled \(error)")
+                case .unknown: print("unknown\(error)")
+                case .waiting: print("waiting\(error)")
+                case .exporting: print("exporting\(error)")
+                default: print("Audio Concatenation Complete")
                 }
-                
                 compltion(self.audioPath)
             })
         }
     }
     
     func mergeVideoWithAudio(videoUrl: URL, audioUrl: URL, complition: @escaping () -> Void) {
-        let mixComposition: AVMutableComposition = AVMutableComposition()
-        var mutableCompositionVideoTrack: [AVMutableCompositionTrack] = []
-        var mutableCompositionAudioTrack: [AVMutableCompositionTrack] = []
-        let totalVideoCompositionInstruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+        Task {
+            let mixComposition = AVMutableComposition()
+            let totalVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
 
-        let aVideoAsset: AVAsset = AVAsset(url: videoUrl)
-        let aAudioAsset: AVAsset = AVAsset(url: audioUrl)
-        
-        if let videoTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid), let audioTrack = mixComposition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) {
-            mutableCompositionVideoTrack.append(videoTrack)
-            mutableCompositionAudioTrack.append(audioTrack)
+            let aVideoAsset = AVURLAsset(url: videoUrl)
+            let aAudioAsset = AVURLAsset(url: audioUrl)
 
-            if let aVideoAssetTrack: AVAssetTrack = aVideoAsset.tracks(withMediaType: .video).first, let aAudioAssetTrack: AVAssetTrack = aAudioAsset.tracks(withMediaType: .audio).first {
+            guard let videoTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid),
+                  let audioTrack = mixComposition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
+
+            if let aVideoAssetTrack = try? await aVideoAsset.loadTracks(withMediaType: .video).first,
+               let aAudioAssetTrack = try? await aAudioAsset.loadTracks(withMediaType: .audio).first {
                 do {
-                    try mutableCompositionVideoTrack.first?.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aVideoAssetTrack.timeRange.duration), of: aVideoAssetTrack, at: CMTime.zero)
-                    try mutableCompositionAudioTrack.first?.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aVideoAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: CMTime.zero)
-                       videoTrack.preferredTransform = aVideoAssetTrack.preferredTransform
-                       
-                } catch{
+                    let videoTimeRange = try await aVideoAssetTrack.load(.timeRange)
+                    let preferredTransform = try await aVideoAssetTrack.load(.preferredTransform)
+                    try videoTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: videoTimeRange.duration), of: aVideoAssetTrack, at: .zero)
+                    try audioTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: videoTimeRange.duration), of: aAudioAssetTrack, at: .zero)
+                    videoTrack.preferredTransform = preferredTransform
+                    totalVideoCompositionInstruction.timeRange = CMTimeRangeMake(start: .zero, duration: videoTimeRange.duration)
+                } catch {
                     print(error)
                 }
-                
-                totalVideoCompositionInstruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: aVideoAssetTrack.timeRange.duration)
             }
-            
-            let mutableVideoComposition: AVMutableVideoComposition = AVMutableVideoComposition()
+
+            let mutableVideoComposition = AVMutableVideoComposition()
             mutableVideoComposition.frameDuration = CMTimeMake(value: 1, timescale: videoTrack.naturalTimeScale)
             mutableVideoComposition.renderSize = CGSize(width: videoTrack.naturalSize.width, height: videoTrack.naturalSize.height)
-            
-            if let outputURL = self.mergePath {
-                if let exportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetPassthrough) {
-                    if let _: AVAssetTrack = aVideoAsset.tracks(withMediaType: .video).first {
-                        
-                        exportSession.outputURL = outputURL
-                        exportSession.outputFileType = AVFileType.mp4
-                        exportSession.shouldOptimizeForNetworkUse = false
-                        checkProgress(exportSession: exportSession)
 
-                        exportSession.exportAsynchronously(completionHandler: {
-                            switch exportSession.status {
-                            case .failed:
-                                if let _error = exportSession.error {
-                                    print("[Error - .failed - merging files]: \(_error)")
-                                }
-
-                            case .cancelled:
-                                if let _error = exportSession.error {
-                                    print("[Error - cancelled - merging files]: \(_error)")
-                                }
-
-                            default:
-                                print("finished merging files")
-                                self.saveToLibrary(videoURL: self.mergePath) { complition() }
-                            }
-                        })
-                    }
-                } else {
-                    print("[Error - merging files]")
-                }
+            guard let outputURL = self.mergePath,
+                  let session = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetPassthrough),
+                  (try? await aVideoAsset.loadTracks(withMediaType: .video).first) != nil else {
+                print("[Error - merging files]")
+                return
             }
+
+            self.videoExportSession = session
+            self.videoExportSession?.outputURL = outputURL
+            self.videoExportSession?.outputFileType = .mp4
+            self.videoExportSession?.shouldOptimizeForNetworkUse = false
+            checkProgress(exportSession: session)
+
+            self.videoExportSession?.exportAsynchronously(completionHandler: {
+                switch self.videoExportSession?.status {
+                case .failed:
+                    if let _error = self.videoExportSession?.error { print("[Error - .failed - merging files]: \(_error)") }
+                case .cancelled:
+                    if let _error = self.videoExportSession?.error { print("[Error - cancelled - merging files]: \(_error)") }
+                default:
+                    print("finished merging files")
+                    self.saveToLibrary(videoURL: self.mergePath) { complition() }
+                }
+            })
         }
     }
     
-    func checkProgress(exportSession:AVAssetExportSession){
+    func checkProgress(exportSession: AVAssetExportSession) {
+        self.activeExportSession = exportSession
         DispatchQueue.main.async {
-            self.progressTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-
-                if exportSession.progress == 1{
+            self.progressTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+                guard let self else { return }
+                if self.activeExportSession?.progress == 1 {
                     self.progressTimer?.invalidate()
                 }
             }

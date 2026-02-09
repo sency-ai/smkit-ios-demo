@@ -98,8 +98,8 @@ public class SM3DSkeleton:UIView{
         self.createNods()
         self.addFloor()
 
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let videoPath = documentsDirectory.appendingPathComponent("output\(Date()).mp4")
+//        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+//        let videoPath = documentsDirectory.appendingPathComponent("output\(Date()).mp4")
 //        do{
 //            try recorder.startRecording(sceneView: sceneView, outputURL: videoPath, videoSize: CGSize(width: 1080 , height: 1920 ))
 //        }catch{

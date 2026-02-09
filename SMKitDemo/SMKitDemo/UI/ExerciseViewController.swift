@@ -57,7 +57,7 @@ class ExerciseViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func configure(exercise:[String], phonePosition:PhonePosition){
+    func configure(exercise: [String], phonePosition: PhonePosition, showSkeleton: Bool = false) {
         do{
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
@@ -86,7 +86,9 @@ class ExerciseViewController: UIViewController {
             self.exercise = exercise
             self.startExercise()
             
-            self.view.addSubview(self.skeletonView)
+            if showSkeleton {
+                self.view.addSubview(self.skeletonView)
+            }
             self.view.addSubview(exerciceView)
             
             NSLayoutConstraint.activate([
@@ -181,7 +183,7 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?) {
         guard let previewLayer else {return}
         let captureSize = previewLayer.frame.size
         let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
@@ -213,7 +215,7 @@ extension ExerciseViewController:ExerciseViewDelegate{
             let jsonData = try jsonEncoder.encode(result)
             let json = String(data: jsonData, encoding: String.Encoding.utf8)
             
-            print(json)
+            print(json as Any)
 
             if exerciseIndex >= exercise.count - 1{
                 self.quitWasPressed()
@@ -239,7 +241,7 @@ extension ExerciseViewController:ExerciseViewDelegate{
             let jsonData = try jsonEncoder.encode(result)
             let json = String(data: jsonData, encoding: String.Encoding.utf8)
 
-            print(json)
+            print(json as Any)
             showSummary(summary: json ?? "")
         }catch{
             self.showError(message: error.localizedDescription)

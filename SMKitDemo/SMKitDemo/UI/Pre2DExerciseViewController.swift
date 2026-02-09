@@ -12,7 +12,7 @@ import SMKit
 class Pre2DExerciseViewController:UIViewController{
     
     lazy var welcomeScreen:UIView = {
-        guard let view = UIHostingController(rootView: Pre2DExerciseView(startWasPressed: startWasPressed, dismissWasPressed: dismissWasPressed)).view else {return UIView()}
+        guard let view = UIHostingController(rootView: Pre2DExerciseView(startWasPressed: startWasPressed, dismissWasPressed: dismissWasPressed)).view else { return UIView() }
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -31,9 +31,9 @@ class Pre2DExerciseViewController:UIViewController{
         ])
     }
     
-    func startWasPressed(phonePostion:PhonePosition, exercise:[String]){
+    func startWasPressed(exercise: [String], showSkeleton: Bool) {
         let vc = ExerciseViewController()
-        vc.configure(exercise: exercise, phonePosition: phonePostion)
+        vc.configure(exercise: exercise, phonePosition: .Floor, showSkeleton: showSkeleton)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

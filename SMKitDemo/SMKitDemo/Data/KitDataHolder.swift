@@ -28,8 +28,8 @@ struct KitDataHolder{
         jointsStyle = {
             var styles:[JointStyle] = []
             let joints = Array(poseType.bodyParts.keys)
-            let headJoints:[Joint] = [.Neck, .Nose, .LEar, .REar, .LEye, .REye]
             joints.forEach { joint in
+//                let headJoints:[Joint] = [.Neck, .Nose, .LEar, .REar, .LEye, .REye]
 //                if !headJoints.contains(joint) || !excludeHeadJoint{
                     styles.append(JointStyle(joint: joint, pointRad: 8, color: .black, jointShadowFactor: 0, strokeColor: .white))
 //                }
