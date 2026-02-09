@@ -13,8 +13,6 @@ The `SMKitSessionDelegate` protocol provides callbacks for session events, detec
 ```swift
 extension ViewController: SMKitSessionDelegate {
 
-    // MARK: - Session Lifecycle
-
     /// Called when the session starts and the camera is ready
     func captureSessionDidSet(session: AVCaptureSession) {
         // Configure your camera preview layer here
@@ -24,8 +22,6 @@ extension ViewController: SMKitSessionDelegate {
     func captureSessionDidStop() {
         // Clean up resources
     }
-
-    // MARK: - Detection Data
 
     /// Called when SMKit detects movement data
     /// - Parameter movementData: Contains feedback about the user's movement, technique score, etc.
@@ -53,14 +49,10 @@ extension ViewController: SMKitSessionDelegate {
         // Process joint position data
     }
 
-    // MARK: - Error Handling
-
     /// Called if any error occurs during the session
     func handleSessionErrors(error: any Error) {
         print("Session error: \(error)")
     }
-
-    // MARK: - Camera Frames
 
     /// Called with each camera frame
     /// - Parameters:
