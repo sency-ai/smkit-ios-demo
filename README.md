@@ -166,9 +166,6 @@ let modifications: [String: Any] = [
         // Feedback/parameter name: [parameter values]
         "DepthCrunchesShallowDepth": ["low": 0.1, "high": 0.9],
         // Add more parameters as needed
-    ],
-    "Squats": [
-        "DepthSquatsShallowDepth": ["low": 0.2, "high": 0.85],
     ]
 ]
 
