@@ -25,7 +25,7 @@ This branch uses **Swift Package Manager (SPM)** for dependency management.
 
 ### SPM (Swift Package Manager)
 
-*Latest version: `1.4.7` (SMKit), `1.4.9` (SMBase)*
+*Latest version: `1.5.1` (SMKit), `1.5.2` (SMBase)*
 
 #### Fresh SPM Integration:
 
@@ -35,7 +35,7 @@ This branch uses **Swift Package Manager (SPM)** for dependency management.
    - Go to **File → Add Package Dependencies...**
    - Enter the repository URL: `https://bitbucket.org/sencyai/smkit_package`
    - **Dependency Rule:** Select "Branch" → `main` (recommended)
-     - Alternatively, use "Exact Version" → `1.4.7`
+     - Alternatively, use "Exact Version" → `1.5.1`
    - Click **Add Package**
 
 3. **Select the package product:**
