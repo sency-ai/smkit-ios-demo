@@ -269,68 +269,71 @@ struct AssessmentView: View {
     // MARK: - Exercise Content
 
     var exerciseContent: some View {
-        VStack(spacing: 0) {
-            // Header — large exercise name
-            VStack(spacing: 4) {
-                Text(model.exerciseName)
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(.white)
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-                HStack {
-                    Text("\(model.exerciseIndex + 1) / \(model.totalExercises)")
-                        .font(.headline)
-                        .foregroundStyle(.white.opacity(0.7))
-                    Spacer()
-                    Button { delegate.stopWasPressed() } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
+        ZStack(alignment: .bottom) {
+            // Main layout: gauge and timer stay fixed; feedback does not affect their position
+            VStack(spacing: 0) {
+                // Header — large exercise name
+                VStack(spacing: 4) {
+                    Text(model.exerciseName)
+                        .font(.system(size: 34, weight: .bold))
+                        .foregroundStyle(.white)
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                    HStack {
+                        Text("\(model.exerciseIndex + 1) / \(model.totalExercises)")
+                            .font(.headline)
+                            .foregroundStyle(.white.opacity(0.7))
+                        Spacer()
+                        Button { delegate.stopWasPressed() } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(.white)
+                        }
                     }
                 }
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.black.opacity(0.6))
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.black.opacity(0.6))
 
-            Spacer()
+                Spacer()
 
-            // ROM gauge
-            VStack(spacing: 12) {
-                if model.romRange != nil {
-                    RomGaugeView(
-                        value: model.currentRomValue,
-                        range: model.romRange!,
-                        isInPosition: model.isInPosition
-                    )
+                // ROM gauge — stays in place regardless of feedback count
+                VStack(spacing: 12) {
+                    if model.romRange != nil {
+                        RomGaugeView(
+                            value: model.currentRomValue,
+                            range: model.romRange!,
+                            isInPosition: model.isInPosition
+                        )
+                    }
+
+                    Text(model.isInPosition ? "In Position" : "Get in position")
+                        .font(.headline)
+                        .foregroundStyle(model.isInPosition ? .green : .white)
                 }
 
-                Text(model.isInPosition ? "In Position" : "Get in position")
-                    .font(.headline)
-                    .foregroundStyle(model.isInPosition ? .green : .white)
-            }
+                Spacer()
 
-            Spacer()
+                // Timer countdown
+                Text(String(format: "%.1f", max(model.timeRemaining, 0)))
+                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .foregroundStyle(progressColor)
+                    .padding(.bottom, 8)
 
-            // Timer countdown
-            Text(String(format: "%.1f", max(model.timeRemaining, 0)))
-                .font(.system(size: 72, weight: .bold, design: .rounded))
-                .foregroundStyle(progressColor)
-                .padding(.bottom, 8)
-
-            // Progress bar
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Rectangle().fill(Color.white.opacity(0.2))
-                    Rectangle()
-                        .fill(progressColor)
-                        .frame(width: geo.size.width * CGFloat(max(model.timeRemaining, 0) / model.duration))
-                        .animation(.linear(duration: 0.1), value: model.timeRemaining)
+                // Progress bar
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Rectangle().fill(Color.white.opacity(0.2))
+                        Rectangle()
+                            .fill(progressColor)
+                            .frame(width: geo.size.width * CGFloat(max(model.timeRemaining, 0) / model.duration))
+                            .animation(.linear(duration: 0.1), value: model.timeRemaining)
+                    }
                 }
+                .frame(height: 6)
             }
-            .frame(height: 6)
 
-            // Feedbacks
+            // Feedbacks overlay at bottom — does not shift gauge or timer
             if !model.feedbacks.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(model.feedbacks, id: \.self) { feedback in

@@ -345,14 +345,24 @@ extension AssessmentViewController: SMKitSessionDelegate {
     }
 
     func handlePositionData(poseData2D: [Joint: JointData]?, poseData3D: [Joint: SCNVector3]?, jointAnglesData: [LimbsPairs: Float]?, jointGlobalAnglesData: [Limbs: Float]?, xyzEulerAngles: [String: SCNVector3]?, xyzRelativeAngles: [String: SCNVector3]?) {
-        guard let joints = poseData2D, let previewLayer = previewLayer else { return }
+        guard let previewLayer = previewLayer else { return }
+        let hasPerson = poseData2D != nil && !(poseData2D?.isEmpty ?? true)
+        guard let joints = poseData2D else {
+            DispatchQueue.main.async { self.skeletonView?.isHidden = true }
+            return
+        }
         let captureSize = previewLayer.frame.size
         let videoSize = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
-        skeletonView?.updateSkeleton(
-            rawData: joints,
-            captureSize: captureSize,
-            videoSize: videoSize
-        )
+        DispatchQueue.main.async {
+            self.skeletonView?.isHidden = !hasPerson
+            if hasPerson {
+                self.skeletonView?.updateSkeleton(
+                    rawData: joints,
+                    captureSize: captureSize,
+                    videoSize: videoSize
+                )
+            }
+        }
     }
 
     func handleSessionErrors(error: Error) {
