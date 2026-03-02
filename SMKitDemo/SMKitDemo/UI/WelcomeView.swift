@@ -10,6 +10,7 @@ import SwiftUI
 struct WelcomeView: View {
     let start2DSession:()->Void
     let start3DSession:()->Void
+    let startAssessment:()->Void
     
     @ObservedObject var authManager = AuthManager.shared
 
@@ -50,7 +51,22 @@ struct WelcomeView: View {
                             .fill(.blue)
                     )
             }
-            
+
+            Button {
+                startAssessment()
+            } label: {
+                Text("Demo Assessment")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.green)
+                    )
+            }
+
             Spacer()
 
         }
@@ -71,5 +87,5 @@ struct WelcomeView: View {
 }
 
 #Preview {
-    WelcomeView(start2DSession: {}, start3DSession: {})
+    WelcomeView(start2DSession: {}, start3DSession: {}, startAssessment: {})
 }

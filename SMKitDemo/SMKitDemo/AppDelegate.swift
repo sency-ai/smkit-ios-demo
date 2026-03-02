@@ -12,7 +12,7 @@ import SMKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-         SMKitFlowManager.configure(authKey: "", shouldSupport3D: true) {
+         SMKitFlowManager.configure(authKey: "public_live_TEWjdHu&PVkB5kv2", shouldSupport3D: true) {
             // The configuration was successful
             // Your Code
             DispatchQueue.main.async {

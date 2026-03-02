@@ -10,7 +10,7 @@ import SwiftUI
 class WelcomeViewController: UIViewController {
     
     lazy var welcomeView:UIView = {
-        guard let view = UIHostingController(rootView: WelcomeView(start2DSession: start2DSession, start3DSession: start3DSession)).view else {return UIView()}
+        guard let view = UIHostingController(rootView: WelcomeView(start2DSession: start2DSession, start3DSession: start3DSession, startAssessment: startAssessment)).view else {return UIView()}
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -37,6 +37,12 @@ class WelcomeViewController: UIViewController {
     
     @objc func start3DSession() {
         let vc = SM3DExerciseViewController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+
+    @objc func startAssessment() {
+        let vc = AssessmentViewController()
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

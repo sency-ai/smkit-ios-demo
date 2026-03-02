@@ -13,6 +13,8 @@
 		BE23AE282D0840C200BFAD8B /* ViewRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */; };
 		BE23AE2A2D08419B00BFAD8B /* SceneKitRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */; };
 		BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */; };
+		D2B000042F39C1D50073AABB /* AssessmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B000022F39C1D50073AABB /* AssessmentViewController.swift */; };
+		D2B000052F39C1D50073AABB /* AssessmentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B000032F39C1D50073AABB /* AssessmentViews.swift */; };
 		BE4042642C6B745200E2B675 /* SM3DSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */; };
 		BE4042662C6B74E100E2B675 /* SM3DExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */; };
 		BE4042682C6B768000E2B675 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4042672C6B768000E2B675 /* WelcomeViewController.swift */; };
@@ -40,6 +42,8 @@
 		BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecorder.swift; sourceTree = "<group>"; };
 		BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitRecorder.swift; sourceTree = "<group>"; };
 		BE4042612C6B743600E2B675 /* SM3DInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DInfoViewModel.swift; sourceTree = "<group>"; };
+		D2B000022F39C1D50073AABB /* AssessmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentViewController.swift; sourceTree = "<group>"; };
+		D2B000032F39C1D50073AABB /* AssessmentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentViews.swift; sourceTree = "<group>"; };
 		BE4042632C6B745200E2B675 /* SM3DSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DSkeleton.swift; sourceTree = "<group>"; };
 		BE4042652C6B74E100E2B675 /* SM3DExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM3DExerciseViewController.swift; sourceTree = "<group>"; };
 		BE4042672C6B768000E2B675 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +98,15 @@
 			path = 3D;
 			sourceTree = "<group>";
 		};
+		D2B000012F39C1D50073AABB /* Assessment */ = {
+			isa = PBXGroup;
+			children = (
+				D2B000022F39C1D50073AABB /* AssessmentViewController.swift */,
+				D2B000032F39C1D50073AABB /* AssessmentViews.swift */,
+			);
+			path = Assessment;
+			sourceTree = "<group>";
+		};
 		BE4B12E62CB7D96E008F2131 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				BE40425C2C6B73C100E2B675 /* 3D */,
+				D2B000012F39C1D50073AABB /* Assessment */,
 				BEB762F72C368973009222EA /* ExerciseViewController.swift */,
 				BEB762E72C36892A009222EA /* ExerciseIndicatorView.swift */,
 				BEB762E82C36892A009222EA /* ExerciseTimerView.swift */,
@@ -264,6 +278,8 @@
 				BEC0983F2BCD1D5100E47B8F /* SceneDelegate.swift in Sources */,
 				BE4B12E82CB7D982008F2131 /* KitDataHolder.swift in Sources */,
 				BE4042622C6B743600E2B675 /* SM3DInfoViewModel.swift in Sources */,
+				D2B000042F39C1D50073AABB /* AssessmentViewController.swift in Sources */,
+				D2B000052F39C1D50073AABB /* AssessmentViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
