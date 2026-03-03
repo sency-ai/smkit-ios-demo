@@ -46,6 +46,7 @@ class AssessmentViewController: UIViewController {
     private var viewModel = AssessmentViewModel()
     private var calibrationViewModel = CalibrationViewModel()
     private var skeletonView: SkeletonView?
+    private var boundingBoxGuideView: BodyCalibrationGuideView?
 
     // Calibration state
     private var isBodyInFrame = false
@@ -134,6 +135,8 @@ class AssessmentViewController: UIViewController {
 
     private func beginAssessment() {
         calibrationOverlay.removeFromSuperview()
+        boundingBoxGuideView?.removeFromSuperview()
+        boundingBoxGuideView = nil
         flowManager?.setBodyPositionCalibrationInactive()
 
         // Add exercise UI (on top of skeleton)
@@ -390,17 +393,31 @@ extension AssessmentViewController: SMBodyCalibrationDelegate {
             case .DidEnterFrame:
                 self.isBodyInFrame = true
                 self.calibrationViewModel.isBodyInFrame = true
+                self.boundingBoxGuideView?.setInPosition(true)
                 self.checkCalibrationComplete()
             case .DidLeaveFrame:
                 self.isBodyInFrame = false
                 self.calibrationViewModel.isBodyInFrame = false
-            case .TooClose(let tooClose):
-                self.calibrationViewModel.isTooClose = tooClose
+                self.boundingBoxGuideView?.setInPosition(false)
+            case .TooClose:
+                break
+            @unknown default:
+                break
             }
         }
     }
 
-    func didRecivedBoundingBox(box: BodyCalRectGuide) {}
+    func didRecivedBoundingBox(box: BodyCalRectGuide) {
+        DispatchQueue.main.async {
+            guard let previewLayer = self.previewLayer else { return }
+            let videoSize = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
+            let guideRect = box.screenRect(videoSize: videoSize, viewSize: self.view.bounds.size)
+            let guideView = BodyCalibrationGuideView(guideRect: guideRect, frame: self.view.bounds)
+            self.boundingBoxGuideView?.removeFromSuperview()
+            self.view.insertSubview(guideView, belowSubview: self.calibrationOverlay)
+            self.boundingBoxGuideView = guideView
+        }
+    }
 }
 
 extension AssessmentViewController: AssessmentViewDelegate {
@@ -414,6 +431,59 @@ extension AssessmentViewController: AssessmentViewDelegate {
 
     func stopWasPressed() {
         stopAndDismiss()
+    }
+}
+
+extension BodyCalRectGuide {
+    /// Converts the normalized guide rect to screen coordinates, accounting for
+    /// the .resizeAspect letterboxing applied by AVCaptureVideoPreviewLayer.
+    func screenRect(videoSize: CGSize, viewSize: CGSize) -> CGRect {
+        let videoRect = getRect(videoSize: videoSize)
+        let scale = min(viewSize.width / videoSize.width, viewSize.height / videoSize.height)
+        let offsetX = (viewSize.width - videoSize.width * scale) / 2
+        let offsetY = (viewSize.height - videoSize.height * scale) / 2
+        return CGRect(
+            x: videoRect.origin.x * scale + offsetX,
+            y: videoRect.origin.y * scale + offsetY,
+            width: videoRect.width * scale,
+            height: videoRect.height * scale
+        )
+    }
+}
+
+/// A transparent overlay that draws a darkened surround with a clear guide
+/// rectangle and a white/green border indicating whether the person is in frame.
+final class BodyCalibrationGuideView: UIView {
+    private let borderLayer = CAShapeLayer()
+    private let guideRect: CGRect
+
+    init(guideRect: CGRect, frame: CGRect) {
+        self.guideRect = guideRect
+        super.init(frame: frame)
+        backgroundColor = .clear
+        isUserInteractionEnabled = false
+        setupLayers()
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    private func setupLayers() {
+        let overlayLayer = CAShapeLayer()
+        let overlayPath = UIBezierPath(rect: bounds)
+        overlayPath.append(UIBezierPath(roundedRect: guideRect, cornerRadius: 12).reversing())
+        overlayLayer.path = overlayPath.cgPath
+        overlayLayer.fillColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        layer.addSublayer(overlayLayer)
+
+        borderLayer.path = UIBezierPath(roundedRect: guideRect, cornerRadius: 12).cgPath
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.white.cgColor
+        borderLayer.lineWidth = 3
+        layer.addSublayer(borderLayer)
+    }
+
+    func setInPosition(_ inPosition: Bool) {
+        borderLayer.strokeColor = inPosition ? UIColor.green.cgColor : UIColor.white.cgColor
     }
 }
 

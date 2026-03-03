@@ -8,7 +8,6 @@ import SwiftUI
 class CalibrationViewModel: ObservableObject {
     @Published var isPhoneReady: Bool = false
     @Published var isBodyInFrame: Bool = false
-    @Published var isTooClose: Bool = false
 }
 
 struct CalibrationView: View {
@@ -17,7 +16,6 @@ struct CalibrationView: View {
     let onSkip: () -> Void
 
     var statusMessage: String {
-        if model.isTooClose { return "Too close — step back" }
         if !model.isPhoneReady { return "Tilt your phone upright" }
         if !model.isBodyInFrame { return "Step into the frame" }
         return "Hold still…"
@@ -52,7 +50,7 @@ struct CalibrationView: View {
                     CalibrationRow(
                         icon: "figure.stand",
                         label: "Body in frame",
-                        isReady: model.isBodyInFrame && !model.isTooClose
+                        isReady: model.isBodyInFrame
                     )
                 }
                 .padding()
