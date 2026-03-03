@@ -5,15 +5,11 @@
 
 import SwiftUI
 
-// MARK: - Calibration ViewModel
-
 class CalibrationViewModel: ObservableObject {
     @Published var isPhoneReady: Bool = false
     @Published var isBodyInFrame: Bool = false
     @Published var isTooClose: Bool = false
 }
-
-// MARK: - Calibration View
 
 struct CalibrationView: View {
     @ObservedObject var model: CalibrationViewModel
@@ -107,15 +103,11 @@ struct CalibrationRow: View {
     }
 }
 
-// MARK: - Delegate
-
 protocol AssessmentViewDelegate {
     func exerciseTimeDidFinish()
     func countdownDidFinish()
     func stopWasPressed()
 }
-
-// MARK: - ViewModel
 
 class AssessmentViewModel: ObservableObject {
     @Published var exerciseName: String = ""
@@ -193,8 +185,6 @@ class AssessmentViewModel: ObservableObject {
     }
 }
 
-// MARK: - Assessment View
-
 struct AssessmentView: View {
     @ObservedObject var model: AssessmentViewModel
     let delegate: AssessmentViewDelegate
@@ -218,8 +208,6 @@ struct AssessmentView: View {
             }
         }
     }
-
-    // MARK: - Countdown Overlay
 
     var countdownOverlay: some View {
         VStack(spacing: 0) {
@@ -265,8 +253,6 @@ struct AssessmentView: View {
             }
         }
     }
-
-    // MARK: - Exercise Content
 
     var exerciseContent: some View {
         ZStack(alignment: .bottom) {
@@ -363,8 +349,6 @@ struct AssessmentView: View {
     }
 }
 
-// MARK: - ROM Gauge View
-
 struct RomGaugeView: View {
     let value: Float       // 0.0–1.0
     let range: ClosedRange<Float>
@@ -430,8 +414,6 @@ struct RomGaugeView: View {
     }
 }
 
-// MARK: - Assessment Summary View
-
 struct AssessmentSummaryView: View {
     let results: [AssessmentExerciseResult]
     let dismissWasPressed: () -> Void
@@ -492,8 +474,6 @@ struct AssessmentSummaryView: View {
         score >= 80 ? .green : score >= 60 ? .orange : .red
     }
 }
-
-// MARK: - Exercise Result Card
 
 struct ExerciseResultCard: View {
     let result: AssessmentExerciseResult

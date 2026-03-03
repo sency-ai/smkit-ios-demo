@@ -334,6 +334,9 @@ extension AssessmentViewController: SMKitSessionDelegate {
             feedbackStrings.forEach { greenZoneFeedbacks.insert($0) }
         }
 
+        // Color the top feedback's joints red on the skeleton
+        let topFeedbackJoints = movementData.feedback?.first?.assessmentJoints ?? []
+
         DispatchQueue.main.async {
             self.viewModel.update(
                 techniqueScore: movementData.techniqueScore,
@@ -341,19 +344,27 @@ extension AssessmentViewController: SMKitSessionDelegate {
                 isInPosition: isInPosition,
                 romValue: rom
             )
+
+            if isInPosition, !topFeedbackJoints.isEmpty {
+                self.skeletonView?.setCirclsColor(
+                    joints: topFeedbackJoints,
+                    removeAfter: 1.0,
+                    color: .systemRed
+                )
+            }
         }
     }
 
     func handlePositionData(poseData2D: [Joint: JointData]?, poseData3D: [Joint: SCNVector3]?, jointAnglesData: [LimbsPairs: Float]?, jointGlobalAnglesData: [Limbs: Float]?, xyzEulerAngles: [String: SCNVector3]?, xyzRelativeAngles: [String: SCNVector3]?) {
-        guard let previewLayer = previewLayer else { return }
-        let hasPerson = poseData2D != nil && !(poseData2D?.isEmpty ?? true)
-        guard let joints = poseData2D else {
-            DispatchQueue.main.async { self.skeletonView?.isHidden = true }
-            return
-        }
-        let captureSize = previewLayer.frame.size
-        let videoSize = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let previewLayer = self.previewLayer else { return }
+            let hasPerson = poseData2D != nil && !(poseData2D?.isEmpty ?? true)
+            guard let joints = poseData2D else {
+                self.skeletonView?.isHidden = true
+                return
+            }
+            let captureSize = previewLayer.frame.size
+            let videoSize = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
             self.skeletonView?.isHidden = !hasPerson
             if hasPerson {
                 self.skeletonView?.updateSkeleton(
@@ -403,5 +414,59 @@ extension AssessmentViewController: AssessmentViewDelegate {
 
     func stopWasPressed() {
         stopAndDismiss()
+    }
+}
+
+extension FormFeedbackTypeBr {
+    /// Maps feedback types to the body joints that should be highlighted red.
+    /// Covers the assessment exercises: OverheadMobility, SquatRegularOverheadStatic,
+    /// JeffersonCurl, StandingSideBend.
+    var assessmentJoints: [Joint] {
+        switch self {
+        // OverheadMobility
+        case .overheadMobilityStraightHands:
+            return [.LWrist, .LElbow, .RWrist, .RElbow]
+        case .overheadMobilityStraightBack:
+            return [.LShoulder, .LHip, .RShoulder, .RHip]
+        case .overheadMobilityRaiseHands:
+            return [.RWrist, .LWrist]
+        case .overheadMobilitySideStand:
+            return [.LHip, .RHip, .LShoulder, .RShoulder]
+        case .overheadMobilityLowerRibs:
+            return [.LHip, .RHip]
+
+        // Squat
+        case .squatKneesCollapsingInward, .squatKneesCollapsingOutward:
+            return [.LKnee, .RKnee]
+        case .squatForwardLean:
+            return [.LShoulder, .LHip, .RShoulder, .RHip]
+        case .squatHipCreaseDepth:
+            return [.LHip, .RHip]
+        case .squatOverHeadHandsNotStraight:
+            return [.LWrist, .LElbow, .RWrist, .RElbow]
+        case .squatAnkleWidth, .squatAnkleTooNarrowWidth, .squatAnkleTooWideWidth:
+            return [.LAnkle, .RAnkle]
+
+        // Jefferson Curl
+        case .jeffersonCurlSideView:
+            return [.LShoulder, .LHip, .RShoulder, .RHip]
+        case .jeffersonCurlLegsStraight:
+            return [.LKnee, .RKnee]
+        case .jeffersonCurlHandsReach:
+            return [.LWrist, .RWrist]
+        case .jeffersonCurlHipFlex:
+            return [.LHip, .RHip, .LShoulder, .RShoulder]
+
+        // Standing Side Bend
+        case .standingSideBendTorsoRotation, .standingSideBendLateralTorsoFlex:
+            return [.LShoulder, .RShoulder]
+        case .standingSideBendHandsAboveHead:
+            return [.RWrist, .LWrist]
+        case .standingSideBendFeetOnFloor:
+            return [.LAnkle, .RAnkle]
+
+        default:
+            return []
+        }
     }
 }
