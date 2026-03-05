@@ -64,6 +64,16 @@ class ViewController: UIViewController {
     func setBodyPositionCalibrationInactive(){
         flowManager?.setBodyPositionCalibrationInactive()
     }
+
+    //Enable verbose logging for body calibration diagnostics (logs every 30 frames)
+    func enableBodyCalibrationVerboseLogging(){
+        flowManager?.verboseBodyCalibration = true
+    }
+
+    //Disable verbose logging for body calibration
+    func disableBodyCalibrationVerboseLogging(){
+        flowManager?.verboseBodyCalibration = false
+    }
 }
 
 
