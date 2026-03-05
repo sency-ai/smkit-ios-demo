@@ -43,6 +43,7 @@ class WelcomeViewController: UIViewController {
 
     @objc func startAssessment() {
         let vc = AssessmentViewController()
+        vc.isElevated = true  // Set to false for floor (phone upright) mode
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

@@ -20,6 +20,8 @@ struct AssessmentExerciseResult {
 
 class AssessmentViewController: UIViewController {
 
+    var isElevated: Bool = true
+
     private let exercises = [
         "OverheadMobility",
         "SquatRegularOverheadStatic",
@@ -84,7 +86,7 @@ class AssessmentViewController: UIViewController {
     private func setup() {
         do {
             let sessionSettings = SMKitSessionSettings(
-                phonePosition: .Floor,
+                phonePosition: isElevated ? .Elevated : .Floor,
                 jumpRefPoint: "Hip",
                 jumpHeightThreshold: 10,
                 userHeight: 170
@@ -107,6 +109,7 @@ class AssessmentViewController: UIViewController {
             flowManager?.setDeviceMotionFrequency(isHigh: true)
 
             try flowManager?.startSession(sessionSettings: sessionSettings)
+            flowManager?.verboseBodyCalibration = true
 
             // Show calibration UI first
             view.addSubview(calibrationOverlay)

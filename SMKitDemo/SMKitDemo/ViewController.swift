@@ -17,6 +17,7 @@ class ViewController: UIViewController {
         do{
             self.flowManager = try SMKitFlowManager(delegate: self)
             try flowManager?.startSession()
+            flowManager?.verboseBodyCalibration = true
         }catch{
             print(error)
         }
