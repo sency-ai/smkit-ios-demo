@@ -6,6 +6,7 @@
 3. [ Configure ](#conf)
 4. [ Start ](#start)
 5. [ Body calibration ](#body)
+   - [ Debugging with Verbose Logging ](#bodydebug)
 6. [ Modifying Feedback Parameters ](#feedback)
 7. [ Change Camera](#cam)
 8. [ Setters ](#setters)
@@ -139,6 +140,40 @@ func setBodyPositionCalibrationInactive(){
     flowManager?.setBodyPositionCalibrationInactive()
 }
 ```
+
+### Debugging Body Calibration with Verbose Logging <a name="bodydebug"></a>
+
+To diagnose body calibration issues, you can enable verbose logging to see detailed diagnostics every 30 frames:
+
+```swift
+// Enable verbose logging
+flowManager?.verboseBodyCalibration = true
+
+// Disable verbose logging
+flowManager?.verboseBodyCalibration = false
+```
+
+When enabled, the logs will show:
+- **Frame count and joint detection**: `[BodyCal] Frame 0: joints=25 valid=24 inBB=18 videoSize=(1080.0, 1920.0) bbSize=(540.0, 768.0)`
+  - `joints`: Total detected joints
+  - `valid`: Joints with valid confidence (not NaN)
+  - `inBB`: Valid joints inside the bounding box
+  - `videoSize`: Camera resolution
+  - `bbSize`: Bounding box dimensions
+
+- **Bounding box analysis**: `[BodyCal] personBB=(...) personBBSize=(w, h) targetBB=(...) targetBBSize=(w, h) contains=true inFrame=false`
+  - `personBB`: Detected person's bounding box
+  - `targetBB`: Target calibration bounding box
+  - `contains`: Whether person is inside target box
+  - `inFrame`: Current frame status
+
+- **Detection errors**: `[BodyCal] Rejected: too few valid joints (10/25)` or `[BodyCal] Frame 30: No joints detected`
+
+This logging helps identify:
+- Video resolution mismatches
+- Joint detection failures
+- Bounding box sizing issues
+- Frame entry/exit timing problems
 
 ## 6. Modifying Feedback Parameters <a name="feedback"></a>
 
