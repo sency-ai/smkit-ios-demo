@@ -53,6 +53,7 @@ class AssessmentViewController: UIViewController {
     // Calibration state
     private var isBodyInFrame = false
     private var isPhoneAngleReady = false
+    private var calibrationHostingController: UIHostingController<CalibrationView>?
 
     private lazy var assessmentView: UIView = {
         guard let view = UIHostingController(
@@ -64,13 +65,18 @@ class AssessmentViewController: UIViewController {
     }()
 
     private lazy var calibrationOverlay: UIView = {
-        guard let view = UIHostingController(
-            rootView: CalibrationView(model: calibrationViewModel, onStop: { [weak self] in
+        let calibrationView = CalibrationView(
+            model: calibrationViewModel,
+            onStop: { [weak self] in
                 self?.stopAndDismiss()
-            }, onSkip: { [weak self] in
-                self?.beginAssessment()
-            })
-        ).view else { return UIView() }
+            },
+            onSkip: { [weak self] in
+                DispatchQueue.main.async { self?.beginAssessment() }
+            }
+        )
+        let host = UIHostingController(rootView: calibrationView)
+        calibrationHostingController = host
+        guard let view = host.view else { return UIView() }
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -119,6 +125,11 @@ class AssessmentViewController: UIViewController {
                 calibrationOverlay.rightAnchor.constraint(equalTo: view.rightAnchor),
                 calibrationOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             ])
+            // Add hosting controller as child so responder chain and touch delivery work
+            if let host = calibrationHostingController {
+                addChild(host)
+                host.didMove(toParent: self)
+            }
         } catch {
             showError(message: error.localizedDescription)
         }
@@ -137,7 +148,12 @@ class AssessmentViewController: UIViewController {
     }
 
     private func beginAssessment() {
-        calibrationOverlay.removeFromSuperview()
+        if let host = calibrationHostingController {
+            host.willMove(toParent: nil)
+            host.view.removeFromSuperview()
+            host.removeFromParent()
+            calibrationHostingController = nil
+        }
         boundingBoxGuideView?.removeFromSuperview()
         boundingBoxGuideView = nil
         flowManager?.setBodyPositionCalibrationInactive()

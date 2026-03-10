@@ -71,6 +71,8 @@ struct CalibrationView: View {
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(12)
                 }
+                .contentShape(Rectangle())
+                .buttonStyle(.plain)
             }
             .padding()
 
