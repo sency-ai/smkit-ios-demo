@@ -20,13 +20,13 @@
 
 This branch uses **CocoaPods** for dependency management.
 
-> Looking for **Swift Package Manager (SPM)** integration? See the [`release/1.5.1_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.5.1_spm) branch.
+> Looking for **Swift Package Manager (SPM)** integration? See the [`release/1.5.3_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.5.3_spm) branch.
 >
 > Need to switch between CocoaPods and SPM? See the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
 ### CocoaPods
 
-*Latest version: `SMKit '1.5.1'`*
+*Latest version: `SMKit '1.5.3'`*
 
 #### Step-by-step Integration:
 
@@ -42,7 +42,7 @@ This branch uses **CocoaPods** for dependency management.
    ```ruby
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '1.5.1'
+     pod 'SMKit', '1.5.3'
    end
    ```
 
