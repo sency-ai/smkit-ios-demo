@@ -19,6 +19,8 @@ class ExerciseViewController: UIViewController {
     var exerciseIndex = 0
     var previewLayer:AVCaptureVideoPreviewLayer?
     let dataHolder = KitDataHolder()
+    private var pendingBoundingBox: BodyCalRectGuide?
+    private var boundingBoxGuideView: BodyCalibrationGuideView?
 
     var currentExercise:String{
         exercise[exerciseIndex]
@@ -153,6 +155,9 @@ extension ExerciseViewController:SMKitSessionDelegate{
     func captureSessionDidSet(session: AVCaptureSession) {
         DispatchQueue.main.async {
             self.setupPreviewLayer(session: session)
+            if let box = self.pendingBoundingBox {
+                self.setupBoundingBoxGuideView(box: box)
+            }
         }
     }
     
@@ -183,13 +188,11 @@ extension ExerciseViewController:SMKitSessionDelegate{
         }
     }
     
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?) {
-        guard let previewLayer else {return}
-        let captureSize = previewLayer.frame.size
-        let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
-        
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?, xyzRelativeAngles: [String : SCNVector3]?) {
         DispatchQueue.main.async {[weak self] in
-            guard let self else {return}
+            guard let self, let previewLayer else {return}
+            let captureSize = previewLayer.frame.size
+            let videoResultion = (previewLayer.session?.sessionPreset ?? .hd1920x1080).videoSize
             skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
         }
     }
@@ -250,12 +253,37 @@ extension ExerciseViewController:ExerciseViewDelegate{
     }
 }
 
-extension ExerciseViewController:SMBodyCalibrationDelegate{
+extension ExerciseViewController: SMBodyCalibrationDelegate {
     func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
-        
+        DispatchQueue.main.async {
+            switch status {
+            case .DidEnterFrame:
+                self.boundingBoxGuideView?.setInPosition(true)
+            case .DidLeaveFrame:
+                self.boundingBoxGuideView?.setInPosition(false)
+            case .TooClose:
+                break
+            @unknown default:
+                break
+            }
+        }
     }
-    
+
     func didRecivedBoundingBox(box: BodyCalRectGuide) {
-        
+        DispatchQueue.main.async {
+            self.pendingBoundingBox = box
+            if self.previewLayer != nil {
+                self.setupBoundingBoxGuideView(box: box)
+            }
+        }
+    }
+
+    private func setupBoundingBoxGuideView(box: BodyCalRectGuide) {
+        boundingBoxGuideView?.removeFromSuperview()
+        let videoSize = (previewLayer?.session?.sessionPreset ?? .hd1920x1080).videoSize
+        let guideRect = box.screenRect(videoSize: videoSize, viewSize: view.bounds.size)
+        let guideView = BodyCalibrationGuideView(guideRect: guideRect, frame: view.bounds)
+        view.insertSubview(guideView, at: 0)
+        boundingBoxGuideView = guideView
     }
 }

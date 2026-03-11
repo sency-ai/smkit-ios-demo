@@ -17,6 +17,7 @@ class ViewController: UIViewController {
         do{
             self.flowManager = try SMKitFlowManager(delegate: self)
             try flowManager?.startSession()
+            flowManager?.verboseBodyCalibration = true
         }catch{
             print(error)
         }
@@ -64,6 +65,16 @@ class ViewController: UIViewController {
     func setBodyPositionCalibrationInactive(){
         flowManager?.setBodyPositionCalibrationInactive()
     }
+
+    //Enable verbose logging for body calibration diagnostics (logs every 30 frames)
+    func enableBodyCalibrationVerboseLogging(){
+        flowManager?.verboseBodyCalibration = true
+    }
+
+    //Disable verbose logging for body calibration
+    func disableBodyCalibrationVerboseLogging(){
+        flowManager?.verboseBodyCalibration = false
+    }
 }
 
 
@@ -93,7 +104,7 @@ extension ViewController:SMKitSessionDelegate{
     //This function will be called with the user joints location.
     //Please notice the 2D joint location are for the video resoltion.
     //Please notice that the 3D joint location are the distance from the camera
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?) {
+    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?, xyzRelativeAngles: [String : SCNVector3]?) {
 
     }
     
