@@ -13,12 +13,11 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 5. [Body Calibration](#body-calibration)
 6. [Camera And Video](#camera-and-video)
 7. [Adaptive ROM](#adaptive-rom)
-8. [Rowing Options](#rowing-options)
-9. [Setters](#setters)
-10. [Getters](#getters)
-11. [Data Types](#data-types)
-12. [MCP Server Integration](#mcp-server-integration)
-13. [Troubleshooting](#troubleshooting)
+8. [Setters](#setters)
+9. [Getters](#getters)
+10. [Data Types](#data-types)
+11. [MCP Server Integration](#mcp-server-integration)
+12. [Troubleshooting](#troubleshooting)
 
 ## Installation
 
@@ -352,24 +351,6 @@ Reset the local adaptive ROM pilot cache:
 SMKitFlowManager.clearAdaptiveRomPilotCache()
 ```
 
-## Rowing Options
-
-Rowing can use the default current engine or the legacy sencyalgolib-compatible engine.
-
-```swift
-let settings = SMKitSessionSettings(
-    phonePosition: .Floor,
-    include3D: false,
-    rowingEngineMode: .sencyalgolibLegacy,
-    rowingFeedbackLevel: .Beginner,
-    rowingFeedbackChecks: RowingFeedbackChecks.all,
-    allowRowingLegacyFallback: false,
-    landscapeCamera: true
-)
-```
-
-Use `MovementFeedbackData.feedback`, `didFinishMovement`, and `isPerfectForm` the same way as other dynamic exercises.
-
 ## Setters
 
 ### Device Motion
@@ -445,10 +426,6 @@ let handGripLocation = try flowManager?.getCurrentPersonLocationForHandGrip()
 | `poseEstimation3DAccuracy` | `PoseEstimation3DAccuracy` | `.light` or `.solid`. |
 | `instructionVideoConfig` | `InstructionVideoConfig` | Optional instruction-video metadata carried with the session settings. |
 | `allowRomWhenNotInPosition` | `Bool` | Allows ROM updates outside in-position for supported flows. |
-| `rowingEngineMode` | `RowingEngineMode` | `.current` or `.sencyalgolibLegacy`. |
-| `rowingFeedbackLevel` | `RowingFeedbackLevel` | `.Expert`, `.Advanced`, or `.Beginner`. |
-| `rowingFeedbackChecks` | `[FormFeedbackTypeBr]` | Rowing feedback checks to enable. |
-| `allowRowingLegacyFallback` | `Bool` | Allows fallback to current rowing engine if legacy startup fails. |
 | `phoneMovementCountPreventionEnabled` | `Bool` | Blocks rep counting/in-position while phone movement is detected. |
 | `variationMismatchFeedbackEnabled` | `Bool` | Enables mapped detector/variation mismatch feedback. |
 | `landscapeCamera` | `Bool` | Starts live camera capture in landscape orientation. |
@@ -493,9 +470,6 @@ let handGripLocation = try flowManager?.getCurrentPersonLocationForHandGrip()
 | `SMCameraType` | `.front`, `.back` |
 | `PoseEstimation3DMode` | `.standard`, `.accurate` |
 | `PoseEstimation3DAccuracy` | `.light`, `.solid` |
-| `RowingEngineMode` | `.current`, `.sencyalgolibLegacy` |
-| `RowingFeedbackLevel` | `.Expert`, `.Advanced`, `.Beginner` |
-
 ## MCP Server Integration
 
 Sency provides an MCP server for AI development tools that need direct SMKit documentation and exercise context.
