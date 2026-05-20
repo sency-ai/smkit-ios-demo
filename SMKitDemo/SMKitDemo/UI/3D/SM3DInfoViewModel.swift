@@ -14,6 +14,7 @@ import SMBase
 public class SM3DInfoViewModel:ObservableObject{
     @Published public var posData:[Joint : SCNVector3] = [:]
     @Published public var threeDAnglesData: [LimbsPairs:Float] = [:]
+    @Published public var anatomicalAngles: [String:SCNVector3] = [:]
     
     public init() {}
 }

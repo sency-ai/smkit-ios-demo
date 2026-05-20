@@ -12,7 +12,13 @@ import SMKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-         SMKitFlowManager.configure(authKey: "", shouldSupport3D: true) {
+        SMKitFlowManager.configure(
+            authKey: "",
+            shouldSupport3D: true,
+            downloadProgress: { completed, total in
+                print("SMKit assets download progress: \(completed)/\(total)")
+            }
+        ) {
             // The configuration was successful
             // Your Code
             DispatchQueue.main.async {
@@ -42,4 +48,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

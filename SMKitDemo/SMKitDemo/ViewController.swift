@@ -7,6 +7,9 @@
 
 import UIKit
 import SMKit
+import SMBase
+import SceneKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
@@ -16,8 +19,12 @@ class ViewController: UIViewController {
     func statSession(){
         do{
             self.flowManager = try SMKitFlowManager(delegate: self)
-            try flowManager?.startSession()
             flowManager?.verboseBodyCalibration = true
+            flowManager?.startSession { result in
+                if case .failure(let error) = result {
+                    print(error)
+                }
+            }
         }catch{
             print(error)
         }
@@ -44,11 +51,14 @@ class ViewController: UIViewController {
     
     //When you are ready to stop the session call stopSession.
     func stopSession(){
-        do{
-            //returns a DetectionSessionResultData.
-            _ = try flowManager?.stopSession()
-        }catch{
-            print(error)
+        //returns a DetectionSessionResultData.
+        flowManager?.stopSession { result in
+            switch result {
+            case .success(let sessionData):
+                print(sessionData as Any)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
@@ -107,6 +117,11 @@ extension ViewController:SMKitSessionDelegate{
     func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?, xyzRelativeAngles: [String : SCNVector3]?) {
 
     }
+
+    //This function will be called with anatomical joint angles when available.
+    func handleAnatomicalAngles(anatomicalAngles: [String : SCNVector3]?) {
+
+    }
     
     //This function will be called with if ant error occcured.
     func handleSessionErrors(error: any Error) {
@@ -116,6 +131,15 @@ extension ViewController:SMKitSessionDelegate{
     //This function will be called when a with each camera frame.
     func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
         
+    }
+
+    //These functions are called when processing a video session.
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {
+
+    }
+
+    func videoSessionDidFinish() {
+
     }
 }
 

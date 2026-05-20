@@ -1,36 +1,36 @@
 # [smkit-ios-demo](https://github.com/sency-ai/smkit-sdk)
 
-## Table of contents
-1. [ Installation ](#inst)
-2. [ Setup ](#setup)
-3. [ Configure ](#conf)
-4. [ Start ](#start)
-5. [ Body calibration ](#body)
-   - [ Debugging with Verbose Logging ](#bodydebug)
-6. [ Modifying Feedback Parameters ](#feedback)
-7. [ Change Camera](#cam)
-8. [ Setters ](#setters)
-9. [ Getters ](#getters)
-10. [ Data ](#data)
-11. [ MCP Server Integration ](#mcp)
-12. [ Troubleshooting ](#troubleshoot)
+This repository demonstrates direct SMKit integration for iOS. It is the lower-level SDK demo: you own the camera preview, session lifecycle, exercise UI, skeleton rendering, and result presentation.
 
-<a name="inst"></a>
-## 1. Installation
+For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai/smkit-ui-ios-demo).
+
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Setup](#setup)
+3. [Configure](#configure)
+4. [Session Lifecycle](#session-lifecycle)
+5. [Body Calibration](#body-calibration)
+6. [Camera And Video](#camera-and-video)
+7. [Adaptive ROM](#adaptive-rom)
+8. [Setters](#setters)
+9. [Getters](#getters)
+10. [Data Types](#data-types)
+11. [MCP Server Integration](#mcp-server-integration)
+12. [Troubleshooting](#troubleshooting)
+
+## Installation
 
 This branch uses **CocoaPods** for dependency management.
 
-> Looking for **Swift Package Manager (SPM)** integration? See the [`release/1.5.3_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.5.3_spm) branch.
->
-> Need to switch between CocoaPods and SPM? See the [Troubleshooting Guide](TROUBLESHOOTING.md).
+Looking for Swift Package Manager integration? Use the [`release/1.9.1_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1_spm) branch, or add `https://bitbucket.org/sencyai/smkit_package` at version `1.9.1` to your own app.
 
 ### CocoaPods
 
-*Latest version: `SMKit '1.5.3'`*
+Latest version: `SMKit '1.9.1'`
 
-#### Step-by-step Integration:
+1. Add the repository sources to your `Podfile`:
 
-1. **Add the repository sources to your `Podfile`:**
    ```ruby
    platform :ios, '16.0'
 
@@ -38,15 +38,17 @@ This branch uses **CocoaPods** for dependency management.
    source 'https://github.com/CocoaPods/Specs.git'
    ```
 
-2. **Add the pod to your target:**
+2. Add the pod to your target:
+
    ```ruby
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '1.5.3'
+     pod 'SMKit', '1.9.1'
    end
    ```
 
-3. **Add post_install hooks** (required for proper build configuration):
+3. Add the post-install build settings:
+
    ```ruby
    post_install do |installer|
      installer.pods_project.targets.each do |target|
@@ -59,480 +61,447 @@ This branch uses **CocoaPods** for dependency management.
    end
    ```
 
-4. **Install the pods:**
+4. Install pods and open the workspace:
+
    ```bash
-   pod install
+   pod install --repo-update
+   open SMKitDemo.xcworkspace
    ```
 
-5. **Open the workspace:**
-   - ⚠️ **Important:** Always open the `.xcworkspace` file, not the `.xcodeproj` file
-   - Example: `YourApp.xcworkspace`
+Always open the `.xcworkspace`, not the `.xcodeproj`, when using CocoaPods.
 
-#### Updating to a New Version:
-```bash
-pod update SMKit
+### Swift Package Manager
+
+For SPM apps, add:
+
+```text
+https://bitbucket.org/sencyai/smkit_package
 ```
 
-<a name="setup"></a>
-## 2. Setup
-Add camera permission request to `Info.plist`
-```Xml
+Use version `1.9.1`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+
+## Setup
+
+Add camera permission to `Info.plist`:
+
+```xml
 <key>NSCameraUsageDescription</key>
-<string>Camera access is needed</string>
+<string>Camera access is needed for exercise detection</string>
 ```
 
-<a name="conf"></a>
-## 3. Configure
-```Swift
-SMKitFlowManager.configure(authKey: "YOUR_KEY") {
-    // The configuration was successful
-    // Your Code
-} onFailure: { error in
-    // The configuration failed with error
-    // Your Code
-}
-```
-To reduce wait time we recommend to call `configure` on app launch.
+## Configure
 
-**⚠️ SMKit will not work if you don't first call configure.**
-
-
-<a name="start"></a>
-## 4. Start
-- [Start 2D exercise detection](https://github.com/sency-ai/smkit-ios-demo/blob/main/Start2DSession.md)
-
-- [Start 3D exercise detection](https://github.com/sency-ai/smkit-ios-demo/blob/main/Start3DSession.md)
-
-## 5. Body calibration <a name="body"></a>
-
-### Body calibration
-*Body calibration* is used to get information about the users' location during the session.
-
-#### Implement **SMBodyCalibrationDelegate**
+Call `configure` once, preferably during app launch, before creating `SMKitFlowManager`.
 
 ```swift
-extension ViewController:SMBodyCalibrationDelegate{
-    // indicates the user current position status
-    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
-        switch status {
-        case .DidEnterFrame:
-            // This status is triggered when the user enters the bounding box.
-            // You can add specific logic here to handle when the user is detected in frame.
-            break
-        case .DidLeaveFrame:
-            // This status is triggered when the user leaves the bounding box.
-            // Implement any necessary actions when the user is no longer detected.
-            break
-        case .TooClose(let tooClose):
-            // This status is triggered only when 3D data is available.
-            // The `tooClose` parameter indicates whether the user is too close to the screen.
-            break
+SMKitFlowManager.configure(
+    authKey: "YOUR_KEY",
+    shouldSupport3D: true,
+    poseEstimation3DMode: .standard,
+    poseEstimation3DAccuracy: .light,
+    downloadProgress: { completed, total in
+        print("SMKit assets: \(completed)/\(total)")
+    }
+) {
+    // Configuration succeeded
+} onFailure: { error in
+    print(error as Any)
+}
+```
+
+Important options:
+
+| Parameter | Description |
+|---|---|
+| `authKey` | Your Sency public SDK key. |
+| `includesHighlights` | Downloads/enables highlight models when needed. Default: `false`. |
+| `shouldSupport3D` | Downloads/enables 3D models. Required before starting sessions with `include3D: true`. |
+| `poseEstimation3DMode` | `.standard` or `.accurate`. |
+| `poseEstimation3DAccuracy` | `.light` or `.solid`. |
+| `uiVersion` | Optional SDK asset version stamp. Most direct SMKit integrations can leave it unset. |
+| `downloadProgress` | Reports background asset/model download progress. |
+
+SMKit will not work until `configure` succeeds.
+
+You can also warm models before a workout:
+
+```swift
+SMKitFlowManager.preloadModelsInBackground()
+```
+
+## Session Lifecycle
+
+Implement `SMKitSessionDelegate`, create a flow manager, start a session, then start exercise detection.
+
+```swift
+final class WorkoutViewController: UIViewController {
+    private var flowManager: SMKitFlowManager?
+
+    func startSession() {
+        do {
+            let settings = SMKitSessionSettings(
+                phonePosition: .Floor,
+                camType: .front,
+                include3D: false
+            )
+
+            flowManager = try SMKitFlowManager(delegate: self)
+            flowManager?.startSession(sessionSettings: settings) { [weak self] result in
+                switch result {
+                case .success:
+                    try? self?.flowManager?.startDetection(exercise: "SquatRegular")
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        } catch {
+            print(error)
         }
     }
-    
-    // BodyCalRectGuide will give you the 'box' size and location
-    func didRecivedBoundingBox(box: BodyCalRectGuide) {
-        
+
+    func stopCurrentExercise() {
+        do {
+            let exerciseInfo = try flowManager?.stopDetection()
+            print(exerciseInfo as Any)
+        } catch {
+            print(error)
+        }
+    }
+
+    func stopSession() {
+        flowManager?.stopSession { result in
+            switch result {
+            case .success(let sessionData):
+                print(sessionData as Any)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 ```
-Now we can set the body calibration active.
+
+The older throwing `startSession(sessionSettings:)` and `stopSession()` APIs are still present for binary compatibility, but they are deprecated. Prefer the completion APIs so camera/model startup and teardown do not block the main thread.
+
+### Delegate
+
 ```swift
-//Sets the body calibration active (make sure to first call statSession)
-func setBodyPositionCalibrationActive(){
-    do{
-        try flowManager?.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
-    }catch{
+extension WorkoutViewController: SMKitSessionDelegate {
+    func captureSessionDidSet(session: AVCaptureSession) {
+        // Attach AVCaptureVideoPreviewLayer here.
+    }
+
+    func captureSessionDidStop() {
+        // Remove preview layers and clean up UI state.
+    }
+
+    func handleDetectionData(movementData: MovementFeedbackData?) {
+        // Reps, in-position state, feedback, ROM, guidance, and gesture data.
+    }
+
+    func handlePositionData(
+        poseData2D: [Joint: JointData]?,
+        poseData3D: [Joint: SCNVector3]?,
+        jointAnglesData: [LimbsPairs: Float]?,
+        jointGlobalAnglesData: [Limbs: Float]?,
+        xyzEulerAngles: [String: SCNVector3]?,
+        xyzRelativeAngles: [String: SCNVector3]?
+    ) {
+        // Render 2D/3D skeletons or collect pose diagnostics.
+    }
+
+    func handleAnatomicalAngles(anatomicalAngles: [String: SCNVector3]?) {
+        // Optional 3D anatomical angles, when available.
+    }
+
+    func didCaptureBuffer(
+        pixelBuffer: CVPixelBuffer,
+        time: CMTime,
+        orientation: CGImagePropertyOrientation
+    ) {
+        // Optional raw frame access.
+    }
+
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {
+        // Called for video-file processing sessions.
+    }
+
+    func videoSessionDidFinish() {
+        // Called when a video-file session reaches the end.
+    }
+
+    func handleSessionErrors(error: Error) {
         print(error)
     }
 }
-
-//Sets the body calibration inactive.
-func setBodyPositionCalibrationInactive(){
-    flowManager?.setBodyPositionCalibrationInactive()
-}
 ```
 
-### Debugging Body Calibration with Verbose Logging <a name="bodydebug"></a>
+More focused examples:
 
-To diagnose body calibration issues, you can enable verbose logging to see detailed diagnostics every 30 frames:
+- [Start 2D exercise detection](Start2DSession.md)
+- [Start 3D exercise detection](Start3DSession.md)
 
-```swift
-// Enable verbose logging
-flowManager?.verboseBodyCalibration = true
+## Body Calibration
 
-// Disable verbose logging
-flowManager?.verboseBodyCalibration = false
-```
-
-When enabled, the logs will show:
-- **Frame count and joint detection**: `[BodyCal] Frame 0: joints=25 valid=24 inBB=18 videoSize=(1080.0, 1920.0) bbSize=(540.0, 768.0)`
-  - `joints`: Total detected joints
-  - `valid`: Joints with valid confidence (not NaN)
-  - `inBB`: Valid joints inside the bounding box
-  - `videoSize`: Camera resolution
-  - `bbSize`: Bounding box dimensions
-
-- **Bounding box analysis**: `[BodyCal] personBB=(...) personBBSize=(w, h) targetBB=(...) targetBBSize=(w, h) contains=true inFrame=false`
-  - `personBB`: Detected person's bounding box
-  - `targetBB`: Target calibration bounding box
-  - `contains`: Whether person is inside target box
-  - `inFrame`: Current frame status
-
-- **Detection errors**: `[BodyCal] Rejected: too few valid joints (10/25)` or `[BodyCal] Frame 30: No joints detected`
-
-This logging helps identify:
-- Video resolution mismatches
-- Joint detection failures
-- Bounding box sizing issues
-- Frame entry/exit timing problems
-
-## 6. Modifying Feedback Parameters <a name="feedback"></a>
-
-You have the ability to modify specific feedback parameters for exercises. This allows you to customize the thresholds and ranges for feedback detection according to your application's needs.
-
-### How to Modify Parameters
-
-Use the `modifications` dictionary to customize feedback parameters for specific exercises:
+Body calibration reports whether the user is inside the expected frame region.
 
 ```swift
-let modifications: [String: Any] = [
-    "Crunches": [
-        // Feedback/parameter name: [parameter values]
-        "DepthCrunchesShallowDepth": ["low": 0.1, "high": 0.9],
-        // Add more parameters as needed
-    ]
-]
-
-// Apply modifications when starting a workout (SMKitUI)
-try SMKitUIModel.startWorkout(
-    viewController: self,
-    workout: workout,
-    delegate: self,
-    modifications: modifications
-)
-```
-
-### Parameter Structure
-
-Each modification follows this structure:
-- **Exercise Name** (e.g., "Crunches", "Squats"): The key identifying the exercise
-- **Parameter Name** (e.g., "DepthCrunchesShallowDepth"): The specific feedback parameter to modify
-- **Values**: A dictionary containing threshold values (typically `"low"` and `"high"`)
-
-### Getting Available Parameters
-
-**Note:** We will release our feedbacks catalog soon with a complete list of available parameters for each exercise.
-
-For assistance in applying modifications or to request the current catalog, please [contact us](mailto:support@sency.ai).
-
-## 7. Change camera<a name="cam"></a>
-In SMKit you have the ability to choose which camera you prefer to use front or back you can achieve this with two different way
-
-### Before session start
-To choose which camera to use before the session starts, you need to call start session with SMKitSessionSettings and add a SMCameraType like so:
-
-```swift
-try flowManager.startSession(sessionSettings: SMKitSessionSettings(camType: SMCameraType.front))
-```
-
-### while session is running
-To switch the camera type during the session you need to call `changeCameraType` like so:
-
-```swift
-self.flowManager.changeCameraType(type: SMCameraType.back)
-```
-
-## 8. Setters <a name="setters"></a>
-
-### `setDeviceMotionActive`
-
-Activates DeviceMotion with [phoneCalibrationInfo](#SMPhoneCalibrationInfo) and a callback that will be called when the phone orientation changes.
-
-```swift
-flowManager.setDeviceMotionActive(
-    phoneCalibrationInfo: SMPhoneCalibrationInfo(YZAngleRange: 60..<90, XYAngleRange: 3..< -3),
-    tiltDidChange: { info in
-        if info.isXYTiltAngleInRange && info.isYZTiltAngleInRange {
-            print("In Range")
+extension WorkoutViewController: SMBodyCalibrationDelegate {
+    func bodyCalStatusDidChange(status: SMBodyCalibrationStatus) {
+        switch status {
+        case .DidEnterFrame:
+            print("User entered frame")
+        case .DidLeaveFrame:
+            print("User left frame")
+        case .TooClose(let tooClose):
+            print("Too close: \(tooClose)")
+        @unknown default:
+            break
         }
     }
-)
-```
 
-### `setDeviceMotionInactive`
-
-Deactivates DeviceMotion.
-
-```swift
-flowManager.setDeviceMotionInactive()
-```
-
-### `setDeviceMotionFrequency`
-
-Changes the device motion update frequency. When `isHigh` is `true`, updates every 0.1 seconds. When `false`, updates every 0.5 seconds.
-
-```swift
-flowManager.setDeviceMotionFrequency(isHigh: true)
-```
-
-### `setBodyPositionCalibrationActive`
-
-Activates body position calibration. For more details, see [Body Calibration](#body).
-
-```swift
-flowManager.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
-```
-
-### `setBodyPositionCalibrationInactive`
-
-Deactivates body position calibration.
-
-```swift
-flowManager.setBodyPositionCalibrationInactive()
-```
-
-## 9. Getters <a name="getters"></a>
-
-### `getExerciseType() -> ExerciseTypeBr?`
-
-Returns the currently running [ExerciseTypeBr](#ExerciseTypeBr), if available.
-
-```swift
-let exerciseType = flowManager.getExerciseType()
-```
-
-### `getExerciseType(ByType:) throws -> ExerciseTypeBr`
-
-Returns an [ExerciseTypeBr](#ExerciseTypeBr) for the given exercise type name.
-
-```swift
-do {
-    let exerciseType = try flowManager.getExerciseType(ByType: "HighKnees")
-} catch {
-    print(error)
+    func didRecivedBoundingBox(box: BodyCalRectGuide) {
+        // Render the guide box if desired.
+    }
 }
 ```
 
-### `getExerciseRange() -> ClosedRange<Float>?`
-
-Returns the exercise range of movement, if available.
+Activate it after the session has started:
 
 ```swift
-let range = flowManager.getExerciseRange()
+try flowManager?.setBodyPositionCalibrationActive(
+    delegate: self,
+    screenSize: view.bounds.size
+)
 ```
 
-### `getModelsID() -> [String:String]`
-
-Returns a dictionary with model names as keys and their IDs as values.
+Deactivate it with:
 
 ```swift
-let models = flowManager.getModelsID()
+flowManager?.setBodyPositionCalibrationInactive()
 ```
 
-## 10. Available Data Types <a name="data"></a>
+Enable diagnostics when needed:
 
-#### `SMKitSessionSettings`
-| Type                       | Format                              | Description                                                                                    |
-|----------------------------|-------------------------------------|------------------------------------------------------------------------------------------------|
-| phonePosition              | `PhonePosition`                     | The phone position mode for the session (Floor or Elevated).                                   |
-| jumpRefPoint               | `String?`                           | Reference point for jump detection.                                                            |
-| jumpHeightThreshold        | `Float?`                            | Threshold value for jump height detection.                                                     |
-| userHeight                 | `Float?`                            | The user's height in centimeters.                                                              |
-| include3D                  | `Bool?`                             | Whether to include 3D pose estimation in the session.                                          |
-| camType                    | `SMCameraType`                      | Camera type to use (front or back).                                                            |
-| configFileName             | `String?`                           | Optional custom configuration file name.                                                       |
+```swift
+flowManager?.verboseBodyCalibration = true
+```
 
-#### `MovementFeedbackData`
-| Type                | Format                                                       | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| didFinishMovement   | `Bool?`                                                      | Will be true when the user finish a dynamic movment.                                                         |
-| isShallowRep        | `Bool?`                                                      | Will be true when the user finish a shallow dynamic movment.                                                 |
-| isInPosition        | `Bool?`                                                      | Will be true if the user is in the currect position                                                          |
-| isPerfectForm       | `Bool?`                                                      | Will be true if the user did not have any mistakes                                                           |
-| techniqueScore      | `Float?`                                                     | The score representing the user's technique during the exercise.                                             |
-| detectionConfidence | `Float?`                                                     | The confidence score                                                                                         |
-| feedback            | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
-| currentRomValue     | `Float?`                                                     | The current Range Of Motion of the user.                                                                     |
-| specialParams       | `[String:Float?]`                                            | Some dynamic exercises will have some special params for example the exercise "Jumps" has "JumpPeakHeight" and "currHeight". |
+You can pass a custom guide:
 
-#### `SMExerciseInfo`
-| Type                | Format                                                       | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| sessionId           | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
-| exerciseName        | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
-| startTime           | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
-| endTime             | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
-| totalTime           | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
-| techniqueScore      | `Float`                                                      | The technique score for the exercise.                                                                        |
+```swift
+let guide = try BodyCalRectGuide(widthScale: 0.7, heightScale: 0.75, originY: 0.15)
+try flowManager?.setBodyPositionCalibrationActive(
+    delegate: self,
+    screenSize: view.bounds.size,
+    boundingBox: guide
+)
+```
 
-#### `SMExerciseStaticInfo` type of `SMExerciseInfo`
-| Type                   | Format                                                       | Description                                                                                                  |
-|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
-| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
-| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
-| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
-| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
-| timeInActiveZone       | `Double`                                                     | The time the user was in position.                                                                           |
-| timeInPositionPerfect  | `Double`                                                     | The time the user was in perfect position.                                                                   |
-| positionTechniqueScore | `Float`                                                      | The technique score for the static exercise.                                                                 |
-| peakRangeOfMotionScore | `Float`                                                      | The peak range of motion score achieved during the exercise.                                                 |
-| inPosition             | `[StaticData]?`                                              | Array of static data (optional).                                                                             |
+## Camera And Video
 
+Choose a camera before session start:
 
-#### `StaticData`
-| Type                     | Format                                                       | Description                                                                                                  |
-|--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
-| detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
-| detectionConfidenceScore | `Float`                                                      | The confidence in the detection.                                                                             |
-| inGreenZone              | `Bool`                                                       | Will be true if the user is in the success zone.                                                             |
-| rangeOfMotionScore       | `Float`                                                      | The range of motion score.                                                                                   |
-| techniqueScore           | `Float`                                                      | The user technique score.                                                                                    |
-| inPosition               | `Bool`                                                       | Will be true if the user is in position.                                                                     |
-| isGood                   | `Bool`                                                       | Indicates if the detection is good.                                                                          |
-| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback for the user movement.                                                                     |
-#### `SMExerciseDynamicInfo` type of `SMExerciseInfo`
-| Type                   | Format                                                       | Description                                                                                                  |
-|------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| sessionId              | `String`                                                     | The identifier for the session in which the exercise was performed.                                          |
-| exerciseName           | `String`                                                     | The name/ID of the exercise being performed.                                                                 |
-| startTime              | `String`                                                     | The start time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                 |
-| endTime                | `String`                                                     | The end time of the exercise session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                   |
-| totalTime              | `Double`                                                     | The total time taken for the exercise session in seconds.                                                    |
-| performedReps          | `[RepData]`                                                  | Array of RepData containing information about each repetition.                                               |
-| numberOfPerformedReps  | `Int?`                                                       | The number of times the user repeated the exercise.                                                          |
-| perfectReps            | `Int`                                                        | The number of perfect reps performed.                                                                        |
-| repsTechniqueScore     | `Float`                                                      | The overall technique score for the dynamic exercise.                                                        |
+```swift
+let settings = SMKitSessionSettings(camType: .front)
+flowManager?.startSession(sessionSettings: settings) { result in
+    // ...
+}
+```
 
+Switch camera during a live session:
 
-#### `RepData`
-| Type                     | Format                                                       | Description                                                                                                  |
-|--------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| detectionStartTime       | `String`                                                     | The start time of the detection.                                                                             |
-| detectionEndTime         | `String`                                                     | The end time of detection.                                                                                   |
-| detectionConfidenceScore | `Float`                                                      | The Confidence in the detection.                                                                             |
-| isShallowRep             | `Bool`                                                       | Will be true if the Rep is shallow                                                                           |
-| romScore                 | `Float`                                                      | The ROM score.                                                                                               |
-| techniqueScore           | `Float`                                                      | The user technic score.                                                                                      |
-| isGood                   | `Bool`                                                       | Is good detection                                                                                            |
-| feedback                 | `[FormFeedbackTypeBr]?`                                      | Array of feedback of the user movment.                                                                       |
+```swift
+flowManager?.changeCameraType(type: .back)
+```
 
-#### `DetectionSessionResultData`
-| Type                | Format                                                       | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| sessionID           | `String`                                                     | The session identifier.                                                                                      |
-| exercises           | `[SMExerciseInfo]`                                           | Array of all the exercises performed in the session.                                                         |
-| startTime           | `String`                                                     | The start time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                          |
-| endTime             | `String`                                                     | The end time of the session in "YYYY-MM-dd HH:mm:ss.SSSZ" format.                                            |
-| totalTime           | `Double`                                                     | The total time for the session in seconds.                                                                   |
-| totalScore          | `Int`                                                        | The overall score for the session.                                                                           |
+Toggle wide-angle front camera:
 
+```swift
+flowManager?.setUseWideAngleCamera(true)
+```
 
-#### `Joint`
+Process a video file instead of a live camera:
 
-| 2D Joints           | 3D Joins     |
-|---------------------|--------------|
-| Head                | Head         |
-| REye                | REye         |
-| LEye                | LEye         |
-| LEar                | LEar         |
-| REar                | REar         |
-| Nose                | Nose         |
-| Neck                | Neck         |
-| RShoulder           | RShoulder    |
-| RElbow              | RElbow       |
-| RWrist              | RWrist       |
-| LShoulder           | LShoulder    |
-| LElbow              | LElbow       |
-| LWrist              | LWrist       |
-| UpperSpine          | UpperSpine   |
-| MiddleSpine1        | MiddleSpine1 |
-| Hip                 | Hip          |
-| RHip                | RHip         |
-| RKnee               | RKnee        |
-| RAnkle              | RAnkle       |
-| RHeel               | RBigToe      |
-| RBigToe             | LHip         |
-| RSmallToe           | LKnee        |
-| LHip                | LAnkle       |
-| LKnee               | LBigToe      |
-| LAnkle              |              |
-| LHeel               |              |
-| LBigToe             |              |
-| LSmallTo            |              |
+```swift
+let player = try flowManager?.startVideoSession(
+    url: videoURL,
+    sessionSettings: SMKitSessionSettings(include3D: true),
+    fpsLimit: 15,
+    deterministicProcessing: false
+)
+```
 
+Use `videoSessionProcessingProgress(progress:processedFrames:)` and `videoSessionDidFinish()` to update UI while processing a video.
 
+## Adaptive ROM
 
+Adaptive ROM lets supported exercises calibrate a user's current range and then adjust feedback thresholds.
 
-### `SMPhoneCalibrationInfo` <a name="SMPhoneCalibrationInfo"></a>
-| Type                | Format                                                       | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| YZTiltAngle         | `Float`                                                      | The current Y angle.                                                                                         |
-| YZTiltAngle         | `Float`                                                      | The current X angle.                                                                                         |
-| YZAngleRange        | `Range<Float>`                                               | The currect Y range.                                                                                         |
-| XYAngleRange        | `Range<Float>`                                               | The currect X range.                                                                                         |
-| isYZTiltAngleInRange| `Bool`                                                       | Will be true if Y angle is in range.                                                                         |
-| isXYTiltAngleInRange| `Bool`                                                       | Will be true if X angle is in range.                                                                         |
+```swift
+try flowManager?.startDetection(
+    exercise: "JeffersonCurl",
+    guidanceMode: nil,
+    adaptiveRomFeedbackEnabled: true,
+    adaptiveRomWarmupReps: 2,
+    adaptiveRomEligible: true
+)
+```
 
-### `PhonePositionMode` <a name ="PhonePositionMode"></a>
-| Type                |
-|---------------------|
-| Floor               |
-| Elevated            |
+Useful runtime state:
 
-### `ExerciseTypeBr` <a name ="ExerciseTypeBr"></a>
-| Type                |
-|---------------------|
-| Dynamic             |
-| Static              |
-| BodyAssessment      |
-| Mobility            |
-| Highlights          |
-| Other               |
+```swift
+let isCalibrating = flowManager?.isAdaptiveRomCalibrationActive
+let shouldMuteVocals = flowManager?.shouldSuppressAdaptiveRomVocalFeedback
+let events = flowManager?.consumeAdaptiveRomFeedbackEvents()
+```
 
-### `SMBodyCalibrationStatus`
-| Type                | Description                           |
-|---------------------|---------------------------------------|
-| DidEnterFrame       | if the user enterd the frame          |
-| DidLeaveFrame       | if the user left the frame            |
-| TooClose(Bool)      | if the user is too close (using 3D)   |
+Reset the local adaptive ROM pilot cache:
 
-### `SMCameraType`
-| Type                | Description                           |
-|---------------------|---------------------------------------|
-| front               | the front camera                      |
-| back                | the back camera                       |
+```swift
+SMKitFlowManager.clearAdaptiveRomPilotCache()
+```
 
-## 11. MCP Server Integration <a name="mcp"></a>
+## Setters
 
-Sency provides an MCP (Model Context Protocol) server for integration with AI development tools like Cursor and Claude CLI. This enables AI-assisted development with direct access to SMKit documentation and examples.
+### Device Motion
 
-### Integration with Cursor
+```swift
+flowManager?.setDeviceMotionActive(
+    phoneCalibrationInfo: SMPhoneCalibrationInfo(
+        YZAngleRange: 60..<90,
+        XYAngleRange: -5..<5
+    ),
+    tiltDidChange: { info in
+        print(info.isYZTiltAngleInRange, info.isXYTiltAngleInRange)
+    }
+)
 
-Add the server definition to `~/.cursor/mcp.json` and reload Cursor:
+flowManager?.setDeviceMotionFrequency(isHigh: true)
+flowManager?.setDeviceMotionInactive()
+```
+
+### Feedback Exclusion
+
+```swift
+flowManager?.setFeedbacksToExclude(feedbacksToExclude: [.pushupKneesOnFloor])
+```
+
+### Model Sensitivity
+
+```swift
+try flowManager?.setModelsSensitivity(
+    jointThresh: 0.2,
+    poseThresh: 0.2,
+    aggregationDiff: 0.1
+)
+```
+
+### Events
+
+```swift
+flowManager?.blockEvents(key: "XeBimnhu3r7g@o&&bBACK1B!^")
+```
+
+## Getters
+
+```swift
+let currentType = flowManager?.getExerciseType()
+let namedType = try flowManager?.getExerciseType(ByType: "HighKnees")
+let romRange = flowManager?.getExerciseRange()
+let modelIDs = flowManager?.getModelsID()
+let screenshot = flowManager?.getScreenshoot()
+let boundingBoxInfo = flowManager?.getBoundingBoxInfo()
+let handGripLocation = try flowManager?.getCurrentPersonLocationForHandGrip()
+```
+
+## Data Types
+
+### `SMKitSessionSettings`
+
+| Property | Type | Description |
+|---|---|---|
+| `phonePosition` | `PhonePosition` | `.Floor` or `.Elevated`. |
+| `jumpRefPoint` | `String?` | Reference joint for jump detection. |
+| `jumpHeightThreshold` | `Float?` | Minimum jump height threshold. |
+| `userHeight` | `Float?` | User height in centimeters. |
+| `include3D` | `Bool?` | Enables 3D output for the session. |
+| `isRightHanded` | `Bool` | Dominant hand setting for supported exercises. |
+| `drawWithCocking` | `Bool` | Draw/cocking option for supported strike/draw exercises. |
+| `isCovers` | `Bool?` | Exercise-specific option for cover-style movements. |
+| `camType` | `SMCameraType` | `.front` or `.back`. |
+| `useWideAngleCamera` | `Bool` | Uses the front wide-angle camera when available. |
+| `isStrikeCross` | `Bool?` | Strike variation option for supported exercises. |
+| `configFileName` | `String?` | Optional custom config file. |
+| `poseEstimation3DMode` | `PoseEstimation3DMode` | `.standard` or `.accurate`. |
+| `poseEstimation3DAccuracy` | `PoseEstimation3DAccuracy` | `.light` or `.solid`. |
+| `instructionVideoConfig` | `InstructionVideoConfig` | Optional instruction-video metadata carried with the session settings. |
+| `allowRomWhenNotInPosition` | `Bool` | Allows ROM updates outside in-position for supported flows. |
+| `phoneMovementCountPreventionEnabled` | `Bool` | Blocks rep counting/in-position while phone movement is detected. |
+| `variationMismatchFeedbackEnabled` | `Bool` | Enables mapped detector/variation mismatch feedback. |
+| `landscapeCamera` | `Bool` | Starts live camera capture in landscape orientation. |
+| `cameraFps` | `Float?` | Optional live-camera FPS. SMBase normalizes to supported values. |
+
+### `MovementFeedbackData`
+
+| Property | Type | Description |
+|---|---|---|
+| `didFinishMovement` | `Bool?` | Dynamic rep completed, or static user moved out after time in position. |
+| `isShallowRep` | `Bool?` | Dynamic rep was shallow. |
+| `isInPosition` | `Bool?` | Static/in-position state. |
+| `isPhoneMoved` | `Bool?` | Phone movement gate state. |
+| `isPerfectForm` | `Bool?` | No feedback mistakes for the current rep/frame. |
+| `techniqueScore` | `Float?` | Technique score, usually normalized 0.0 to 1.0 in live frames. |
+| `detectionConfidence` | `Float?` | Detection confidence. |
+| `feedback` | `[FormFeedbackTypeBr]?` | Feedback identifiers. |
+| `currentRomValue` | `Float?` | Current ROM value. |
+| `specialParams` | `[String: Float?]` | Exercise-specific values, such as jump height. |
+| `debugParams` | `[String: Float?]` | Debug-only values in dev builds. |
+| `isGestureDetected` | `Bool?` | Gesture detection state. |
+| `gestureProgress` | `Float?` | Gesture progress. |
+| `coachStep` | `GuidanceStep?` | Active mobility coaching step. |
+| `coachInstruction` | `String?` | Human-readable coaching instruction. |
+| `coachAdvanceProgress` | `Float?` | Progress toward the next guidance step. |
+| `guidanceVocalKey` | `String?` | Vocal asset key for guidance. |
+| `requestGuidanceVocalReplay` | `Bool?` | Requests replay of the current guidance vocal. |
+
+### Result Models
+
+`stopDetection()` returns an `SMExerciseInfo?`. Dynamic exercises return `SMExerciseDynamicInfo`; static, body assessment, and mobility exercises return `SMExerciseStaticInfo`.
+
+`stopSession(completion:)` returns `DetectionSessionResultData?`, which includes all recorded exercises, start/end times, total time, and total score.
+
+### Common Enums
+
+| Type | Values |
+|---|---|
+| `PhonePosition` | `.Floor`, `.Elevated` |
+| `ExerciseTypeBr` | `.Dynamic`, `.Static`, `.BodyAssessment`, `.Mobility`, `.Highlights`, `.Other` |
+| `SMBodyCalibrationStatus` | `.DidEnterFrame`, `.DidLeaveFrame`, `.TooClose(Bool)` |
+| `SMCameraType` | `.front`, `.back` |
+| `PoseEstimation3DMode` | `.standard`, `.accurate` |
+| `PoseEstimation3DAccuracy` | `.light`, `.solid` |
+## MCP Server Integration
+
+Sency provides an MCP server for AI development tools that need direct SMKit documentation and exercise context.
+
+Cursor example:
 
 ```json
 {
   "mcpServers": {
-    "smkitui": {
+    "sency": {
       "type": "streamable-http",
       "url": "https://sency-mcp-production.up.railway.app/mcp",
       "headers": {
-        "X-API-Key": "Your-API-Key"
+        "X-API-Key": "YOUR-API-KEY"
       }
     }
   }
 }
 ```
-### Integration with Claude Code
 
-To use the Sency MCP server with Claude Code, follow these steps:
-
-**1. Configure MCP Settings**
-
-Create or edit the file `~/.claude/mcp_settings.json` and add the following configuration:
+Claude Code example:
 
 ```json
 {
@@ -548,41 +517,10 @@ Create or edit the file `~/.claude/mcp_settings.json` and add the following conf
 }
 ```
 
-**2. Restart Claude Code**
+Contact [support@sency.ai](mailto:support@sency.ai) for an API key.
 
-After adding the configuration, restart Claude Code to load the MCP server:
+## Troubleshooting
 
-```bash
-# Exit your current Claude Code session
-# Then start a new session
-claude
-```
-
-After setup, you can ask Claude Code questions like:
-- "Show me the iOS setup guide"
-- "List all available exercises"
-- "Create a beginner workout focused on upper body"
-- "Generate Swift code for a cardio workout"
-- "Search for exercises targeting core muscles"
-
-### Getting Your API Key
-
-Contact us at [support@sency.ai](mailto:support@sency.ai) to receive your MCP server API key.
-
-### What is MCP?
-
-The Model Context Protocol (MCP) allows AI assistants to access external context and tools. With Sency's MCP server, your AI development assistant can:
-- Access SMKit documentation and API references
-- Provide contextual code suggestions
-- Help troubleshoot integration issues
-- Suggest best practices for exercise detection implementation
-
-## 12. Troubleshooting <a name="troubleshoot"></a>
-
-For common issues and migration guides, see the [Troubleshooting Guide](TROUBLESHOOTING.md), including:
-- Switching from CocoaPods to SPM
-- Switching from SPM back to CocoaPods
-
----
+For CocoaPods/SPM migration notes, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 Having issues? [Contact us](mailto:support@sency.ai) and let us know what the problem is.

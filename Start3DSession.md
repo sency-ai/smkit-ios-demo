@@ -1,100 +1,133 @@
-## Start 3D exercise detection 
+# Start 3D Exercise Detection
 
-Starting a 3D session is very similar to starting a 2D session, with only a few minor adjustments.
+Starting a 3D session is similar to starting a 2D session, but `configure` and `SMKitSessionSettings` must enable 3D support.
 
-### Configure
-First you will have to configure SMKit the similery to [the previus section](https://github.com/sency-ai/smkit-ios-demo?tab=readme-ov-file#conf) but with the add `shouldSupport3D` this Bool wil make sure that 3D data is supported
-```Swift
-SMKitFlowManager.configure(authKey: "YOUR_KEY", shouldSupport3D: true) {
-    // The configuration was successful
-    // Your Code
+## Configure With 3D Support
+
+```swift
+SMKitFlowManager.configure(
+    authKey: "YOUR_KEY",
+    shouldSupport3D: true,
+    poseEstimation3DMode: .standard,
+    poseEstimation3DAccuracy: .solid,
+    downloadProgress: { completed, total in
+        print("SMKit assets: \(completed)/\(total)")
+    }
+) {
+    // Configuration succeeded.
 } onFailure: { error in
-    // The configuration failed with error
-    // Your Code
+    print(error as Any)
 }
 ```
-To reduce wait time we recommend to call `configure` on app launch.
 
-### Implement **SMKitSessionDelegate**.
-Now please implement the SMKitSessionDelegate.
+Use `.accurate` for the metric 3D estimator when your app needs it, and `.standard` for the default two-stage 3D pipeline.
+
+## Implement `SMKitSessionDelegate`
+
 ```swift
-extension ViewController:SMKitSessionDelegate{
-    //This function will be called when the session started and the camera is ready.
+extension ViewController: SMKitSessionDelegate {
     func captureSessionDidSet(session: AVCaptureSession) {
-        
+        // Attach AVCaptureVideoPreviewLayer here.
     }
-    
-    //This function will be called when the session stoped.
-    func captureSessionDidStop() {
-        
-    }
-    
-    //This function will be called when SMKit detects movement data.
-    func handleDetectionData(movementData: MovementFeedbackData?) {
-    }
-    
-    //This function will be called with the user joints location.
-    //Please notice the 2D joint location are for the video resoltion.
-    //Please notice that the 3D joint location are the distance from the camera.
-    //Note: `poseData3D` will be `nil` if the user is too close to the camera.
 
-    func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?) {
-        
+    func captureSessionDidStop() {}
+
+    func handleDetectionData(movementData: MovementFeedbackData?) {}
+
+    func handlePositionData(
+        poseData2D: [Joint: JointData]?,
+        poseData3D: [Joint: SCNVector3]?,
+        jointAnglesData: [LimbsPairs: Float]?,
+        jointGlobalAnglesData: [Limbs: Float]?,
+        xyzEulerAngles: [String: SCNVector3]?,
+        xyzRelativeAngles: [String: SCNVector3]?
+    ) {
+        // poseData3D is nil when the 3D pose is unavailable or out of range.
+        // jointAnglesData, jointGlobalAnglesData, and XYZ angle dictionaries are available when supported.
     }
-    
-    //This function will be called with if ant error occcured.
-    func handleSessionErrors(error: any Error) {
-        
+
+    func handleAnatomicalAngles(anatomicalAngles: [String: SCNVector3]?) {
+        // Optional anatomical angles for 3D analytics.
     }
-    
-    //This function will be called when a with each camera frame.
-    func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
-        
+
+    func didCaptureBuffer(
+        pixelBuffer: CVPixelBuffer,
+        time: CMTime,
+        orientation: CGImagePropertyOrientation
+    ) {}
+
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {}
+
+    func videoSessionDidFinish() {}
+
+    func handleSessionErrors(error: Error) {
+        print(error)
     }
 }
 ```
-### Starting the 3D session
-Now we can start the 3D session, to do so please call startSession with a `SMKitSessionSettings` and make sure that `include3D` is set to true.
+
+## Start The 3D Session
+
 ```swift
-//First you will need to start the session with include3D.
-func statSession(){
-    let sessionSettings = SMKitSessionSettings(
-        include3D: true
-    )
-    do{
-        self.flowManager = try SMKitFlowManager(delegate: self)
-        try flowManager?.startSession(sessionSettings: sessionSettings)
-    }catch{
-        print(error)
-    }
-}
+final class ViewController: UIViewController {
+    private var flowManager: SMKitFlowManager?
 
-//Then call startDetection to start the exercise detection.
-func startDetection(){
-    do{
-        try flowManager?.startDetection(exercise: "EXERCISE_NAME")
-    }catch{
-        print(error)
-    }
-}
+    func startSession() {
+        do {
+            let sessionSettings = SMKitSessionSettings(
+                include3D: true,
+                poseEstimation3DMode: .standard,
+                poseEstimation3DAccuracy: .solid,
+                camType: .front
+            )
 
-//When you are ready to stop the exercise call stopDetection.
-func stopDetection(){
-    do{
-        //returns a SMExerciseInfo.
-        let exerciseData = try flowManager?.stopDetection()
-    }catch{
-        print(error)
+            flowManager = try SMKitFlowManager(delegate: self)
+            flowManager?.startSession(sessionSettings: sessionSettings) { [weak self] result in
+                switch result {
+                case .success:
+                    self?.startDetection()
+                case .failure(let error):
+                    print("Failed to start 3D session: \(error)")
+                }
+            }
+        } catch {
+            print("Failed to create flow manager: \(error)")
+        }
     }
-}
 
-//When you are ready to stop the session call stopSession.
-func stopSession(){
-    do{
-        //returns a DetectionSessionResultData.
-        let workoutData = try flowManager?.stopSession()
-    }catch{
-        print(error)
+    func startDetection() {
+        do {
+            try flowManager?.startDetection(exercise: "EXERCISE_NAME")
+        } catch {
+            print(error)
+        }
+    }
+
+    func stopDetection() {
+        do {
+            let exerciseData = try flowManager?.stopDetection()
+            print(exerciseData as Any)
+        } catch {
+            print(error)
+        }
+    }
+
+    func stopSession() {
+        flowManager?.stopSession { result in
+            switch result {
+            case .success(let workoutData):
+                print(workoutData as Any)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 ```
+
+## Notes
+
+- `shouldSupport3D: true` must be used during `configure`; otherwise `include3D: true` cannot start.
+- `poseData3D` can be nil if the user is too close, out of range, or the current frame does not produce valid 3D output.
+- `handleAnatomicalAngles` fires before `handlePositionData` for each processed frame.
+- Video-file 3D processing uses the same session settings with `startVideoSession(...)`.

@@ -61,6 +61,7 @@ class ExerciseViewController: UIViewController {
     
     func configure(exercise: [String], phonePosition: PhonePosition, showSkeleton: Bool = false) {
         do{
+            self.exercise = exercise
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
                 jumpRefPoint: "Hip",
@@ -80,35 +81,52 @@ class ExerciseViewController: UIViewController {
             
             self.flowManager?.setDeviceMotionFrequency(isHigh: true)
             self.flowManager?.setBodyPositionCalibrationInactive()
-
-            try flowManager?.setBodyPositionCalibrationActive(delegate: self, screenSize: self.view.frame.size)
-            
-            try flowManager?.startSession(sessionSettings: sessionSettings)
-
-            self.exercise = exercise
-            self.startExercise()
-            
-            if showSkeleton {
-                self.view.addSubview(self.skeletonView)
+            self.flowManager?.verboseBodyCalibration = true
+            self.flowManager?.startSession(sessionSettings: sessionSettings) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success:
+                    do {
+                        try self.flowManager?.setBodyPositionCalibrationActive(
+                            delegate: self,
+                            screenSize: self.view.frame.size
+                        )
+                        self.setupExerciseUI(showSkeleton: showSkeleton)
+                        self.startExercise()
+                    } catch {
+                        self.showError(message: error.localizedDescription)
+                    }
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
             }
-            self.view.addSubview(exerciceView)
-            
-            NSLayoutConstraint.activate([
-                exerciceView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                exerciceView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-                exerciceView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                exerciceView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-            ])
             
         }catch{
             showError(message: error.localizedDescription)
         }
     }
 
+    private func setupExerciseUI(showSkeleton: Bool) {
+        if showSkeleton, skeletonView.superview == nil {
+            view.addSubview(skeletonView)
+        }
+        guard exerciceView.superview == nil else { return }
+        view.addSubview(exerciceView)
+
+        NSLayoutConstraint.activate([
+            exerciceView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            exerciceView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            exerciceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            exerciceView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+        ])
+    }
+
     func showError(message:String){
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(.init(title: "OK", style: .default))
-        self.present(alert, animated: true)
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
     
     func setupPreviewLayer(session: AVCaptureSession){
@@ -196,6 +214,10 @@ extension ExerciseViewController:SMKitSessionDelegate{
             skeletonView.updateSkeleton(rawData: poseData2D ?? [:], captureSize: captureSize, videoSize: videoResultion)
         }
     }
+
+    func handleAnatomicalAngles(anatomicalAngles: [String : SCNVector3]?) {
+
+    }
     
     func handleSessionErrors(error: any Error) {
         DispatchQueue.main.async {
@@ -205,6 +227,14 @@ extension ExerciseViewController:SMKitSessionDelegate{
 
     func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
         
+    }
+
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {
+
+    }
+
+    func videoSessionDidFinish() {
+
     }
 }
 
@@ -236,18 +266,26 @@ extension ExerciseViewController:ExerciseViewDelegate{
     }
     
     func quitWasPressed() {
-        do{
-            exerciseViewModel.isPaused = true
-            guard let result = try flowManager?.stopSession() else {return}
-            let jsonEncoder = JSONEncoder()
-            jsonEncoder.outputFormatting = .prettyPrinted
-            let jsonData = try jsonEncoder.encode(result)
-            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+        exerciseViewModel.isPaused = true
+        flowManager?.stopSession { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let sessionData):
+                guard let sessionData else { return }
+                do {
+                    let jsonEncoder = JSONEncoder()
+                    jsonEncoder.outputFormatting = .prettyPrinted
+                    let jsonData = try jsonEncoder.encode(sessionData)
+                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
 
-            print(json as Any)
-            showSummary(summary: json ?? "")
-        }catch{
-            self.showError(message: error.localizedDescription)
+                    print(json as Any)
+                    self.showSummary(summary: json ?? "")
+                } catch {
+                    self.showError(message: error.localizedDescription)
+                }
+            case .failure(let error):
+                self.showError(message: error.localizedDescription)
+            }
         }
         
     }
