@@ -12,8 +12,15 @@ import SMKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let authKey = AuthManager.shared.smKitAuthKey
+        guard !authKey.isEmpty else {
+            print("Missing SMKIT_AUTH_KEY. Create a local .env file from .env.example.")
+            AuthManager.shared.didFaildAuth = true
+            return true
+        }
+
         SMKitFlowManager.configure(
-            authKey: "",
+            authKey: authKey,
             shouldSupport3D: true,
             downloadProgress: { completed, total in
                 print("SMKit assets download progress: \(completed)/\(total)")

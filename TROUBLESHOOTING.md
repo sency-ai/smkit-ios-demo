@@ -37,7 +37,7 @@ CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one
 
 6. Build your project to verify the integration.
 
-For a complete SPM demo, use the [`release/1.9.1_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1_spm) branch.
+This branch is the complete SPM demo. For CocoaPods, use the [`release/1.9.1`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1) branch.
 
 ## Switching From SPM Back To CocoaPods
 

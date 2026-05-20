@@ -22,64 +22,39 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 
 ## Installation
 
-This branch uses **CocoaPods** for dependency management.
+This branch uses **Swift Package Manager (SPM)** for dependency management.
 
-Looking for Swift Package Manager integration? Use the [`release/1.9.1_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1_spm) branch, or add `https://bitbucket.org/sencyai/smkit_package` at version `1.9.1` to your own app.
-
-### CocoaPods
-
-Latest version: `SMKit '1.9.1'`
-
-1. Add the repository sources to your `Podfile`:
-
-   ```ruby
-   platform :ios, '16.0'
-
-   source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
-   source 'https://github.com/CocoaPods/Specs.git'
-   ```
-
-2. Add the pod to your target:
-
-   ```ruby
-   target 'YourApp' do
-     use_frameworks!
-     pod 'SMKit', '1.9.1'
-   end
-   ```
-
-3. Add the post-install build settings:
-
-   ```ruby
-   post_install do |installer|
-     installer.pods_project.targets.each do |target|
-       target.build_configurations.each do |config|
-         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-       end
-     end
-   end
-   ```
-
-4. Install pods and open the workspace:
-
-   ```bash
-   pod install --repo-update
-   open SMKitDemo.xcworkspace
-   ```
-
-Always open the `.xcworkspace`, not the `.xcodeproj`, when using CocoaPods.
+Looking for CocoaPods integration? Use the [`release/1.9.1`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1) branch, or add `pod 'SMKit', '1.9.1'` to your own app.
 
 ### Swift Package Manager
 
-For SPM apps, add:
+Latest version: `1.9.1` (SMKit)
+
+This demo already has the package connected in `SMKitDemo.xcodeproj`. For a fresh SPM integration, add:
 
 ```text
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use version `1.9.1`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use exact version `1.9.1`. Select the `SMKitPackage` product for your app target, then import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+
+Open `SMKitDemo.xcodeproj` for this branch. There are no CocoaPods build phases in the SPM demo project.
+
+### CocoaPods
+
+For CocoaPods apps, use the `release/1.9.1` branch or add the pod directly:
+
+```ruby
+platform :ios, '16.0'
+
+source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'YourApp' do
+  use_frameworks!
+  pod 'SMKit', '1.9.1'
+end
+```
 
 ## Setup
 
@@ -90,13 +65,27 @@ Add camera permission to `Info.plist`:
 <string>Camera access is needed for exercise detection</string>
 ```
 
+Create a local `.env` file at the repository root for the demo app:
+
+```bash
+cp .env.example .env
+```
+
+Then set your SDK key:
+
+```text
+SMKIT_AUTH_KEY=YOUR_KEY
+```
+
+`.env` is ignored by git. Do not commit real SDK keys.
+
 ## Configure
 
 Call `configure` once, preferably during app launch, before creating `SMKitFlowManager`.
 
 ```swift
 SMKitFlowManager.configure(
-    authKey: "YOUR_KEY",
+    authKey: AuthManager.shared.smKitAuthKey,
     shouldSupport3D: true,
     poseEstimation3DMode: .standard,
     poseEstimation3DAccuracy: .light,

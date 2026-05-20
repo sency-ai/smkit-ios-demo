@@ -1,0 +1,33 @@
+{
+  "originHash" : "754cc41fe1f0fc882b8e3b683799591947fc82a2b34d2db6337e0e1708767efd",
+  "pins" : [
+    {
+      "identity" : "opencv-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yeatse/opencv-spm.git",
+      "state" : {
+        "revision" : "ed61dc59456dce41d36de0817a89e367c1bf8849",
+        "version" : "4.10.0"
+      }
+    },
+    {
+      "identity" : "smbase_package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://bitbucket.org/sencyai/smbase_package",
+      "state" : {
+        "revision" : "034953b038e5f7e4b9eb417aa5ae26c8831e3ffe",
+        "version" : "1.9.1"
+      }
+    },
+    {
+      "identity" : "smkit_package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://bitbucket.org/sencyai/smkit_package",
+      "state" : {
+        "revision" : "ea8ae1d5d0e9a158bfe806ab896ece74b3a5bac1",
+        "version" : "1.9.1"
+      }
+    }
+  ],
+  "version" : 3
+}
