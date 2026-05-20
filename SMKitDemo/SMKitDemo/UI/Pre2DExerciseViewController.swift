@@ -10,9 +10,10 @@ import SMBase
 import SMKit
 
 class Pre2DExerciseViewController:UIViewController{
+    var useElevatedMode = true
     
     lazy var welcomeScreen:UIView = {
-        guard let view = UIHostingController(rootView: Pre2DExerciseView(startWasPressed: startWasPressed, dismissWasPressed: dismissWasPressed)).view else { return UIView() }
+        guard let view = UIHostingController(rootView: Pre2DExerciseView(useElevatedMode: useElevatedMode, startWasPressed: startWasPressed, dismissWasPressed: dismissWasPressed)).view else { return UIView() }
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -31,9 +32,13 @@ class Pre2DExerciseViewController:UIViewController{
         ])
     }
     
-    func startWasPressed(exercise: [String], showSkeleton: Bool) {
+    func startWasPressed(exercise: [String], showSkeleton: Bool, useElevatedMode: Bool) {
         let vc = ExerciseViewController()
-        vc.configure(exercise: exercise, phonePosition: .Floor, showSkeleton: showSkeleton)
+        vc.configure(
+            exercise: exercise,
+            phonePosition: useElevatedMode ? .Elevated : .Floor,
+            showSkeleton: showSkeleton
+        )
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

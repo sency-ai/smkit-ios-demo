@@ -3,6 +3,8 @@
 //  SMKitDemo
 //
 
+import SMBase
+import SMKit
 import SwiftUI
 
 class CalibrationViewModel: ObservableObject {
@@ -118,6 +120,7 @@ class AssessmentViewModel: ObservableObject {
     @Published var feedbacks: [String] = []
     @Published var isInPosition: Bool = false
     @Published var timeInPosition: Float = 0
+    @Published var guidanceState = ExerciseGuidanceDisplayState.inactive
 
     // Countdown state
     @Published var isCountingDown: Bool = false
@@ -133,14 +136,25 @@ class AssessmentViewModel: ObservableObject {
     }
 
     var duration: Float = 15
+    var isGuidanceActive: Bool { guidanceState.locksTimer }
 
     func startCountdown(exerciseName: String) {
         isCountingDown = true
         countdownValue = 3
         countdownExerciseName = exerciseName
+        guidanceState = .inactive
     }
 
-    func startExercise(name: String, index: Int, total: Int, duration: Float) {
+    func startExercise(
+        name: String,
+        index: Int,
+        total: Int,
+        duration: Float,
+        guidanceEnabled: Bool,
+        guidanceVideoURL: URL?,
+        initialGuidanceStep: GuidanceStep?,
+        initialGuidanceSegment: GuidanceVideoSegment?
+    ) {
         isCountingDown = false
         exerciseName = name
         exerciseIndex = index
@@ -153,6 +167,16 @@ class AssessmentViewModel: ObservableObject {
         timeInPosition = 0
         currentRomValue = 0
         romRange = nil
+        if guidanceEnabled {
+            guidanceState = ExerciseGuidanceDisplayState(
+                isEnabled: true,
+                step: initialGuidanceStep,
+                videoURL: guidanceVideoURL,
+                videoSegment: initialGuidanceSegment
+            )
+        } else {
+            guidanceState = .inactive
+        }
     }
 
     func setRomRange(_ range: ClosedRange<Float>?) {
@@ -183,6 +207,46 @@ class AssessmentViewModel: ObservableObject {
             if !self.feedbacks.isEmpty { self.feedbacks = [] }
         }
     }
+
+    func updateGuidance(
+        step: GuidanceStep?,
+        progress: Float?,
+        vocalKey: String?,
+        requestsReplay: Bool,
+        videoSegment: GuidanceVideoSegment?,
+        isInPosition: Bool? = nil,
+        romValue: Float? = nil
+    ) {
+        guard guidanceState.isEnabled else { return }
+        var nextState = guidanceState
+        nextState.step = step
+        nextState.progress = progress ?? 0
+        nextState.vocalKey = vocalKey
+        nextState.requestsReplay = requestsReplay
+        if let videoSegment {
+            nextState.videoSegment = videoSegment
+            nextState.videoRevision += 1
+        }
+        if let isInPosition {
+            self.isInPosition = isInPosition
+        }
+        if let romValue {
+            currentRomValue = romValue
+        }
+        guidanceState = nextState
+    }
+
+    func completeGuidance() {
+        guard guidanceState.isEnabled else { return }
+        var nextState = guidanceState
+        nextState.isCompleted = true
+        nextState.progress = 1
+        guidanceState = nextState
+    }
+
+    func clearGuidance() {
+        guidanceState = .inactive
+    }
 }
 
 struct AssessmentView: View {
@@ -194,6 +258,16 @@ struct AssessmentView: View {
 
     var progressColor: Color {
         model.timeRemaining > 10 ? .green : model.timeRemaining > 5 ? .orange : .red
+    }
+
+    var shouldShowGuidanceGauge: Bool {
+        guard model.guidanceState.isVisible, let step = model.guidanceState.step else {
+            return false
+        }
+        return !GuidanceModePolicy.shouldHideGuidanceOverlays(
+            detector: model.exerciseName,
+            coachStep: step
+        )
     }
 
     var body: some View {
@@ -284,18 +358,30 @@ struct AssessmentView: View {
                 Spacer()
 
                 // ROM gauge — stays in place regardless of feedback count
-                VStack(spacing: 12) {
-                    if model.romRange != nil {
-                        RomGaugeView(
-                            value: model.currentRomValue,
-                            range: model.romRange!,
-                            isInPosition: model.isInPosition
+                VStack(spacing: 16) {
+                    if model.guidanceState.isVisible {
+                        GuidancePanelView(
+                            detector: model.exerciseName,
+                            state: model.guidanceState
                         )
+                        .padding(.horizontal, 24)
                     }
 
-                    Text(model.isInPosition ? "In Position" : "Get in position")
-                        .font(.headline)
-                        .foregroundStyle(model.isInPosition ? .green : .white)
+                    if !model.guidanceState.isVisible || shouldShowGuidanceGauge {
+                        VStack(spacing: 12) {
+                            if model.romRange != nil {
+                                RomGaugeView(
+                                    value: model.currentRomValue,
+                                    range: model.romRange!,
+                                    isInPosition: model.isInPosition
+                                )
+                            }
+
+                            Text(model.isInPosition ? "In Position" : "Get in position")
+                                .font(.headline)
+                                .foregroundStyle(model.isInPosition ? .green : .white)
+                        }
+                    }
                 }
 
                 Spacer()
@@ -320,7 +406,7 @@ struct AssessmentView: View {
             }
 
             // Feedbacks overlay at bottom — does not shift gauge or timer
-            if !model.feedbacks.isEmpty {
+            if !model.guidanceState.isVisible, !model.feedbacks.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(model.feedbacks, id: \.self) { feedback in
                         HStack(spacing: 6) {
@@ -339,7 +425,7 @@ struct AssessmentView: View {
             }
         }
         .onReceive(timer) { _ in
-            guard !model.isCountingDown, model.timeRemaining > 0 else { return }
+            guard !model.isCountingDown, !model.isGuidanceActive, model.timeRemaining > 0 else { return }
             model.timeRemaining -= 0.1
             if model.isInPosition { model.timeInPosition += 0.1 }
             if model.timeRemaining <= 0 {

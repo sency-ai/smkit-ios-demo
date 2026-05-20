@@ -252,6 +252,7 @@ extension ExerciseViewController:ExerciseViewDelegate{
 
             if exerciseIndex >= exercise.count - 1{
                 self.quitWasPressed()
+                return
             }else{
                 exerciseIndex += 1
             }

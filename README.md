@@ -64,19 +64,12 @@ Add camera permission to `Info.plist`:
 <string>Camera access is needed for exercise detection</string>
 ```
 
-Create a local `.env` file at the repository root for the demo app:
+The demo is committed with a placeholder SDK key. Before running it locally,
+replace `YOUR_SMKIT_AUTH_KEY` in `SMKitDemo/SMKitDemo/Managers/AuthManager.swift`
+with your Sency SDK key.
 
-```bash
-cp .env.example .env
-```
-
-Then set your SDK key:
-
-```text
-SMKIT_AUTH_KEY=YOUR_KEY
-```
-
-`.env` is ignored by git. Do not commit real SDK keys.
+Do not commit real SDK keys. Integrating apps should load keys from their own
+configuration system.
 
 ## Configure
 

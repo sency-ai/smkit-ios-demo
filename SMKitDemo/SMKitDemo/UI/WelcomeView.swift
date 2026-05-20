@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    let start2DSession:()->Void
+    let start2DSession: (Bool) -> Void
     let start3DSession:()->Void
-    let startAssessment:()->Void
+    let startAssessment: (Bool) -> Void
+
+    @State private var useElevatedMode = true
     
     @ObservedObject var authManager = AuthManager.shared
 
@@ -21,9 +23,25 @@ struct WelcomeView: View {
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity)
             Spacer()
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Session Settings")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+
+                Toggle(isOn: $useElevatedMode) {
+                    HStack {
+                        Image(systemName: "iphone")
+                        Text("Elevated Mode")
+                    }
+                }
+                .font(.title3)
+                .fontWeight(.medium)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             Button {
-                start2DSession()
+                start2DSession(useElevatedMode)
             } label: {
                 Text("Start 2D Session")
                     .font(.title)
@@ -53,7 +71,7 @@ struct WelcomeView: View {
             }
 
             Button {
-                startAssessment()
+                startAssessment(useElevatedMode)
             } label: {
                 Text("Demo Assessment")
                     .font(.title)
@@ -87,5 +105,5 @@ struct WelcomeView: View {
 }
 
 #Preview {
-    WelcomeView(start2DSession: {}, start3DSession: {}, startAssessment: {})
+    WelcomeView(start2DSession: { _ in }, start3DSession: {}, startAssessment: { _ in })
 }

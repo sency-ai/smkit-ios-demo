@@ -10,13 +10,24 @@ import SMKit
 
 struct Pre2DExerciseView: View {
 
-    @State var selectedExercises: [String] = []
-    @State var showSkeleton: Bool = false
+    @State private var selectedExercises: [String] = []
+    @State private var showSkeleton: Bool = false
+    @State private var useElevatedMode: Bool
 
-    let startWasPressed: ([String], Bool) -> Void
+    let startWasPressed: ([String], Bool, Bool) -> Void
     let dismissWasPressed: () -> Void
 
     @ObservedObject var authManager = AuthManager.shared
+
+    init(
+        useElevatedMode: Bool,
+        startWasPressed: @escaping ([String], Bool, Bool) -> Void,
+        dismissWasPressed: @escaping () -> Void
+    ) {
+        _useElevatedMode = State(initialValue: useElevatedMode)
+        self.startWasPressed = startWasPressed
+        self.dismissWasPressed = dismissWasPressed
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -34,10 +45,23 @@ struct Pre2DExerciseView: View {
             }
             Spacer()
 
-            Toggle(isOn: $showSkeleton) {
-                HStack {
-                    Image(systemName: "figure.stand")
-                    Text("Show Skeleton")
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Session Settings")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+
+                Toggle(isOn: $showSkeleton) {
+                    HStack {
+                        Image(systemName: "figure.stand")
+                        Text("Show Skeleton")
+                    }
+                }
+
+                Toggle(isOn: $useElevatedMode) {
+                    HStack {
+                        Image(systemName: "iphone")
+                        Text("Elevated Mode")
+                    }
                 }
             }
             .font(.title2)
@@ -85,7 +109,7 @@ struct Pre2DExerciseView: View {
             }
 
             Button {
-                startWasPressed(selectedExercises, showSkeleton)
+                startWasPressed(selectedExercises, showSkeleton, useElevatedMode)
             } label: {
                 Text("START")
                     .font(.title)
@@ -117,7 +141,7 @@ struct Pre2DExerciseView: View {
 }
 
 #Preview {
-    Pre2DExerciseView(startWasPressed: { _, _ in }, dismissWasPressed: {})
+    Pre2DExerciseView(useElevatedMode: true, startWasPressed: { _, _, _ in }, dismissWasPressed: {})
 }
 
 enum DemoExercises: String, CaseIterable {

@@ -20,7 +20,7 @@ struct AssessmentExerciseResult {
 
 class AssessmentViewController: UIViewController {
 
-    var isElevated: Bool = false
+    var isElevated: Bool = true
 
     private let exercises = [
         "OverheadMobility",
@@ -49,6 +49,11 @@ class AssessmentViewController: UIViewController {
     private var calibrationViewModel = CalibrationViewModel()
     private var skeletonView: SkeletonView?
     private var boundingBoxGuideView: BodyCalibrationGuideView?
+    private var currentExerciseUsesGuidance = false
+    private var didCompleteGuidanceForCurrentExercise = false
+    private var didInspectFirstGuidanceFrame = false
+    private var isWaitingForGuidanceRecheckFrame = false
+    private var highestGuidanceVideoStepRank = -1
 
     // Calibration state
     private var isBodyInFrame = false
@@ -195,7 +200,21 @@ class AssessmentViewController: UIViewController {
             currentRomValues = []
             greenZoneTechniqueScores = []
             greenZoneFeedbacks = []
-            try flowManager?.startDetection(exercise: currentExercise)
+            currentExerciseUsesGuidance = shouldUseGuidance(for: currentExercise)
+            didCompleteGuidanceForCurrentExercise = !currentExerciseUsesGuidance
+            didInspectFirstGuidanceFrame = false
+            isWaitingForGuidanceRecheckFrame = false
+            highestGuidanceVideoStepRank = currentExerciseUsesGuidance ? GuidanceStep.orient.sequenceIndex : -1
+            let guidanceVideoURL = DemoGuidanceVideoPolicy.videoURL(for: currentExercise)
+            let initialGuidanceStep: GuidanceStep? = currentExerciseUsesGuidance ? .orient : nil
+            let initialGuidanceSegment = initialGuidanceStep.flatMap {
+                DemoGuidanceVideoPolicy.segment(for: $0, detector: currentExercise)
+            }
+
+            try flowManager?.startDetection(
+                exercise: currentExercise,
+                guidanceMode: currentExerciseUsesGuidance
+            )
 
             let romRange = flowManager?.getExerciseRange()
             currentRomRange = romRange
@@ -205,12 +224,148 @@ class AssessmentViewController: UIViewController {
                     name: self.currentExercise,
                     index: self.exerciseIndex,
                     total: self.exercises.count,
-                    duration: self.exerciseDuration
+                    duration: self.exerciseDuration,
+                    guidanceEnabled: self.currentExerciseUsesGuidance,
+                    guidanceVideoURL: guidanceVideoURL,
+                    initialGuidanceStep: initialGuidanceStep,
+                    initialGuidanceSegment: initialGuidanceSegment
                 )
                 self.viewModel.setRomRange(romRange)
             }
         } catch {
             showError(message: error.localizedDescription)
+        }
+    }
+
+    private func shouldUseGuidance(for detector: String) -> Bool {
+        GuidanceModePolicy.exerciseUsesDefaultGuidanceOrchestration(detector: detector)
+    }
+
+    private func assessmentInPosition(rawInPosition: Bool, rom: Float?) -> Bool {
+        if rawInPosition { return true }
+
+        guard GuidanceModePolicy.isOverheadSquatStaticGuidance(detector: currentExercise),
+              let rom else {
+            return false
+        }
+
+        return currentRomRange?.contains(rom) == true
+    }
+
+    private func guidanceInAssessmentPosition(
+        step: GuidanceStep,
+        rawInPosition: Bool,
+        refinedInPosition: Bool,
+        rom: Float?
+    ) -> Bool {
+        if GuidanceModePolicy.isJeffersonCompactGuidance(detector: currentExercise), step == .hold {
+            guard let rom, rom.isFinite else { return false }
+            return rom >= GuidanceModePolicy.jeffersonGuidanceMinDescentRom
+        }
+
+        return refinedInPosition || assessmentInPosition(rawInPosition: rawInPosition, rom: rom)
+    }
+
+    private func updateGuidance(from movementData: MovementFeedbackData) -> Bool {
+        guard currentExerciseUsesGuidance else {
+            DispatchQueue.main.async { self.viewModel.clearGuidance() }
+            return false
+        }
+
+        guard !didCompleteGuidanceForCurrentExercise else { return false }
+
+        guard let step = movementData.coachStep else { return true }
+
+        if !didInspectFirstGuidanceFrame {
+            didInspectFirstGuidanceFrame = true
+            if step.sequenceIndex > GuidanceStep.orient.sequenceIndex {
+                highestGuidanceVideoStepRank = GuidanceStep.orient.sequenceIndex
+                let initialSegment = DemoGuidanceVideoPolicy.segment(for: .orient, detector: currentExercise)
+                DispatchQueue.main.async {
+                    self.viewModel.updateGuidance(
+                        step: .orient,
+                        progress: 0,
+                        vocalKey: nil,
+                        requestsReplay: false,
+                        videoSegment: initialSegment
+                    )
+                }
+                flowManager?.resetGuidanceMode()
+                isWaitingForGuidanceRecheckFrame = true
+                return true
+            }
+        }
+
+        if isWaitingForGuidanceRecheckFrame {
+            isWaitingForGuidanceRecheckFrame = false
+            return true
+        }
+
+        let refinedInPosition = GuidanceModePolicy.refinedGuidanceInPosition(
+            rawInPosition: movementData.isInPosition == true,
+            detector: currentExercise,
+            step: step,
+            currentRom: movementData.currentRomValue ?? 0,
+            feedback: movementData.feedback
+        )
+        let isInAssessmentPosition = guidanceInAssessmentPosition(
+            step: step,
+            rawInPosition: movementData.isInPosition == true,
+            refinedInPosition: refinedInPosition,
+            rom: movementData.currentRomValue
+        )
+        let segment = advanceGuidanceVideoIfNeeded(for: step)
+
+        DispatchQueue.main.async {
+            self.viewModel.updateGuidance(
+                step: step,
+                progress: movementData.coachAdvanceProgress,
+                vocalKey: movementData.guidanceVocalKey,
+                requestsReplay: movementData.requestGuidanceVocalReplay == true,
+                videoSegment: segment,
+                isInPosition: isInAssessmentPosition,
+                romValue: movementData.currentRomValue
+            )
+        }
+
+        if step == .hold, isInAssessmentPosition {
+            completeGuidanceMode()
+        }
+
+        return currentExerciseUsesGuidance && !didCompleteGuidanceForCurrentExercise
+    }
+
+    private func advanceGuidanceVideoIfNeeded(for step: GuidanceStep) -> GuidanceVideoSegment? {
+        let targetRank = step.sequenceIndex
+        guard targetRank > highestGuidanceVideoStepRank else { return nil }
+
+        let detector = currentExercise
+        let compact = GuidanceModePolicy.skipsIntermediateGuidanceRanks(detector: detector)
+        if compact, highestGuidanceVideoStepRank >= 0, targetRank > highestGuidanceVideoStepRank + 1 {
+            highestGuidanceVideoStepRank = targetRank
+            return DemoGuidanceVideoPolicy.segment(for: step, detector: detector)
+        }
+
+        var nextSegment: GuidanceVideoSegment?
+        for rank in (highestGuidanceVideoStepRank + 1)...targetRank {
+            if GuidanceModePolicy.shouldSkipGuidanceVideoRank(rank, detector: detector) {
+                highestGuidanceVideoStepRank = rank
+                continue
+            }
+            guard let stepForRank = GuidanceStep.from(sequenceIndex: rank) else { continue }
+            highestGuidanceVideoStepRank = rank
+            nextSegment = DemoGuidanceVideoPolicy.segment(for: stepForRank, detector: detector) ?? nextSegment
+        }
+
+        return nextSegment
+    }
+
+    private func completeGuidanceMode() {
+        guard currentExerciseUsesGuidance, !didCompleteGuidanceForCurrentExercise else { return }
+        didCompleteGuidanceForCurrentExercise = true
+        flowManager?.endGuidanceMode()
+        DispatchQueue.main.async {
+            self.viewModel.completeGuidance()
         }
     }
 
@@ -355,8 +510,13 @@ extension AssessmentViewController: SMKitSessionDelegate {
 
     func handleDetectionData(movementData: MovementFeedbackData?) {
         guard let movementData else { return }
-        let isInPosition = movementData.isInPosition ?? false
+        if updateGuidance(from: movementData) {
+            return
+        }
+
+        let rawInPosition = movementData.isInPosition ?? false
         let rom = movementData.currentRomValue
+        let isInPosition = assessmentInPosition(rawInPosition: rawInPosition, rom: rom)
         let feedbackStrings = movementData.feedback?.map { $0.description } ?? []
 
         if let score = movementData.techniqueScore, isInPosition {

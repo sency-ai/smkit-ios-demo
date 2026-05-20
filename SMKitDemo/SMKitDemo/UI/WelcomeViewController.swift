@@ -29,8 +29,9 @@ class WelcomeViewController: UIViewController {
         ])
     }
     
-    @objc func start2DSession() {
+    func start2DSession(useElevatedMode: Bool) {
         let vc = Pre2DExerciseViewController()
+        vc.useElevatedMode = useElevatedMode
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
@@ -41,9 +42,9 @@ class WelcomeViewController: UIViewController {
         self.present(vc, animated: true)
     }
 
-    @objc func startAssessment() {
+    func startAssessment(useElevatedMode: Bool) {
         let vc = AssessmentViewController()
-        vc.isElevated = false  // Set to false for floor (phone upright) mode
+        vc.isElevated = useElevatedMode
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
