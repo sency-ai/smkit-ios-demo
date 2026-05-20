@@ -98,6 +98,7 @@ class AssessmentViewController: UIViewController {
                 userHeight: 170
             )
             flowManager = try SMKitFlowManager(delegate: self)
+            flowManager?.verboseBodyCalibration = true
 
             // Phone calibration
             flowManager?.setDeviceMotionActive(
@@ -114,24 +115,33 @@ class AssessmentViewController: UIViewController {
             )
             flowManager?.setDeviceMotionFrequency(isHigh: true)
 
-            try flowManager?.startSession(sessionSettings: sessionSettings)
-            flowManager?.verboseBodyCalibration = true
-
-            // Show calibration UI first
-            view.addSubview(calibrationOverlay)
-            NSLayoutConstraint.activate([
-                calibrationOverlay.topAnchor.constraint(equalTo: view.topAnchor),
-                calibrationOverlay.leftAnchor.constraint(equalTo: view.leftAnchor),
-                calibrationOverlay.rightAnchor.constraint(equalTo: view.rightAnchor),
-                calibrationOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            ])
-            // Add hosting controller as child so responder chain and touch delivery work
-            if let host = calibrationHostingController {
-                addChild(host)
-                host.didMove(toParent: self)
+            flowManager?.startSession(sessionSettings: sessionSettings) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.showCalibrationOverlay()
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
             }
         } catch {
             showError(message: error.localizedDescription)
+        }
+    }
+
+    private func showCalibrationOverlay() {
+        guard calibrationOverlay.superview == nil else { return }
+        view.addSubview(calibrationOverlay)
+        NSLayoutConstraint.activate([
+            calibrationOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            calibrationOverlay.leftAnchor.constraint(equalTo: view.leftAnchor),
+            calibrationOverlay.rightAnchor.constraint(equalTo: view.rightAnchor),
+            calibrationOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        // Add hosting controller as child so responder chain and touch delivery work
+        if let host = calibrationHostingController {
+            addChild(host)
+            host.didMove(toParent: self)
         }
     }
 
@@ -148,6 +158,7 @@ class AssessmentViewController: UIViewController {
     }
 
     private func beginAssessment() {
+        guard assessmentView.superview == nil else { return }
         if let host = calibrationHostingController {
             host.willMove(toParent: nil)
             host.view.removeFromSuperview()
@@ -232,11 +243,14 @@ class AssessmentViewController: UIViewController {
     }
 
     private func finishAssessment() {
-        do {
-            _ = try flowManager?.stopSession()
-            DispatchQueue.main.async { self.showAssessmentSummary() }
-        } catch {
-            showError(message: error.localizedDescription)
+        flowManager?.stopSession { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                self.showAssessmentSummary()
+            case .failure(let error):
+                self.showError(message: error.localizedDescription)
+            }
         }
     }
 
@@ -309,8 +323,13 @@ class AssessmentViewController: UIViewController {
     }
 
     private func stopAndDismiss() {
-        do { _ = try flowManager?.stopSession() } catch {}
-        dismiss(animated: true)
+        guard let flowManager else {
+            dismiss(animated: true)
+            return
+        }
+        flowManager.stopSession { [weak self] _ in
+            self?.dismiss(animated: true)
+        }
     }
 
     private func showError(message: String) {
@@ -402,11 +421,19 @@ extension AssessmentViewController: SMKitSessionDelegate {
         }
     }
 
+    func handleAnatomicalAngles(anatomicalAngles: [String : SCNVector3]?) {
+
+    }
+
     func handleSessionErrors(error: Error) {
         DispatchQueue.main.async { self.showError(message: error.localizedDescription) }
     }
 
     func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {}
+
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {}
+
+    func videoSessionDidFinish() {}
 }
 
 extension AssessmentViewController: SMBodyCalibrationDelegate {
@@ -437,7 +464,11 @@ extension AssessmentViewController: SMBodyCalibrationDelegate {
             let guideRect = box.screenRect(videoSize: videoSize, viewSize: self.view.bounds.size)
             let guideView = BodyCalibrationGuideView(guideRect: guideRect, frame: self.view.bounds)
             self.boundingBoxGuideView?.removeFromSuperview()
-            self.view.insertSubview(guideView, belowSubview: self.calibrationOverlay)
+            if self.calibrationOverlay.superview != nil {
+                self.view.insertSubview(guideView, belowSubview: self.calibrationOverlay)
+            } else {
+                self.view.addSubview(guideView)
+            }
             self.boundingBoxGuideView = guideView
         }
     }

@@ -52,15 +52,20 @@ class SM3DExerciseViewController: UIViewController {
     }
     
     func dismissWasPressed(){
-        let _ = try? self.flowManager?.stopSession()
-        self.dismiss(animated: true)
+        guard let flowManager else {
+            dismiss(animated: true)
+            return
+        }
+        flowManager.stopSession { [weak self] _ in
+            self?.dismiss(animated: true)
+        }
     }
     
     func startSession(){
-        do{
-            try flowManager?.startSession(sessionSettings: SMKitSessionSettings(include3D: true))
-        }catch{
-            showAlert(message: error.localizedDescription)
+        flowManager?.startSession(sessionSettings: SMKitSessionSettings(include3D: true)) { [weak self] result in
+            if case .failure(let error) = result {
+                self?.showAlert(message: error.localizedDescription)
+            }
         }
     }
 
@@ -117,7 +122,7 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
     
     
     func handleSessionErrors(error: any Error) {
-        
+        showAlert(message: error.localizedDescription)
     }
     
     func handlePositionData(poseData2D: [Joint : JointData]?, poseData3D: [Joint : SCNVector3]?, jointAnglesData: [LimbsPairs : Float]?, jointGlobalAnglesData: [Limbs : Float]?, xyzEulerAngles: [String : SCNVector3]?, xyzRelativeAngles: [String : SCNVector3]?) {
@@ -128,8 +133,22 @@ extension SM3DExerciseViewController:SMKitSessionDelegate{
             sm3DInfoViewModel.threeDAnglesData = jointAnglesData ?? [:]
         }
     }
+
+    func handleAnatomicalAngles(anatomicalAngles: [String : SCNVector3]?) {
+        DispatchQueue.main.async { [weak self] in
+            self?.sm3DInfoViewModel.anatomicalAngles = anatomicalAngles ?? [:]
+        }
+    }
     
     func didCaptureBuffer(pixelBuffer: CVPixelBuffer, time: CMTime, orientation: CGImagePropertyOrientation) {
+
+    }
+
+    func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {
+
+    }
+
+    func videoSessionDidFinish() {
 
     }
 }

@@ -2,15 +2,14 @@ platform :ios, '16.0'
 
 # [1] add the source to the top of your Podfile.
 source 'https://bitbucket.org/sencyai/ios_sdks_release.git'
-source 'https://bitbucket.org/sencyai/ios_sdks_dev.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
-workspace 'SMKitUIDemo.xcworkspace'
+workspace 'SMKitDemo.xcworkspace'
 
 #[2] add the pod to your target
 target 'SMKitDemo' do
   use_frameworks!
-  pod 'SMKit', '1.5.3'
+  pod 'SMKit', '1.9.1'
 end
 
 #[3] add post_install hooks
@@ -19,8 +18,7 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.5'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
     end
   end
 end
-
