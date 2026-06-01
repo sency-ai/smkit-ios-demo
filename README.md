@@ -27,7 +27,7 @@ Looking for Swift Package Manager integration? Use the [`release/1.9.1_spm`](htt
 
 ### CocoaPods
 
-Latest version: `SMKit '1.9.1'`
+Latest version: `SMKit '1.9.2'`
 
 1. Add the repository sources to your `Podfile`:
 
@@ -43,7 +43,7 @@ Latest version: `SMKit '1.9.1'`
    ```ruby
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '1.9.1'
+     pod 'SMKit', '1.9.5'
    end
    ```
 
@@ -78,7 +78,7 @@ For SPM apps, add:
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use version `1.9.1`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use version `1.9.5`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
 
 ## Setup
 
