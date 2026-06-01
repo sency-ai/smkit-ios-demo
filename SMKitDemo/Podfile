@@ -9,7 +9,7 @@ workspace 'SMKitDemo.xcworkspace'
 #[2] add the pod to your target
 target 'SMKitDemo' do
   use_frameworks!
-  pod 'SMKit', '1.9.1'
+  pod 'SMKit', '1.9.5'
 end
 
 #[3] add post_install hooks
