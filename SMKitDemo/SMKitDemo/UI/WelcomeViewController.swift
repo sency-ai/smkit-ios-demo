@@ -42,9 +42,10 @@ class WelcomeViewController: UIViewController {
         self.present(vc, animated: true)
     }
 
-    func startAssessment(useElevatedMode: Bool) {
+    func startAssessment(useElevatedMode: Bool, manualCameraStart: Bool) {
         let vc = AssessmentViewController()
         vc.isElevated = useElevatedMode
+        vc.manualCameraStart = manualCameraStart
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

@@ -21,13 +21,18 @@ struct AssessmentExerciseResult {
 class AssessmentViewController: UIViewController {
 
     var isElevated: Bool = true
+    var manualCameraStart: Bool = false
 
     private let exercises = [
         "OverheadMobility",
         "SquatRegularOverheadStatic",
         "JeffersonCurl",
         "StandingSideBendRight",
-        "StandingSideBendLeft"
+        "StandingSideBendLeft",
+        "HipFlexionRight",
+        "HipFlexionLeft",
+        "StandingKneeRaiseRight",
+        "StandingKneeRaiseLeft"
     ]
     private let exerciseDuration: Float = 15.0
 
@@ -49,6 +54,10 @@ class AssessmentViewController: UIViewController {
     private var calibrationViewModel = CalibrationViewModel()
     private var skeletonView: SkeletonView?
     private var boundingBoxGuideView: BodyCalibrationGuideView?
+    private let manualCameraControls = UIStackView()
+    private let manualCameraStatusLabel = UILabel()
+    private let manualCameraStartButton = UIButton(type: .system)
+    private let manualCameraStopButton = UIButton(type: .system)
     private var currentExerciseUsesGuidance = false
     private var didCompleteGuidanceForCurrentExercise = false
     private var didInspectFirstGuidanceFrame = false
@@ -96,11 +105,16 @@ class AssessmentViewController: UIViewController {
 
     private func setup() {
         do {
+            viewModel.manualCameraStartEnabled = manualCameraStart
+            viewModel.cameraCaptureRunning = !manualCameraStart
+            viewModel.cameraStatusText = manualCameraStart ? "waiting for manual camera start" : ""
+
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: isElevated ? .Elevated : .Floor,
                 jumpRefPoint: "Hip",
                 jumpHeightThreshold: 10,
-                userHeight: 170
+                userHeight: 170,
+                autoStartCamera: !manualCameraStart
             )
             flowManager = try SMKitFlowManager(delegate: self)
             flowManager?.verboseBodyCalibration = true
@@ -124,6 +138,10 @@ class AssessmentViewController: UIViewController {
                 guard let self else { return }
                 switch result {
                 case .success:
+                    if self.manualCameraStart {
+                        self.viewModel.cameraStatusText = "preview attached before camera start"
+                        self.showManualCameraControlsIfNeeded()
+                    }
                     self.showCalibrationOverlay()
                 case .failure(let error):
                     self.showError(message: error.localizedDescription)
@@ -132,6 +150,70 @@ class AssessmentViewController: UIViewController {
         } catch {
             showError(message: error.localizedDescription)
         }
+    }
+
+    private func showManualCameraControlsIfNeeded() {
+        guard manualCameraStart else { return }
+
+        if manualCameraControls.superview == nil {
+            manualCameraControls.axis = .horizontal
+            manualCameraControls.alignment = .center
+            manualCameraControls.spacing = 12
+            manualCameraControls.translatesAutoresizingMaskIntoConstraints = false
+            manualCameraControls.isLayoutMarginsRelativeArrangement = true
+            manualCameraControls.layoutMargins = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
+            manualCameraControls.backgroundColor = UIColor.black.withAlphaComponent(0.65)
+            manualCameraControls.layer.cornerRadius = 12
+            manualCameraControls.clipsToBounds = true
+
+            manualCameraStartButton.setImage(UIImage(systemName: "video.fill"), for: .normal)
+            manualCameraStartButton.tintColor = .white
+            manualCameraStartButton.addTarget(self, action: #selector(startCameraCaptureButtonWasPressed), for: .touchUpInside)
+
+            manualCameraStopButton.setImage(UIImage(systemName: "video.slash.fill"), for: .normal)
+            manualCameraStopButton.tintColor = .white
+            manualCameraStopButton.addTarget(self, action: #selector(stopCameraCaptureButtonWasPressed), for: .touchUpInside)
+
+            manualCameraStatusLabel.textColor = .white
+            manualCameraStatusLabel.font = .systemFont(ofSize: 12, weight: .medium)
+            manualCameraStatusLabel.numberOfLines = 2
+
+            manualCameraControls.addArrangedSubview(manualCameraStartButton)
+            manualCameraControls.addArrangedSubview(manualCameraStopButton)
+            manualCameraControls.addArrangedSubview(manualCameraStatusLabel)
+
+            view.addSubview(manualCameraControls)
+            NSLayoutConstraint.activate([
+                manualCameraControls.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+                manualCameraControls.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                manualCameraControls.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 16),
+                manualCameraControls.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16),
+            ])
+        }
+
+        updateManualCameraControls()
+        view.bringSubviewToFront(manualCameraControls)
+    }
+
+    private func hideManualCameraControls() {
+        manualCameraControls.removeFromSuperview()
+    }
+
+    private func updateManualCameraControls() {
+        manualCameraStatusLabel.text = [
+            "camera running: \(viewModel.cameraCaptureRunning.description)",
+            viewModel.cameraStatusText
+        ]
+        .filter { !$0.isEmpty }
+        .joined(separator: "\n")
+    }
+
+    @objc private func startCameraCaptureButtonWasPressed() {
+        startCameraCaptureWasPressed()
+    }
+
+    @objc private func stopCameraCaptureButtonWasPressed() {
+        stopCameraCaptureWasPressed()
     }
 
     private func showCalibrationOverlay() {
@@ -148,6 +230,8 @@ class AssessmentViewController: UIViewController {
             addChild(host)
             host.didMove(toParent: self)
         }
+
+        showManualCameraControlsIfNeeded()
     }
 
     private func phoneAngleDidUpdate(isReady: Bool) {
@@ -172,6 +256,7 @@ class AssessmentViewController: UIViewController {
         }
         boundingBoxGuideView?.removeFromSuperview()
         boundingBoxGuideView = nil
+        hideManualCameraControls()
         flowManager?.setBodyPositionCalibrationInactive()
 
         // Add exercise UI (on top of skeleton)
@@ -498,6 +583,11 @@ extension AssessmentViewController: SMKitSessionDelegate {
     func captureSessionDidSet(session: AVCaptureSession) {
         DispatchQueue.main.async {
             self.setupPreviewLayer(session: session)
+            if self.manualCameraStart {
+                self.viewModel.cameraCaptureRunning = session.isRunning
+                self.viewModel.cameraStatusText = "preview attached, session running: \(session.isRunning)"
+                self.updateManualCameraControls()
+            }
             self.flowManager?.setBodyPositionCalibrationInactive()
             try? self.flowManager?.setBodyPositionCalibrationActive(
                 delegate: self,
@@ -645,6 +735,38 @@ extension AssessmentViewController: AssessmentViewDelegate {
 
     func stopWasPressed() {
         stopAndDismiss()
+    }
+
+    func startCameraCaptureWasPressed() {
+        flowManager?.startCameraCapture { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.viewModel.cameraCaptureRunning = true
+                    self.viewModel.cameraStatusText = "camera capture started"
+                    self.updateManualCameraControls()
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    func stopCameraCaptureWasPressed() {
+        flowManager?.stopCameraCapture { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.viewModel.cameraCaptureRunning = false
+                    self.viewModel.cameraStatusText = "camera capture stopped, session still active"
+                    self.updateManualCameraControls()
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
+            }
+        }
     }
 }
 

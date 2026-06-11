@@ -32,7 +32,7 @@ class AuthManager:ObservableObject{
     weak var delegate:AuthManagerDelegate?
 
     var smKitAuthKey: String {
-        Self.authKeyPlaceholder
+        Self.configuredAuthKey
     }
 
     var hasConfiguredAuthKey: Bool {

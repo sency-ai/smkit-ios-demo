@@ -10,9 +10,10 @@ import SwiftUI
 struct WelcomeView: View {
     let start2DSession: (Bool) -> Void
     let start3DSession:()->Void
-    let startAssessment: (Bool) -> Void
+    let startAssessment: (Bool, Bool) -> Void
 
     @State private var useElevatedMode = true
+    @State private var manualAssessmentCameraStart = false
     
     @ObservedObject var authManager = AuthManager.shared
 
@@ -33,6 +34,15 @@ struct WelcomeView: View {
                     HStack {
                         Image(systemName: "iphone")
                         Text("Elevated Mode")
+                    }
+                }
+                .font(.title3)
+                .fontWeight(.medium)
+
+                Toggle(isOn: $manualAssessmentCameraStart) {
+                    HStack {
+                        Image(systemName: "video.badge.ellipsis")
+                        Text("Manual Assessment Camera Start")
                     }
                 }
                 .font(.title3)
@@ -71,7 +81,7 @@ struct WelcomeView: View {
             }
 
             Button {
-                startAssessment(useElevatedMode)
+                startAssessment(useElevatedMode, manualAssessmentCameraStart)
             } label: {
                 Text("Demo Assessment")
                     .font(.title)
@@ -105,5 +115,5 @@ struct WelcomeView: View {
 }
 
 #Preview {
-    WelcomeView(start2DSession: { _ in }, start3DSession: {}, startAssessment: { _ in })
+    WelcomeView(start2DSession: { _ in }, start3DSession: {}, startAssessment: { _, _ in })
 }

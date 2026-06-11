@@ -29,7 +29,18 @@ struct GuidanceVideoSegment: Equatable {
 }
 
 enum DemoGuidanceVideoPolicy {
+    private static let remoteVideoURLs: [String: URL] = [
+        "HipFlexionRight": URL(string: "https://sency-instruction-videos-public.s3.us-east-1.amazonaws.com/videos/HipFlexionRight.mp4")!,
+        "HipFlexionLeft": URL(string: "https://sency-instruction-videos-public.s3.us-east-1.amazonaws.com/videos/HipFlexionLeft.mp4")!,
+        "StandingKneeRaiseRight": URL(string: "https://sency-instruction-videos-public.s3.us-east-1.amazonaws.com/videos/StandingKneeRaiseRight.mp4")!,
+        "StandingKneeRaiseLeft": URL(string: "https://sency-instruction-videos-public.s3.us-east-1.amazonaws.com/videos/StandingKneeRaiseLeft.mp4")!
+    ]
+
     static func videoURL(for detector: String) -> URL? {
+        if let remoteURL = remoteVideoURLs[detector] {
+            return remoteURL
+        }
+
         for fileExtension in ["mp4", "mov", "m4v"] {
             if let url = Bundle.main.url(forResource: detector, withExtension: fileExtension) {
                 return url
@@ -105,6 +116,17 @@ enum DemoGuidanceVideoPolicy {
         }
 
         if GuidanceModePolicy.isStandingKneeRaiseGuidance(detector: detector) {
+            switch step {
+            case .orient:
+                return .freeze(at: 0)
+            case .prepare:
+                return .play(from: 0, to: nil)
+            default:
+                return nil
+            }
+        }
+
+        if GuidanceModePolicy.isHipFlexionGuidance(detector: detector) {
             switch step {
             case .orient:
                 return .freeze(at: 0)

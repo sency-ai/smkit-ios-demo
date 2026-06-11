@@ -23,11 +23,11 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 
 This branch uses **Swift Package Manager (SPM)** for dependency management.
 
-Looking for CocoaPods integration? Use the [`release/1.9.1`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1) branch, or add `pod 'SMKit', '1.9.1'` to your own app.
+Looking for CocoaPods integration? Use the [`release/1.9.1`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1) branch as a CocoaPods project reference, or add `pod 'SMKit', '1.9.8'` to your own app.
 
 ### Swift Package Manager
 
-Latest version: `1.9.1` (SMKit)
+Latest version: `1.9.8` (SMKit)
 
 This demo already has the package connected in `SMKitDemo.xcodeproj`. For a fresh SPM integration, add:
 
@@ -35,13 +35,13 @@ This demo already has the package connected in `SMKitDemo.xcodeproj`. For a fres
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use exact version `1.9.1`. Select the `SMKitPackage` product for your app target, then import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use exact version `1.9.8`. Select the `SMKitPackage` product for your app target, then import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
 
 Open `SMKitDemo.xcodeproj` for this branch. There are no CocoaPods build phases in the SPM demo project.
 
 ### CocoaPods
 
-For CocoaPods apps, use the `release/1.9.1` branch or add the pod directly:
+For CocoaPods apps, use the `release/1.9.1` branch as a CocoaPods project reference or add the pod directly:
 
 ```ruby
 platform :ios, '16.0'
@@ -51,7 +51,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'YourApp' do
   use_frameworks!
-  pod 'SMKit', '1.9.1'
+  pod 'SMKit', '1.9.8'
 end
 ```
 

@@ -21,6 +21,7 @@ class ExerciseViewController: UIViewController {
     let dataHolder = KitDataHolder()
     private var pendingBoundingBox: BodyCalRectGuide?
     private var boundingBoxGuideView: BodyCalibrationGuideView?
+    private var manualCameraStart = false
 
     var currentExercise:String{
         exercise[exerciseIndex]
@@ -59,14 +60,19 @@ class ExerciseViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func configure(exercise: [String], phonePosition: PhonePosition, showSkeleton: Bool = false) {
+    func configure(exercise: [String], phonePosition: PhonePosition, showSkeleton: Bool = false, manualCameraStart: Bool = false) {
         do{
             self.exercise = exercise
+            self.manualCameraStart = manualCameraStart
+            exerciseViewModel.manualCameraStartEnabled = manualCameraStart
+            exerciseViewModel.cameraCaptureRunning = !manualCameraStart
+            exerciseViewModel.cameraStatusText = manualCameraStart ? "waiting for manual camera start" : ""
             let sessionSettings = SMKitSessionSettings(
                 phonePosition: phonePosition,
                 jumpRefPoint: "Hip",
                 jumpHeightThreshold: 10,
-                userHeight: 170
+                userHeight: 170,
+                autoStartCamera: !manualCameraStart
             )
             flowManager = try SMKitFlowManager(delegate: self)
             
@@ -93,6 +99,9 @@ class ExerciseViewController: UIViewController {
                         )
                         self.setupExerciseUI(showSkeleton: showSkeleton)
                         self.startExercise()
+                        if self.manualCameraStart {
+                            self.exerciseViewModel.cameraStatusText = "preview attached before camera start"
+                        }
                     } catch {
                         self.showError(message: error.localizedDescription)
                     }
@@ -173,6 +182,10 @@ extension ExerciseViewController:SMKitSessionDelegate{
     func captureSessionDidSet(session: AVCaptureSession) {
         DispatchQueue.main.async {
             self.setupPreviewLayer(session: session)
+            if self.manualCameraStart {
+                self.exerciseViewModel.cameraCaptureRunning = session.isRunning
+                self.exerciseViewModel.cameraStatusText = "preview attached, session running: \(session.isRunning)"
+            }
             if let box = self.pendingBoundingBox {
                 self.setupBoundingBoxGuideView(box: box)
             }
@@ -264,6 +277,36 @@ extension ExerciseViewController:ExerciseViewDelegate{
     
     func puassWasPressed() {
         exerciseViewModel.isPaused.toggle()
+    }
+
+    func startCameraCaptureWasPressed() {
+        flowManager?.startCameraCapture { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.exerciseViewModel.cameraCaptureRunning = true
+                    self.exerciseViewModel.cameraStatusText = "camera capture started"
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    func stopCameraCaptureWasPressed() {
+        flowManager?.stopCameraCapture { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.exerciseViewModel.cameraCaptureRunning = false
+                    self.exerciseViewModel.cameraStatusText = "camera capture stopped, session still active"
+                case .failure(let error):
+                    self.showError(message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     func quitWasPressed() {

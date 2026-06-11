@@ -109,6 +109,8 @@ protocol AssessmentViewDelegate {
     func exerciseTimeDidFinish()
     func countdownDidFinish()
     func stopWasPressed()
+    func startCameraCaptureWasPressed()
+    func stopCameraCaptureWasPressed()
 }
 
 class AssessmentViewModel: ObservableObject {
@@ -121,6 +123,9 @@ class AssessmentViewModel: ObservableObject {
     @Published var isInPosition: Bool = false
     @Published var timeInPosition: Float = 0
     @Published var guidanceState = ExerciseGuidanceDisplayState.inactive
+    @Published var manualCameraStartEnabled = false
+    @Published var cameraCaptureRunning = false
+    @Published var cameraStatusText = ""
 
     // Countdown state
     @Published var isCountingDown: Bool = false
@@ -348,6 +353,34 @@ struct AssessmentView: View {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundStyle(.white)
+                        }
+                    }
+
+                    if model.manualCameraStartEnabled {
+                        HStack(spacing: 12) {
+                            Button { delegate.startCameraCaptureWasPressed() } label: {
+                                Image(systemName: "video.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(.white)
+                            }
+
+                            Button { delegate.stopCameraCaptureWasPressed() } label: {
+                                Image(systemName: "video.slash.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(.white)
+                            }
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("camera running: \(model.cameraCaptureRunning.description)")
+                                    .font(.caption)
+                                if !model.cameraStatusText.isEmpty {
+                                    Text(model.cameraStatusText)
+                                        .font(.caption2)
+                                }
+                            }
+                            .foregroundStyle(.white.opacity(0.8))
+
+                            Spacer()
                         }
                     }
                 }

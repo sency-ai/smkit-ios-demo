@@ -13,6 +13,9 @@ class ExerciseViewModel:ObservableObject{
     @Published fileprivate var feedbacks:[String] = []
     @Published var isShallow:Bool? = false
     @Published var timePassed:Float = 0
+    @Published var manualCameraStartEnabled = false
+    @Published var cameraCaptureRunning = false
+    @Published var cameraStatusText = ""
     
     func addFeedback(feedbacks:[String]){
         if self.feedbacks != feedbacks{
@@ -38,6 +41,8 @@ protocol ExerciseViewDelegate{
     func nextWasPressed()
     func puassWasPressed()
     func quitWasPressed()
+    func startCameraCaptureWasPressed()
+    func stopCameraCaptureWasPressed()
 }
 
 struct ExerciseView: View {
@@ -77,6 +82,10 @@ struct ExerciseView: View {
                             imageName: model.isPaused ? "play.fill" : "pause.fill",
                             action: delegate.puassWasPressed
                         )
+                        if model.manualCameraStartEnabled {
+                            ExerciseViewButton(imageName: "video.fill", action: delegate.startCameraCaptureWasPressed)
+                            ExerciseViewButton(imageName: "video.slash.fill", action: delegate.stopCameraCaptureWasPressed)
+                        }
                         ExerciseViewButton(imageName: "stop.fill", action: delegate.quitWasPressed)
                     }
                     .frame(maxHeight: .infinity)
@@ -89,6 +98,16 @@ struct ExerciseView: View {
             .frame(maxHeight: .infinity)
             
             VStack(alignment: .leading){
+                if model.manualCameraStartEnabled {
+                    Text("camera running: \(model.cameraCaptureRunning.description)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    if !model.cameraStatusText.isEmpty {
+                        Text(model.cameraStatusText)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+
                 ForEach(model.feedbacks, id:\.self){ feedback in
                     Text(feedback)
                 }
@@ -112,6 +131,14 @@ struct ExerciseView: View {
 }
 
 class ExerciseViewDelegateTest:ExerciseViewDelegate{
+    func startCameraCaptureWasPressed() {
+
+    }
+
+    func stopCameraCaptureWasPressed() {
+
+    }
+
     func nextWasPressed() {
         
     }

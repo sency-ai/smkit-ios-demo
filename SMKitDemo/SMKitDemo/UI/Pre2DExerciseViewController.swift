@@ -32,12 +32,13 @@ class Pre2DExerciseViewController:UIViewController{
         ])
     }
     
-    func startWasPressed(exercise: [String], showSkeleton: Bool, useElevatedMode: Bool) {
+    func startWasPressed(exercise: [String], showSkeleton: Bool, useElevatedMode: Bool, manualCameraStart: Bool) {
         let vc = ExerciseViewController()
         vc.configure(
             exercise: exercise,
             phonePosition: useElevatedMode ? .Elevated : .Floor,
-            showSkeleton: showSkeleton
+            showSkeleton: showSkeleton,
+            manualCameraStart: manualCameraStart
         )
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)

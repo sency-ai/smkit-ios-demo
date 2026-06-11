@@ -6,7 +6,14 @@
 //
 
 import UIKit
+import SMBase
 import SMKit
+
+private enum DemoConfiguration {
+    // Demo default: wait for server-downloaded NN models before configure succeeds.
+    // Set to false to compare the SDK's backward-compatible bundled/cached fallback path.
+    static var waitForRemoteModelsOnFirstLaunch = true
+}
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,9 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
 
+        let modelDownloadPolicy: SMModelDownloadPolicy = DemoConfiguration.waitForRemoteModelsOnFirstLaunch ? .waitForRemoteModelsThenFallback : .immediateFallback
         SMKitFlowManager.configure(
             authKey: authKey,
             shouldSupport3D: true,
+            modelDownloadPolicy: modelDownloadPolicy,
             downloadProgress: { completed, total in
                 print("SMKit assets download progress: \(completed)/\(total)")
             }

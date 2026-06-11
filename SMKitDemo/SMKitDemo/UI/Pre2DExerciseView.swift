@@ -13,15 +13,16 @@ struct Pre2DExerciseView: View {
     @State private var selectedExercises: [String] = []
     @State private var showSkeleton: Bool = false
     @State private var useElevatedMode: Bool
+    @State private var manualCameraStart: Bool = false
 
-    let startWasPressed: ([String], Bool, Bool) -> Void
+    let startWasPressed: ([String], Bool, Bool, Bool) -> Void
     let dismissWasPressed: () -> Void
 
     @ObservedObject var authManager = AuthManager.shared
 
     init(
         useElevatedMode: Bool,
-        startWasPressed: @escaping ([String], Bool, Bool) -> Void,
+        startWasPressed: @escaping ([String], Bool, Bool, Bool) -> Void,
         dismissWasPressed: @escaping () -> Void
     ) {
         _useElevatedMode = State(initialValue: useElevatedMode)
@@ -61,6 +62,13 @@ struct Pre2DExerciseView: View {
                     HStack {
                         Image(systemName: "iphone")
                         Text("Elevated Mode")
+                    }
+                }
+
+                Toggle(isOn: $manualCameraStart) {
+                    HStack {
+                        Image(systemName: "video.badge.ellipsis")
+                        Text("Manual Camera Start")
                     }
                 }
             }
@@ -109,7 +117,7 @@ struct Pre2DExerciseView: View {
             }
 
             Button {
-                startWasPressed(selectedExercises, showSkeleton, useElevatedMode)
+                startWasPressed(selectedExercises, showSkeleton, useElevatedMode, manualCameraStart)
             } label: {
                 Text("START")
                     .font(.title)
@@ -141,7 +149,7 @@ struct Pre2DExerciseView: View {
 }
 
 #Preview {
-    Pre2DExerciseView(useElevatedMode: true, startWasPressed: { _, _, _ in }, dismissWasPressed: {})
+    Pre2DExerciseView(useElevatedMode: true, startWasPressed: { _, _, _, _ in }, dismissWasPressed: {})
 }
 
 enum DemoExercises: String, CaseIterable {
