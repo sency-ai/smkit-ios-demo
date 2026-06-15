@@ -1,6 +1,6 @@
 # Start 2D Exercise Detection
 
-This guide shows a minimal 2D SMKit session using the 1.9.8 async session APIs.
+This guide shows a minimal 2D SMKit session using the 2.0.0 async session APIs.
 
 ## Implement `SMKitSessionDelegate`
 

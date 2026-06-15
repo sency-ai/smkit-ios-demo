@@ -22,6 +22,7 @@ class AssessmentViewController: UIViewController {
 
     var isElevated: Bool = true
     var manualCameraStart: Bool = false
+    var sendInitialBodyCalibrationStatus: Bool = false
 
     private let exercises = [
         "OverheadMobility",
@@ -114,6 +115,7 @@ class AssessmentViewController: UIViewController {
                 jumpRefPoint: "Hip",
                 jumpHeightThreshold: 10,
                 userHeight: 170,
+                sendInitialBodyCalibrationStatus: sendInitialBodyCalibrationStatus,
                 autoStartCamera: !manualCameraStart
             )
             flowManager = try SMKitFlowManager(delegate: self)

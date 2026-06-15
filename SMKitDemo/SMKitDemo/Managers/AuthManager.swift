@@ -15,6 +15,7 @@ protocol AuthManagerDelegate:NSObject{
 class AuthManager:ObservableObject{
     static let shared = AuthManager()
     private static let authKeyPlaceholder = "YOUR_SMKIT_AUTH_KEY"
+    private static let configuredAuthKey = authKeyPlaceholder
     
     @Published var didFinishAuth = false{
         didSet{
