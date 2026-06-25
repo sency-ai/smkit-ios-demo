@@ -33,11 +33,11 @@ CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one
    https://bitbucket.org/sencyai/smkit_package
    ```
 
-   Use version `1.9.1`.
+   Use version `2.0.6`.
 
 6. Build your project to verify the integration.
 
-For a complete SPM demo, use the [`release/1.9.1_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1_spm) branch.
+For a complete SPM demo, use the [`release/2.0.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.0.6_spm) branch.
 
 ## Switching From SPM Back To CocoaPods
 
@@ -62,7 +62,7 @@ For a complete SPM demo, use the [`release/1.9.1_spm`](https://github.com/sency-
 
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '1.9.1'
+     pod 'SMKit', '2.0.6'
    end
 
    post_install do |installer|
