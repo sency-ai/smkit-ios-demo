@@ -153,6 +153,7 @@ struct Pre2DExerciseView: View {
 }
 
 enum DemoExercises: String, CaseIterable {
+    case StandingSideBend
     case StandingSideBendRight
     case StandingSideBendLeft
     case JeffersonCurl
