@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smbase_package",
       "state" : {
-        "revision" : "86d3f1618189bbfff5c155dde30969cbec20b4d1",
-        "version" : "2.0.0"
+        "revision" : "956228e42ce4c9b7d761c114feb1a9124cb47c9a",
+        "version" : "2.0.6"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://bitbucket.org/sencyai/smkit_package",
       "state" : {
-        "revision" : "b4960581f39834c00087edc2cb40bdb3ff3cb8df",
-        "version" : "2.0.0"
+        "revision" : "fcd48d5b5eb4dba6099c99e66ea1fd3e95ef79ff",
+        "version" : "2.0.6"
       }
     }
   ],
