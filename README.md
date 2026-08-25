@@ -25,7 +25,7 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 
 This branch uses **CocoaPods** for dependency management.
 
-Looking for Swift Package Manager integration? Add `https://bitbucket.org/sencyai/smkit_package` at version `2.3.6` to your own app.
+Looking for Swift Package Manager integration? Use the [`release/2.3.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.3.6_spm) branch as a project reference, or add `https://bitbucket.org/sencyai/smkit_package` at version `2.3.6` to your own app.
 
 ### CocoaPods
 
@@ -80,7 +80,7 @@ For SPM apps, add:
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use version `2.3.6`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use version `2.3.6`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types. For the complete SPM demo project, use the [`release/2.3.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.3.6_spm) branch.
 
 ## Setup
 

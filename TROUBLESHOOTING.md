@@ -37,7 +37,7 @@ CocoaPods and SPM both provide the same frameworks (`SMKit`, `SMBase`). Only one
 
 6. Build your project to verify the integration.
 
-Use the Swift Package Manager setup above with version `2.3.6`.
+For the complete Swift Package Manager demo project, use the [`release/2.3.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.3.6_spm) branch at version `2.3.6`.
 
 ## Switching From SPM Back To CocoaPods
 
