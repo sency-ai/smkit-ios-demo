@@ -1,10 +1,10 @@
 PODS:
-  - SMBase (2.0.6)
-  - SMKit (2.0.6):
-    - SMBase (= 2.0.6)
+  - SMBase (2.3.6)
+  - SMKit (2.3.6):
+    - SMBase (= 2.3.6)
 
 DEPENDENCIES:
-  - SMKit (= 2.0.6)
+  - SMKit (= 2.3.6)
 
 SPEC REPOS:
   https://bitbucket.org/sencyai/ios_sdks_release.git:
@@ -12,9 +12,9 @@ SPEC REPOS:
     - SMKit
 
 SPEC CHECKSUMS:
-  SMBase: 8033d5579f8115342a6cc2615612ec05676c92b7
-  SMKit: b346b1fc635007bb70b730a8067b44f8fa72bb6f
+  SMBase: 185235983595ea972a69dde6f3bc768cddc675b1
+  SMKit: b7a079a01bcb391dc046ebb850c4fe67c991770d
 
-PODFILE CHECKSUM: c2e99e565511bd0680d3a1ee8ffe7b2fe747831a
+PODFILE CHECKSUM: 5e8e2d43c90d6d90df31013b613df743600b1230
 
 COCOAPODS: 1.16.2
