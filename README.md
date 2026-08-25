@@ -9,25 +9,27 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 1. [Installation](#installation)
 2. [Setup](#setup)
 3. [Configure](#configure)
-4. [Session Lifecycle](#session-lifecycle)
-5. [Body Calibration](#body-calibration)
-6. [Camera And Video](#camera-and-video)
-7. [Adaptive ROM](#adaptive-rom)
-8. [Setters](#setters)
-9. [Getters](#getters)
-10. [Data Types](#data-types)
-11. [MCP Server Integration](#mcp-server-integration)
-12. [Troubleshooting](#troubleshooting)
+4. [Model And Asset Delivery](#model-and-asset-delivery)
+5. [Session Lifecycle](#session-lifecycle)
+6. [Body Calibration](#body-calibration)
+7. [Demo Assessment](#demo-assessment)
+8. [Camera And Video](#camera-and-video)
+9. [Adaptive ROM](#adaptive-rom)
+10. [Setters](#setters)
+11. [Getters](#getters)
+12. [Data Types](#data-types)
+13. [MCP Server Integration](#mcp-server-integration)
+14. [Troubleshooting](#troubleshooting)
 
 ## Installation
 
 This branch uses **Swift Package Manager (SPM)** for dependency management.
 
-Looking for CocoaPods integration? Use the [`release/1.9.1`](https://github.com/sency-ai/smkit-ios-demo/tree/release/1.9.1) branch as a CocoaPods project reference, or add `pod 'SMKit', '2.0.6'` to your own app.
+Looking for CocoaPods integration? Use the [`release/2.3.6`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.3.6) branch as a CocoaPods project reference, or add `pod 'SMKit', '2.3.6'` to your own app.
 
 ### Swift Package Manager
 
-Latest version: `2.0.6` (SMKit)
+Latest version: `2.3.6` (SMKit)
 
 This demo already has the package connected in `SMKitDemo.xcodeproj`. For a fresh SPM integration, add:
 
@@ -35,13 +37,13 @@ This demo already has the package connected in `SMKitDemo.xcodeproj`. For a fres
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use exact version `2.0.6`. Select the `SMKitPackage` product for your app target, then import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use exact version `2.3.6`. Select the `SMKitPackage` product for your app target, then import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
 
 Open `SMKitDemo.xcodeproj` for this branch. There are no CocoaPods build phases in the SPM demo project.
 
 ### CocoaPods
 
-For CocoaPods apps, use the `release/1.9.1` branch as a CocoaPods project reference or add the pod directly:
+For CocoaPods apps, use the [`release/2.3.6`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.3.6) branch as a CocoaPods project reference or add the pod directly:
 
 ```ruby
 platform :ios, '16.0'
@@ -51,7 +53,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'YourApp' do
   use_frameworks!
-  pod 'SMKit', '2.0.6'
+  pod 'SMKit', '2.3.6'
 end
 ```
 
@@ -81,6 +83,7 @@ SMKitFlowManager.configure(
     shouldSupport3D: true,
     poseEstimation3DMode: .standard,
     poseEstimation3DAccuracy: .light,
+    modelDownloadPolicy: .waitForRemoteModelsThenFallback,
     downloadProgress: { completed, total in
         print("SMKit assets: \(completed)/\(total)")
     }
@@ -100,6 +103,7 @@ Important options:
 | `shouldSupport3D` | Downloads/enables 3D models. Required before starting sessions with `include3D: true`. |
 | `poseEstimation3DMode` | `.standard` or `.accurate`. |
 | `poseEstimation3DAccuracy` | `.light` or `.solid`. |
+| `modelDownloadPolicy` | Choose whether configuration waits for remote models or uses a valid, previously server-downloaded cache when available. |
 | `uiVersion` | Optional SDK asset version stamp. Most direct SMKit integrations can leave it unset. |
 | `downloadProgress` | Reports background asset/model download progress. |
 
@@ -110,6 +114,12 @@ You can also warm models before a workout:
 ```swift
 SMKitFlowManager.preloadModelsInBackground()
 ```
+
+## Model And Asset Delivery
+
+SMKit 2.3.6 downloads models and required SDK assets from the server. It does not include bundled fallback models. Keep the device online for the first configuration and asset download; a valid, previously downloaded cache can be used offline later.
+
+`SMModelDownloadPolicy` controls how configuration uses the downloaded cache. Its fallback is a previously server-downloaded cache only, never an embedded model.
 
 ## Session Lifecycle
 
@@ -269,6 +279,14 @@ Enable diagnostics when needed:
 flowManager?.verboseBodyCalibration = true
 ```
 
+## Demo Assessment
+
+The **Demo Assessment** entry point in the sample app is a complete, local assessment implementation. Its current protocol covers Overhead Mobility, Squat Regular Overhead Static, Jefferson Curl, left/right Standing Side Bend, left/right Hip Flexion, and left/right Standing Knee Raise.
+
+Before the first exercise, the demo waits for phone-angle and body-in-frame calibration, draws the SDK bounding-box guide, and lets the user skip calibration. It supports an optional manual camera start. During each timed exercise it shows a countdown, current technique score, form feedback, time in position, and a ROM gauge when supported. The top feedback highlights its relevant skeleton joints in red.
+
+At completion, the app presents an overall score and per-exercise technique score, peak ROM, time in position, and detected form issues. See the implementation in `SMKitDemo/UI/Assessment` to adapt the protocol and presentation to your own assessment.
+
 You can pass a custom guide:
 
 ```swift
@@ -384,6 +402,16 @@ try flowManager?.setModelsSensitivity(
 ```swift
 flowManager?.blockEvents(key: "XeBimnhu3r7g@o&&bBACK1B!^")
 ```
+
+### Guidance Recovery
+
+Guidance Mode is strict by default. If your product needs a bounded recovery from a stalled guidance step, set a positive timeout for the active flow:
+
+```swift
+flowManager?.setGuidanceStepFailOpenSeconds(3)
+```
+
+Pass `nil` or a non-positive value to retain regular strict Guidance Mode behavior.
 
 ## Getters
 

@@ -11,7 +11,7 @@ import SMKit
 
 private enum DemoConfiguration {
     // Demo default: wait for server-downloaded NN models before configure succeeds.
-    // Set to false to compare the SDK's backward-compatible bundled/cached fallback path.
+    // Set to false to start with a valid, previously server-downloaded cache when available.
     static var waitForRemoteModelsOnFirstLaunch = true
 }
 
