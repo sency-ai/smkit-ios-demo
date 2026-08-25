@@ -9,25 +9,27 @@ For the prebuilt UI product, see [smkit-ui-ios-demo](https://github.com/sency-ai
 1. [Installation](#installation)
 2. [Setup](#setup)
 3. [Configure](#configure)
-4. [Session Lifecycle](#session-lifecycle)
-5. [Body Calibration](#body-calibration)
-6. [Camera And Video](#camera-and-video)
-7. [Adaptive ROM](#adaptive-rom)
-8. [Setters](#setters)
-9. [Getters](#getters)
-10. [Data Types](#data-types)
-11. [MCP Server Integration](#mcp-server-integration)
-12. [Troubleshooting](#troubleshooting)
+4. [Model And Asset Delivery](#model-and-asset-delivery)
+5. [Session Lifecycle](#session-lifecycle)
+6. [Body Calibration](#body-calibration)
+7. [Demo Assessment](#demo-assessment)
+8. [Camera And Video](#camera-and-video)
+9. [Adaptive ROM](#adaptive-rom)
+10. [Setters](#setters)
+11. [Getters](#getters)
+12. [Data Types](#data-types)
+13. [MCP Server Integration](#mcp-server-integration)
+14. [Troubleshooting](#troubleshooting)
 
 ## Installation
 
 This branch uses **CocoaPods** for dependency management.
 
-Looking for Swift Package Manager integration? Use the [`release/2.0.6_spm`](https://github.com/sency-ai/smkit-ios-demo/tree/release/2.0.6_spm) branch, or add `https://bitbucket.org/sencyai/smkit_package` at version `2.0.6` to your own app.
+Looking for Swift Package Manager integration? Add `https://bitbucket.org/sencyai/smkit_package` at version `2.3.6` to your own app.
 
 ### CocoaPods
 
-Latest version: `SMKit '2.0.6'`
+Latest version: `SMKit '2.3.6'`
 
 1. Add the repository sources to your `Podfile`:
 
@@ -43,7 +45,7 @@ Latest version: `SMKit '2.0.6'`
    ```ruby
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '2.0.6'
+     pod 'SMKit', '2.3.6'
    end
    ```
 
@@ -78,7 +80,7 @@ For SPM apps, add:
 https://bitbucket.org/sencyai/smkit_package
 ```
 
-Use version `2.0.6`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
+Use version `2.3.6`. The package product is `SMKitPackage`; import `SMKit` and `SMBase` in source files that use SDK APIs and data types.
 
 ## Setup
 
@@ -99,6 +101,7 @@ SMKitFlowManager.configure(
     shouldSupport3D: true,
     poseEstimation3DMode: .standard,
     poseEstimation3DAccuracy: .light,
+    modelDownloadPolicy: .waitForRemoteModelsThenFallback,
     downloadProgress: { completed, total in
         print("SMKit assets: \(completed)/\(total)")
     }
@@ -119,6 +122,7 @@ Important options:
 | `poseEstimation3DMode` | `.standard` or `.accurate`. |
 | `poseEstimation3DAccuracy` | `.light` or `.solid`. |
 | `uiVersion` | Optional SDK asset version stamp. Most direct SMKit integrations can leave it unset. |
+| `modelDownloadPolicy` | Controls use of remote downloads and a valid, previously downloaded cache. |
 | `downloadProgress` | Reports background asset/model download progress. |
 
 SMKit will not work until `configure` succeeds.
@@ -128,6 +132,12 @@ You can also warm models before a workout:
 ```swift
 SMKitFlowManager.preloadModelsInBackground()
 ```
+
+## Model And Asset Delivery
+
+SMKit 2.3.6 downloads models and required SDK assets from the server. It does not include bundled fallback models. Keep the device online for the first configuration and asset download; a valid, previously downloaded cache can be used offline later.
+
+`SMModelDownloadPolicy` controls how configuration uses the downloaded cache. Its fallback is a previously server-downloaded cache only, never an embedded model.
 
 ## Session Lifecycle
 
@@ -287,6 +297,14 @@ Enable diagnostics when needed:
 flowManager?.verboseBodyCalibration = true
 ```
 
+## Demo Assessment
+
+The **Demo Assessment** entry point in the sample app is a complete, local assessment implementation. It runs Overhead Mobility, Squat Regular Overhead Static, Jefferson Curl, and left/right Standing Side Bend in sequence.
+
+Before the first exercise, the demo waits for both phone-angle and body-in-frame calibration, draws the SDK bounding-box guide, and lets the user skip calibration. During each timed exercise it shows a countdown, current technique score, form feedback, time in position, and a ROM gauge when supported. The top feedback highlights its relevant skeleton joints in red.
+
+At completion, the app presents an overall score and per-exercise technique score, peak ROM, time in position, and detected form issues. See the implementation in `SMKitDemo/UI/Assessment` to adapt the protocol and presentation to your own assessment.
+
 You can pass a custom guide:
 
 ```swift
@@ -402,6 +420,16 @@ try flowManager?.setModelsSensitivity(
 ```swift
 flowManager?.blockEvents(key: "XeBimnhu3r7g@o&&bBACK1B!^")
 ```
+
+### Guidance Recovery
+
+Guidance Mode is strict by default. If your product needs a bounded recovery from a stalled guidance step, set a positive timeout for the active flow:
+
+```swift
+flowManager?.setGuidanceStepFailOpenSeconds(3)
+```
+
+Pass `nil` or a non-positive value to retain regular strict Guidance Mode behavior.
 
 ## Getters
 
