@@ -10,10 +10,15 @@ import SMKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    // Read from SMKitDemo/Config/AuthKey.local.xcconfig (gitignored) through Info.plist.
+    private var smKitAuthKey: String {
+        (Bundle.main.object(forInfoDictionaryKey: "SMKitAuthKey") as? String ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         SMKitFlowManager.configure(
-            authKey: "",
+            authKey: smKitAuthKey,
             shouldSupport3D: true,
             downloadProgress: { completed, total in
                 print("SMKit assets download progress: \(completed)/\(total)")

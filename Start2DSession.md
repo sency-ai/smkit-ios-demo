@@ -1,6 +1,6 @@
 # Start 2D Exercise Detection
 
-This guide shows a minimal 2D SMKit session using the 2.0.6 async session APIs.
+This guide shows a minimal 2D SMKit session using the completion-based session APIs.
 
 ## Implement `SMKitSessionDelegate`
 
@@ -33,8 +33,8 @@ extension ViewController: SMKitSessionDelegate {
         // Render poseData2D into your own skeleton overlay.
     }
 
+    // Optional (default empty implementation). Usually nil for basic 2D sessions.
     func handleAnatomicalAngles(anatomicalAngles: [String: SCNVector3]?) {
-        // Usually nil for basic 2D sessions.
     }
 
     func didCaptureBuffer(
@@ -45,6 +45,7 @@ extension ViewController: SMKitSessionDelegate {
         // Optional raw frame access.
     }
 
+    // Optional (default empty implementations), for video-file sessions.
     func videoSessionProcessingProgress(progress: Float, processedFrames: Int) {}
 
     func videoSessionDidFinish() {}
@@ -87,19 +88,21 @@ final class ViewController: UIViewController {
     }
 
     func startDetection(exercise: String) {
-        do {
-            try flowManager?.startDetection(exercise: exercise)
-        } catch {
-            print("Failed to start detection: \(error)")
+        flowManager?.startDetection(exercise: exercise) { result in
+            if case .failure(let error) = result {
+                print("Failed to start detection: \(error)")
+            }
         }
     }
 
     func stopDetection() {
-        do {
-            let exerciseData = try flowManager?.stopDetection()
-            print(exerciseData as Any)
-        } catch {
-            print("Failed to stop detection: \(error)")
+        flowManager?.stopDetection { result in
+            switch result {
+            case .success(let exerciseData):
+                print(exerciseData as Any)
+            case .failure(let error):
+                print("Failed to stop detection: \(error)")
+            }
         }
     }
 
@@ -123,12 +126,13 @@ final class ViewController: UIViewController {
 3. Call `startSession(sessionSettings:completion:)`.
 4. Start exercise detection from the success callback.
 5. Receive live feedback through `SMKitSessionDelegate`.
-6. Call `stopDetection()` for each exercise.
+6. Call `stopDetection(completion:)` for each exercise.
 7. Call `stopSession(completion:)` when the workout ends.
 
 ## Notes
 
 - 2D joint coordinates are in video-resolution space, not screen coordinates.
 - All `SMKitSessionSettings` parameters are optional.
-- Use `phoneMovementCountPreventionEnabled`, `cameraFps`, or `landscapeCamera` in `SMKitSessionSettings` when your flow needs them.
-- Use `startVideoSession(url:sessionSettings:fpsLimit:deterministicProcessing:)` for video-file processing.
+- Pass `phoneMovementCountPreventionEnabled` or `landscapeCamera` to the `SMKitSessionSettings` initializer when your flow needs them. `cameraFps` is a property: set it after creating the settings (`var settings = SMKitSessionSettings(...); settings.cameraFps = 30`).
+- `SMKitSessionSettings` arguments must be passed in the initializer's order (for example `include3D:` before `camType:`).
+- Use `startVideoSession(url:sessionSettings:fpsLimit:deterministicProcessing:realtimeSequentialProcessing:completion:)` for video-file processing.

@@ -20,7 +20,7 @@ SMKitFlowManager.configure(
 }
 ```
 
-Use `.accurate` for the metric 3D estimator when your app needs it, and `.standard` for the default two-stage 3D pipeline.
+Use `.accurate` for the metric 3D estimator when your app needs it, and `.standard` for the default two-stage 3D pipeline. `poseEstimation3DAccuracy` accepts `.light` (the `configure` default), `.fastSolid`, or `.solid` (the `SMKitSessionSettings` default).
 
 ## Implement `SMKitSessionDelegate`
 
@@ -76,9 +76,9 @@ final class ViewController: UIViewController {
         do {
             let sessionSettings = SMKitSessionSettings(
                 include3D: true,
+                camType: .front,
                 poseEstimation3DMode: .standard,
-                poseEstimation3DAccuracy: .solid,
-                camType: .front
+                poseEstimation3DAccuracy: .solid
             )
 
             flowManager = try SMKitFlowManager(delegate: self)
@@ -96,19 +96,21 @@ final class ViewController: UIViewController {
     }
 
     func startDetection() {
-        do {
-            try flowManager?.startDetection(exercise: "EXERCISE_NAME")
-        } catch {
-            print(error)
+        flowManager?.startDetection(exercise: "EXERCISE_NAME") { result in
+            if case .failure(let error) = result {
+                print(error)
+            }
         }
     }
 
     func stopDetection() {
-        do {
-            let exerciseData = try flowManager?.stopDetection()
-            print(exerciseData as Any)
-        } catch {
-            print(error)
+        flowManager?.stopDetection { result in
+            switch result {
+            case .success(let exerciseData):
+                print(exerciseData as Any)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 

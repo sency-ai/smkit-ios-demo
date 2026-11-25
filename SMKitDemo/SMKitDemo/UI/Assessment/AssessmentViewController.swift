@@ -189,18 +189,18 @@ class AssessmentViewController: UIViewController {
     }
 
     private func startExercise() {
-        do {
-            currentTechniqueScores = []
-            currentFeedbacks = []
-            currentRomValues = []
-            greenZoneTechniqueScores = []
-            greenZoneFeedbacks = []
-            try flowManager?.startDetection(exercise: currentExercise)
+        currentTechniqueScores = []
+        currentFeedbacks = []
+        currentRomValues = []
+        greenZoneTechniqueScores = []
+        greenZoneFeedbacks = []
+        flowManager?.startDetection(exercise: currentExercise) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                let romRange = self.flowManager?.getExerciseRange()
+                self.currentRomRange = romRange
 
-            let romRange = flowManager?.getExerciseRange()
-            currentRomRange = romRange
-
-            DispatchQueue.main.async {
                 self.viewModel.startExercise(
                     name: self.currentExercise,
                     index: self.exerciseIndex,
@@ -208,37 +208,39 @@ class AssessmentViewController: UIViewController {
                     duration: self.exerciseDuration
                 )
                 self.viewModel.setRomRange(romRange)
+            case .failure(let error):
+                self.showError(message: error.localizedDescription)
             }
-        } catch {
-            showError(message: error.localizedDescription)
         }
     }
 
     private func finishCurrentExercise() {
-        do {
-            _ = try flowManager?.stopDetection()
+        flowManager?.stopDetection { [weak self] result in
+            guard let self else { return }
+            if case .failure(let error) = result {
+                self.showError(message: error.localizedDescription)
+                return
+            }
 
             // Use green-zone data if the user ever reached the target ROM, otherwise all in-position data
-            let scoresToUse = greenZoneTechniqueScores.isEmpty ? currentTechniqueScores : greenZoneTechniqueScores
-            let feedbacksToUse = greenZoneTechniqueScores.isEmpty ? currentFeedbacks : greenZoneFeedbacks
+            let scoresToUse = self.greenZoneTechniqueScores.isEmpty ? self.currentTechniqueScores : self.greenZoneTechniqueScores
+            let feedbacksToUse = self.greenZoneTechniqueScores.isEmpty ? self.currentFeedbacks : self.greenZoneFeedbacks
 
             let avg = scoresToUse.isEmpty ? 0 : scoresToUse.reduce(0, +) / Float(scoresToUse.count)
-            let peakRom: Float? = currentRomValues.isEmpty ? nil : currentRomValues.max()
-            results.append(AssessmentExerciseResult(
-                name: currentExercise,
+            let peakRom: Float? = self.currentRomValues.isEmpty ? nil : self.currentRomValues.max()
+            self.results.append(AssessmentExerciseResult(
+                name: self.currentExercise,
                 techniqueScore: avg * 100,
                 feedbacks: Array(feedbacksToUse),
-                timeInPosition: viewModel.timeInPosition,
+                timeInPosition: self.viewModel.timeInPosition,
                 peakRom: peakRom
             ))
-            if exerciseIndex < exercises.count - 1 {
-                exerciseIndex += 1
-                showCountdown()
+            if self.exerciseIndex < self.exercises.count - 1 {
+                self.exerciseIndex += 1
+                self.showCountdown()
             } else {
-                finishAssessment()
+                self.finishAssessment()
             }
-        } catch {
-            showError(message: error.localizedDescription)
         }
     }
 

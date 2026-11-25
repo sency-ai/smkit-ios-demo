@@ -32,20 +32,23 @@ class ViewController: UIViewController {
     
     //Then call startDetection to start the exercise detection.
     func startDetection(){
-        do{
-            try flowManager?.startDetection(exercise: "EXERCISE_NAME")
-        }catch{
-            print(error)
+        flowManager?.startDetection(exercise: "EXERCISE_NAME") { result in
+            if case .failure(let error) = result {
+                print(error)
+            }
         }
     }
-    
+
     //When you are ready to stop the exercise call stopDetection.
     func stopDetection(){
-        do{
-            //returns a SMExerciseInfo.
-            _ = try flowManager?.stopDetection()
-        }catch{
-            print(error)
+        flowManager?.stopDetection { result in
+            switch result {
+            case .success(let exerciseInfo):
+                //returns a SMExerciseInfo.
+                print(exerciseInfo as Any)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
