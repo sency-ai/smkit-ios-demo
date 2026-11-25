@@ -68,6 +68,8 @@
 		BEC0984A2BCD1D5200E47B8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF4C52D374589C5A6343FFEC /* Pods_SMKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SMKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E61765490FEA2A56490C8DE1 /* Pods-SMKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMKitDemo.release.xcconfig"; path = "Target Support Files/Pods-SMKitDemo/Pods-SMKitDemo.release.xcconfig"; sourceTree = "<group>"; };
+		5D3C0A102F70000000A1B2C1 /* SMKitDemo.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SMKitDemo.debug.xcconfig; sourceTree = "<group>"; };
+		5D3C0A112F70000000A1B2C1 /* SMKitDemo.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SMKitDemo.release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				BE23AE292D08419800BFAD8B /* SceneKitRecorder.swift */,
 				BE23AE272D0840C200BFAD8B /* ViewRecorder.swift */,
 				BE23AE252D083F7500BFAD8B /* VideoRecorder.swift */,
+				5D3C0A122F70000000A1B2C1 /* Config */,
 				BE4B12E62CB7D96E008F2131 /* Data */,
 				BEB762E62C36892A009222EA /* Managers */,
 				BEB762EE2C36892A009222EA /* UI */,
@@ -190,6 +193,15 @@
 				DF4C52D374589C5A6343FFEC /* Pods_SMKitDemo.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5D3C0A122F70000000A1B2C1 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5D3C0A102F70000000A1B2C1 /* SMKitDemo.debug.xcconfig */,
+				5D3C0A112F70000000A1B2C1 /* SMKitDemo.release.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,7 +488,7 @@
 		};
 		BEC0984E2BCD1D5200E47B8F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6826F907B35A1116BCCEC695 /* Pods-SMKitDemo.debug.xcconfig */;
+			baseConfigurationReference = 5D3C0A102F70000000A1B2C1 /* SMKitDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -512,7 +524,7 @@
 		};
 		BEC0984F2BCD1D5200E47B8F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E61765490FEA2A56490C8DE1 /* Pods-SMKitDemo.release.xcconfig */;
+			baseConfigurationReference = 5D3C0A112F70000000A1B2C1 /* SMKitDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -62,7 +62,7 @@ For the complete Swift Package Manager demo project, use the [`release/2.3.6_spm
 
    target 'YourApp' do
      use_frameworks!
-     pod 'SMKit', '2.3.6'
+     pod 'SMKit', '2.7.3'
    end
 
    post_install do |installer|

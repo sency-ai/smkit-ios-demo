@@ -141,14 +141,16 @@ class ExerciseViewController: UIViewController {
     }
     
     func startExercise(){
-        do{
-            try flowManager?.startDetection(exercise: currentExercise)
-            DispatchQueue.main.async {
-                self.exerciseViewModel.startExercise(exerciseName: self.currentExercise)
+        let exerciseName = currentExercise
+        flowManager?.startDetection(exercise: exerciseName) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                self.exerciseViewModel.startExercise(exerciseName: exerciseName)
                 self.repModel.startExercise(isDynamic: self.isDymnamic)
+            case .failure(let error):
+                self.showError(message: error.localizedDescription)
             }
-        }catch{
-            showError(message: error.localizedDescription)
         }
     }
     
@@ -240,24 +242,27 @@ extension ExerciseViewController:SMKitSessionDelegate{
 
 extension ExerciseViewController:ExerciseViewDelegate{
     func nextWasPressed() {
-        do{
-            let result = try flowManager?.stopDetection()
-            
-            let jsonEncoder = JSONEncoder()
-            jsonEncoder.outputFormatting = .prettyPrinted
-            let jsonData = try jsonEncoder.encode(result)
-            let json = String(data: jsonData, encoding: String.Encoding.utf8)
-            
-            print(json as Any)
+        flowManager?.stopDetection { [weak self] result in
+            guard let self else { return }
+            do{
+                let exerciseInfo = try result.get()
 
-            if exerciseIndex >= exercise.count - 1{
-                self.quitWasPressed()
-            }else{
-                exerciseIndex += 1
+                let jsonEncoder = JSONEncoder()
+                jsonEncoder.outputFormatting = .prettyPrinted
+                let jsonData = try jsonEncoder.encode(exerciseInfo)
+                let json = String(data: jsonData, encoding: String.Encoding.utf8)
+
+                print(json as Any)
+
+                if self.exerciseIndex >= self.exercise.count - 1{
+                    self.quitWasPressed()
+                }else{
+                    self.exerciseIndex += 1
+                }
+                self.startExercise()
+            }catch{
+                self.showError(message: error.localizedDescription)
             }
-            startExercise()
-        }catch{
-            self.showError(message: error.localizedDescription)
         }
     }
     

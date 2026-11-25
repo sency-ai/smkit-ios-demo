@@ -88,3 +88,10 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# macOS
+.DS_Store
+
+# Local secrets (never commit)
+.env
+SMKitDemo/SMKitDemo/Config/AuthKey.local.xcconfig
